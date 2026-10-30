@@ -4371,7 +4371,7 @@
             const stop = paused || reduced.matches;
             document.documentElement.classList.toggle('motion-paused', stop);
             art.setAttribute('aria-pressed', String(stop));
-            art.title = stop ? '点击启动 3D 效果' : '点击暂停 3D 效果';
+            
             if (stop) resetTilt();
         }
 
@@ -4396,6 +4396,17 @@
             art.style.setProperty('--py', (15 + y * 35) + '%');
         });
         art.addEventListener('pointerleave', resetTilt);
+
+        // 彻底隐藏全站所有原生悬停提示 (Tooltips)
+        document.addEventListener('mouseover', e => {
+            let el = e.target;
+            while (el && el !== document) {
+                if (el.hasAttribute && el.hasAttribute('title')) {
+                    el.removeAttribute('title');
+                }
+                el = el.parentElement;
+            }
+        }, { capture: true, passive: true });
     })();
 </script>
 </body>

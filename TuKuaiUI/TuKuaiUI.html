@@ -21,7 +21,7 @@
     </script>
 
     <!-- 🌟 全局唯一引入：通过 jsDelivr CDN 一键加载全量组件与 5 套流光主题（内置样式，无需额外引入任何 CSS！） -->
-    <script src="https://cdn.jsdelivr.net/gh/GallantTarry/TuKuai-Studio@v1.0.0/tukuai-ui.min.js"></script>
+    <script src="../assets/tukuai-ui.min.js"></script>
 
     <style>
         /* ==========================================================================
@@ -739,7 +739,7 @@
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                     一键复制 CDN
                 </button>
-                <a href="../assets/tukuai-ui.min.js" download="tukuai-ui.min.js" class="btn-download" title="下载 resources 目录下的本地独立版 tukuai-ui.min.js 脚本 (35KB)">
+                <a href="../assets/tukuai-ui.min.js" download="tukuai-ui.min.js" class="btn-download">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                     下载 JS 文件
                 </a>
@@ -956,17 +956,17 @@
             <div class="preview-box">
                 <div class="preview-header">
                     <div class="format-tabs" role="tablist">
-                        <button type="button" class="format-tab active" id="tab-format-full" onclick="setExportFormat('full')" title="新建 HTML 文件直接粘贴，内置 UTF-8 声明与居中宽度样式，绝不乱码且播放条完整舒展">
+                        <button type="button" class="format-tab active" id="tab-format-full" onclick="setExportFormat('full')">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
                             完整独立网页 (推荐)
                         </button>
-                        <button type="button" class="format-tab" id="tab-format-snippet" onclick="setExportFormat('snippet')" title="仅生成组件标签片段，适合插入到已有网页项目中">
+                        <button type="button" class="format-tab" id="tab-format-snippet" onclick="setExportFormat('snippet')">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
                             仅组件标签
                         </button>
                     </div>
                     <div class="preview-actions">
-                        <button class="btn-copy" onclick="resetGenDefaults()" style="background:rgba(255,255,255,0.06); color:#cbd5e1; border-color:rgba(255,255,255,0.15);" title="恢复当前类型的官方默认配置">
+                        <button class="btn-copy" onclick="resetGenDefaults()" style="background:rgba(255,255,255,0.06); color:#cbd5e1; border-color:rgba(255,255,255,0.15);">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
                             恢复默认
                         </button>
@@ -1474,6 +1474,17 @@
     window.addEventListener('DOMContentLoaded', () => {
         renderGenCode();
     });
+
+    // 彻底隐藏全站所有原生悬停提示 (Tooltips)
+    document.addEventListener('mouseover', e => {
+        let el = e.target;
+        while (el && el !== document) {
+            if (el.hasAttribute && el.hasAttribute('title')) {
+                el.removeAttribute('title');
+            }
+            el = el.parentElement;
+        }
+    }, { capture: true, passive: true });
 </script>
 
 </body>
