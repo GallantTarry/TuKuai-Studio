@@ -3,16 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
-    <title>🎨 TuKuai-UI 影音组件工坊全样式展示与使用指南</title>
+    <title>TuKuai UI 影音组件工坊 · 样式展示与使用指南</title>
     <link rel="icon" href="../imgs/TuKuaiStudio.ico" type="image/x-icon">
+
+    <!-- 🌓 高级灰主题无缝联动内核：首屏防白闪/黑闪，秒级同步主页白天/黑夜主题 -->
+    <script>
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            let theme = params.get('theme') || localStorage.getItem('tukuai-theme');
+            if (theme !== 'light' && theme !== 'dark') {
+                const hour = new Date().getHours();
+                theme = (hour >= 7 && hour < 19) ? 'light' : 'dark';
+            }
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.style.colorScheme = theme;
+        })();
+    </script>
 
     <!-- 🌟 全局唯一引入：通过 jsDelivr CDN 一键加载全量组件与 5 套流光主题（内置样式，无需额外引入任何 CSS！） -->
     <script src="https://cdn.jsdelivr.net/gh/GallantTarry/TuKuai-Studio@v1.0.0/tukuai-ui.min.js"></script>
 
     <style>
         /* ==========================================================================
-           【全局设计规范与流光毛玻璃排版】 (PC + Mobile 响应式增强版)
+           【TuKuai Studio 统一高级白 / 高级黑规范】 (完全匹配主页设计体系)
            ========================================================================== */
+        :root {
+            color-scheme: light;
+            --page: #ffffff;
+            --surface: #f6f6f6;
+            --surface-raised: #ffffff;
+            --neutral-ink: #242424;
+            --neutral-muted: #777777;
+            --neutral-faint: #999999;
+            --neutral-line: #e5e5e5;
+            --blue: #3989ec;
+            --green: #27ad80;
+            --yellow: #d5a32e;
+            --ease: cubic-bezier(.22, 1, .36, 1);
+        }
+
+        html[data-theme="dark"] {
+            color-scheme: dark;
+            --page: #111111;
+            --surface: #191919;
+            --surface-raised: #1d1d1d;
+            --neutral-ink: #e9e9e9;
+            --neutral-muted: #aaaaaa;
+            --neutral-faint: #858585;
+            --neutral-line: #303030;
+            --blue: #7ab7ff;
+            --green: #63cfa6;
+            --yellow: #e6c46e;
+        }
+
+        /* ================= 全局基础重置与纯净背景 ================= */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -26,36 +70,32 @@
         }
 
         body {
-            background-color: #0b0b0e;
-            background-image:
-                    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
-                    radial-gradient(at 100% 100%, rgba(217, 70, 239, 0.12) 0px, transparent 50%),
-                    radial-gradient(at 50% 50%, rgba(56, 189, 248, 0.05) 0px, transparent 60%);
-            background-attachment: fixed;
-            color: #f4f4f5;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
-            padding: 40px 20px calc(100px + env(safe-area-inset-bottom, 0px));
+            background: var(--page);
+            color: var(--neutral-ink);
+            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            padding: 40px 20px calc(80px + env(safe-area-inset-bottom, 0px));
             min-height: 100vh;
             line-height: 1.6;
             overflow-x: hidden;
             scrollbar-width: thin;
-            scrollbar-color: rgba(250, 204, 21, 0.4) #0b0b0e;
+            scrollbar-color: var(--neutral-line) var(--page);
+            transition: background 0.25s var(--ease), color 0.25s var(--ease);
         }
 
-        /* 亚克力滚动条定制 */
+        /* 极简细滚动条 */
         ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(11, 11, 14, 0.6);
+            background: var(--page);
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(250, 204, 21, 0.35);
-            border-radius: 4px;
+            background: var(--neutral-line);
+            border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(250, 204, 21, 0.7);
+            background: var(--neutral-muted);
         }
 
         .container {
@@ -64,7 +104,7 @@
             width: 100%;
         }
 
-        /* 确保自定义组件在任何屏幕下不溢出 */
+        /* 确保自定义播放器组件在任何屏幕下不溢出 */
         tukuai-audio,
         tukuai-player {
             display: block;
@@ -72,30 +112,40 @@
             max-width: 100%;
         }
 
-        /* 顶部标题区 */
+        /* ================= 顶部标题区 (克制、高级、大方) ================= */
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 48px;
+            padding-top: 8px;
+        }
+
+        .header-eyebrow {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 11px;
+            letter-spacing: 2.2px;
+            color: var(--neutral-faint);
+            text-transform: uppercase;
+            margin-bottom: 14px;
+            font-weight: 500;
         }
 
         h1 {
-            font-size: clamp(1.65rem, 5vw, 2.6rem);
-            font-weight: 800;
-            background: linear-gradient(135deg, #10b981 0%, #06b6d4 50%, #d946ef 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: clamp(1.8rem, 4.5vw, 2.4rem);
+            font-weight: 700;
+            color: var(--neutral-ink);
             margin-bottom: 12px;
             letter-spacing: -0.5px;
             line-height: 1.25;
         }
 
         .subtitle {
-            color: #a1a1aa;
-            font-size: 0.98rem;
-            margin-bottom: 18px;
-            max-width: 680px;
+            color: var(--neutral-muted);
+            font-size: 0.95rem;
+            margin-bottom: 22px;
+            max-width: 620px;
             margin-left: auto;
             margin-right: auto;
+            line-height: 1.7;
         }
 
         .badge-bar {
@@ -103,28 +153,33 @@
             justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
-            margin-bottom: 24px;
         }
 
         .badge {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: var(--surface);
+            border: 1px solid var(--neutral-line);
             padding: 5px 14px;
-            border-radius: 999px;
-            font-size: 0.82rem;
-            color: #d4d4d8;
-            backdrop-filter: blur(8px);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--neutral-muted);
+            letter-spacing: 0.2px;
+            transition: all 0.2s var(--ease);
         }
 
-        /* ================= CDN 快速起步卡片 ================= */
+        .badge:hover {
+            color: var(--neutral-ink);
+            border-color: var(--neutral-muted);
+            background: var(--surface-raised);
+        }
+
+        /* ================= CDN 起步卡片与通用面板 ================= */
         .cdn-card {
-            background: rgba(24, 24, 27, 0.6);
-            border: 1px solid rgba(250, 204, 21, 0.25);
-            border-radius: 16px;
+            background: var(--surface);
+            border: 1px solid var(--neutral-line);
+            border-radius: 12px;
             padding: 24px;
             margin-bottom: 40px;
-            backdrop-filter: blur(16px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+            transition: background 0.25s var(--ease), border-color 0.25s var(--ease);
         }
 
         .cdn-header {
@@ -137,34 +192,35 @@
         }
 
         .cdn-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: #facc15;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--neutral-ink);
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
         .cdn-subtip {
-            font-size: 0.8rem;
-            color: #a1a1aa;
+            font-size: 0.82rem;
+            color: var(--neutral-muted);
         }
 
         .code-box {
             position: relative;
-            background: #050608;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            background: var(--surface-raised);
+            border: 1px solid var(--neutral-line);
+            border-radius: 8px;
             padding: 14px 18px;
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            font-size: 0.88rem;
-            color: #e4e4e7;
+            font-size: 0.86rem;
+            color: var(--neutral-ink);
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 12px;
             overflow-x: auto;
             margin-top: 10px;
+            transition: background 0.25s var(--ease), border-color 0.25s var(--ease);
         }
 
         .code-box pre {
@@ -183,13 +239,13 @@
         }
 
         .btn-copy {
-            background: rgba(250, 204, 21, 0.15);
-            color: #facc15;
-            border: 1px solid rgba(250, 204, 21, 0.35);
-            border-radius: 8px;
-            padding: 7px 16px;
-            font-size: 0.84rem;
-            font-weight: 600;
+            background: var(--surface);
+            color: var(--neutral-ink);
+            border: 1px solid var(--neutral-line);
+            border-radius: 6px;
+            padding: 7px 15px;
+            font-size: 0.82rem;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
             white-space: nowrap;
@@ -201,24 +257,22 @@
         }
 
         .btn-copy:hover {
-            background: #facc15;
-            color: #0b0b0e;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(250, 204, 21, 0.35);
+            border-color: var(--neutral-muted);
+            color: var(--neutral-ink);
         }
 
         .btn-copy:active {
-            transform: translateY(0);
+            transform: scale(0.98);
         }
 
         .btn-download {
-            background: rgba(16, 185, 129, 0.15);
-            color: #34d399;
-            border: 1px solid rgba(16, 185, 129, 0.35);
-            border-radius: 8px;
-            padding: 7px 16px;
-            font-size: 0.84rem;
-            font-weight: 600;
+            background: var(--surface);
+            color: var(--neutral-muted);
+            border: 1px solid var(--neutral-line);
+            border-radius: 6px;
+            padding: 7px 15px;
+            font-size: 0.82rem;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
             white-space: nowrap;
@@ -231,79 +285,78 @@
         }
 
         .btn-download:hover {
-            background: #10b981;
-            color: #0b0b0e;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+            border-color: var(--neutral-muted);
+            color: var(--neutral-ink);
         }
 
         .btn-download:active {
-            transform: translateY(0);
+            transform: scale(0.98);
         }
 
-        /* ================= 分块标题与卡片标注 ================= */
+        /* ================= 章节标题与分块标注 ================= */
         .section-title {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-size: 1.35rem;
-            font-weight: 700;
-            margin: 45px 0 12px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 45px 0 10px;
             padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            color: #ffffff;
+            border-bottom: 1px solid var(--neutral-line);
+            color: var(--neutral-ink);
             flex-wrap: wrap;
             gap: 8px;
         }
 
         .card-tip {
-            font-size: 0.88rem;
-            color: #a1a1aa;
-            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--neutral-muted);
+            margin-bottom: 20px;
         }
 
-        /* 单个样式展示项标签 */
+        /* 单个组件展示项标注 */
         .style-label {
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 8px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #e4e4e7;
-            margin: 28px 0 10px;
+            font-size: 0.92rem;
+            font-weight: 500;
+            color: var(--neutral-ink);
+            margin: 26px 0 10px;
             padding: 8px 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border-left: 3px solid #10b981;
-            border-radius: 0 8px 8px 0;
+            background: var(--surface);
+            border-left: 3px solid var(--neutral-muted);
+            border-radius: 0 6px 6px 0;
         }
 
         .style-label code {
-            font-size: 0.8rem;
-            color: #facc15;
-            background: rgba(250, 204, 21, 0.1);
+            font-size: 0.78rem;
+            color: var(--neutral-muted);
+            background: var(--surface-raised);
             padding: 2px 8px;
+            border: 1px solid var(--neutral-line);
             border-radius: 4px;
             font-family: monospace;
             flex-shrink: 0;
         }
 
-        /* ================= 可视化代码生成器 ================= */
+        /* ================= 代码生成器卡片 ================= */
         .generator-card {
-            background: rgba(20, 20, 26, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 28px;
+            background: var(--surface);
+            border: 1px solid var(--neutral-line);
+            border-radius: 12px;
+            padding: 24px;
             margin: 40px 0;
-            backdrop-filter: blur(15px);
+            transition: background 0.25s var(--ease), border-color 0.25s var(--ease);
         }
 
         .generator-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-top: 18px;
+            gap: 20px;
+            margin-top: 16px;
         }
 
         .form-side, .preview-box {
@@ -311,46 +364,45 @@
         }
 
         .form-group {
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .form-label {
             display: block;
-            font-size: 0.84rem;
-            font-weight: 600;
-            color: #d4d4d8;
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--neutral-muted);
             margin-bottom: 6px;
         }
 
         .form-input, .form-select {
             width: 100%;
-            background: #050608;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 8px;
-            padding: 9px 12px;
-            color: #ffffff;
-            font-size: 0.86rem;
+            background: var(--surface-raised);
+            border: 1px solid var(--neutral-line);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: var(--neutral-ink);
+            font-size: 0.85rem;
             outline: none;
-            transition: all 0.2s ease;
+            transition: border-color 0.2s ease;
         }
 
         .form-input:focus, .form-select:focus {
-            border-color: #facc15;
-            box-shadow: 0 0 10px rgba(250, 204, 21, 0.25);
+            border-color: var(--neutral-muted);
         }
 
         .form-select option {
-            background: #090b10;
-            color: #fff;
+            background: var(--surface-raised);
+            color: var(--neutral-ink);
         }
 
         .preview-box {
             display: flex;
             flex-direction: column;
-            background: #050608;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 16px;
+            background: var(--surface-raised);
+            border: 1px solid var(--neutral-line);
+            border-radius: 8px;
+            padding: 14px;
             height: 100%;
         }
 
@@ -360,11 +412,11 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 10px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            margin-bottom: 12px;
-            font-size: 0.84rem;
-            color: #a1a1aa;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--neutral-line);
+            margin-bottom: 10px;
+            font-size: 0.82rem;
+            color: var(--neutral-muted);
         }
 
         .preview-actions {
@@ -373,113 +425,107 @@
             align-items: center;
         }
 
-        /* 格式切换 Tabs 与防乱码提醒 */
         .format-tabs {
             display: inline-flex;
-            gap: 4px;
-            background: rgba(255, 255, 255, 0.06);
-            padding: 3px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            gap: 2px;
+            background: var(--surface);
+            padding: 2px;
+            border-radius: 6px;
+            border: 1px solid var(--neutral-line);
             max-width: 100%;
         }
 
         .format-tab {
             background: transparent;
             border: none;
-            color: #94a3b8;
-            padding: 5px 11px;
-            font-size: 0.78rem;
+            color: var(--neutral-muted);
+            padding: 4px 10px;
+            font-size: 0.76rem;
             font-weight: 500;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
             transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
             white-space: nowrap;
         }
 
         .format-tab:hover {
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.08);
+            color: var(--neutral-ink);
         }
 
         .format-tab.active {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: #0b0f17;
-            font-weight: 700;
-            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+            background: var(--surface-raised);
+            color: var(--neutral-ink);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .preview-code {
             flex: 1;
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            font-size: 0.84rem;
-            color: #e2e8f0;
+            font-size: 0.82rem;
+            color: var(--neutral-ink);
             white-space: pre-wrap;
             word-break: break-all;
             line-height: 1.55;
             overflow-y: auto;
-            background: #090b10;
-            padding: 14px 16px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: var(--surface);
+            padding: 12px 14px;
+            border-radius: 6px;
+            border: 1px solid var(--neutral-line);
             max-height: 460px;
         }
 
-        /* 🎨 代码高亮色彩规范 (Syntax Highlighting) */
-        .hl-comment { color: #64748b; font-style: italic; }
-        .hl-doctype { color: #c084fc; font-weight: 600; }
-        .hl-tag { color: #38bdf8; font-weight: 600; }
-        .hl-attr { color: #fbbf24; }
-        .hl-str { color: #34d399; }
-        .hl-selector { color: #f472b6; font-weight: 600; }
-        .hl-prop { color: #93c5fd; }
-        .hl-val { color: #fde047; }
+        /* 极简灰度代码语法 */
+        .hl-comment { color: var(--neutral-faint); font-style: italic; }
+        .hl-doctype { color: var(--neutral-muted); font-weight: 600; }
+        .hl-tag { color: var(--blue); }
+        .hl-attr { color: var(--neutral-ink); font-weight: 500; }
+        .hl-str { color: var(--green); }
+        .hl-selector { color: var(--blue); }
+        .hl-prop { color: var(--neutral-muted); }
+        .hl-val { color: var(--neutral-ink); }
 
         /* ================= 属性配置表格 ================= */
         .doc-table-wrap {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             margin-top: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            background: rgba(15, 15, 20, 0.5);
+            border: 1px solid var(--neutral-line);
+            border-radius: 8px;
+            background: var(--surface-raised);
         }
 
         .doc-table {
             width: 100%;
-            min-width: 540px; /* 保证手机端横向滑动阅读时不挤成竖列 */
+            min-width: 540px;
             border-collapse: collapse;
-            font-size: 0.86rem;
+            font-size: 0.84rem;
             text-align: left;
         }
 
         .doc-table th, .doc-table td {
-            padding: 12px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--neutral-line);
         }
 
         .doc-table th {
-            background: rgba(255, 255, 255, 0.03);
-            color: #e4e4e7;
+            background: var(--surface);
+            color: var(--neutral-ink);
             font-weight: 600;
             white-space: nowrap;
         }
 
         .doc-table td {
-            color: #a1a1aa;
+            color: var(--neutral-muted);
         }
 
         .doc-table code {
             font-family: monospace;
-            background: rgba(250, 204, 21, 0.1);
-            color: #facc15;
+            background: var(--surface);
+            color: var(--neutral-ink);
+            border: 1px solid var(--neutral-line);
             padding: 2px 6px;
             border-radius: 4px;
-            font-size: 0.82rem;
+            font-size: 0.8rem;
             white-space: nowrap;
         }
 
@@ -489,21 +535,21 @@
             bottom: max(30px, calc(env(safe-area-inset-bottom, 16px) + 14px));
             left: 50%;
             transform: translateX(-50%) translateY(80px);
-            background: #10b981;
-            color: #ffffff;
-            padding: 9px 20px;
+            background: var(--neutral-ink);
+            color: var(--page);
+            padding: 8px 18px;
             border-radius: 999px;
-            font-size: 0.86rem;
-            font-weight: 600;
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+            font-size: 0.84rem;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             opacity: 0;
             pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            transition: all 0.25s var(--ease);
             z-index: 9999;
             display: flex;
             align-items: center;
             gap: 8px;
-            max-width: 92vw;
+            max-width: 90vw;
             text-align: center;
         }
 
@@ -516,53 +562,47 @@
             opacity: 1;
         }
 
-        /* ==========================================================================
-           📱 手机端与小屏平板专项响应式适配 (@media max-width: 768px)
-           ========================================================================== */
+        /* ================= 移动端适配 (@media max-width: 768px) ================= */
         @media (max-width: 768px) {
             body {
-                /* 移动端取消 fixed 背景重绘，提升滚动帧率 */
-                background-attachment: scroll;
-                padding: 24px 14px calc(70px + env(safe-area-inset-bottom, 0px));
+                padding: 20px 12px calc(60px + env(safe-area-inset-bottom, 0px));
             }
 
             header {
-                margin-bottom: 26px;
+                margin-bottom: 24px;
             }
 
             .subtitle {
-                font-size: 0.88rem;
-                margin-bottom: 14px;
-                padding: 0 4px;
+                font-size: 0.85rem;
+                margin-bottom: 12px;
             }
 
             .badge-bar {
-                gap: 6px;
+                gap: 5px;
                 margin-bottom: 16px;
             }
 
             .badge {
-                padding: 4px 10px;
-                font-size: 0.75rem;
+                padding: 3px 8px;
+                font-size: 0.72rem;
             }
 
-            /* CDN 卡片移动端上下堆叠布局 */
             .cdn-card {
                 padding: 16px;
-                border-radius: 14px;
-                margin-bottom: 28px;
+                border-radius: 10px;
+                margin-bottom: 24px;
             }
 
             .cdn-title {
-                font-size: 1rem;
+                font-size: 0.98rem;
             }
 
             .code-box {
                 flex-direction: column;
                 align-items: stretch;
-                padding: 12px;
-                gap: 12px;
-                font-size: 0.8rem;
+                padding: 10px;
+                gap: 10px;
+                font-size: 0.78rem;
             }
 
             .cdn-actions {
@@ -575,97 +615,88 @@
             .cdn-actions .btn-copy,
             .cdn-actions .btn-download {
                 width: 100%;
-                padding: 9px 10px;
-                font-size: 0.8rem;
+                padding: 8px 10px;
+                font-size: 0.78rem;
             }
 
-            /* 章节标题与样式标签 */
             .section-title {
-                font-size: 1.15rem;
-                margin: 32px 0 10px;
+                font-size: 1.1rem;
+                margin: 28px 0 8px;
             }
 
             .card-tip {
-                font-size: 0.82rem;
-                margin-bottom: 16px;
+                font-size: 0.8rem;
+                margin-bottom: 14px;
             }
 
             .style-label {
-                font-size: 0.86rem;
-                margin: 20px 0 8px;
-                padding: 8px 10px;
+                font-size: 0.84rem;
+                margin: 18px 0 6px;
+                padding: 6px 10px;
             }
 
-            .style-label code {
-                font-size: 0.75rem;
-            }
-
-            /* 可视化代码生成器移动端优化 */
             .generator-card {
                 padding: 16px;
-                border-radius: 14px;
-                margin: 30px 0;
+                border-radius: 10px;
+                margin: 24px 0;
             }
 
             .generator-grid {
                 grid-template-columns: 1fr;
-                gap: 18px;
+                gap: 16px;
             }
 
-            /* iOS Safari 防自动缩放：输入框字号设为 16px */
             .form-input, .form-select {
                 font-size: 16px;
-                padding: 10px 12px;
+                padding: 8px 10px;
             }
 
             .preview-box {
-                padding: 12px;
+                padding: 10px;
             }
 
             .preview-header {
                 flex-direction: column;
                 align-items: stretch;
-                gap: 10px;
+                gap: 8px;
             }
 
             .format-tabs {
                 display: grid;
-                grid-template-columns: 1.3fr 1fr;
+                grid-template-columns: 1.2fr 1fr;
                 width: 100%;
             }
 
             .format-tab {
-                padding: 7px 6px;
-                font-size: 0.74rem;
+                padding: 6px 5px;
+                font-size: 0.72rem;
             }
 
             .preview-actions {
                 width: 100%;
                 display: grid;
-                grid-template-columns: 1fr 1.3fr;
+                grid-template-columns: 1fr 1.2fr;
                 gap: 8px;
             }
 
             .preview-actions .btn-copy {
                 width: 100%;
-                padding: 9px 10px;
-                font-size: 0.8rem;
+                padding: 8px 10px;
+                font-size: 0.78rem;
             }
 
             .preview-code {
-                font-size: 0.78rem;
-                padding: 12px;
-                max-height: 320px;
+                font-size: 0.76rem;
+                padding: 10px;
+                max-height: 300px;
             }
 
-            /* 表格移动端紧凑间距 */
             .doc-table th, .doc-table td {
-                padding: 10px 12px;
-                font-size: 0.82rem;
+                padding: 8px 10px;
+                font-size: 0.8rem;
             }
         }
 
-        /* 超小屏手机（<= 380px）按钮自适应堆叠 */
         @media (max-width: 380px) {
             .cdn-actions,
             .format-tabs,
@@ -673,21 +704,21 @@
                 grid-template-columns: 1fr;
             }
         }
-    </style>
+</style>
 </head>
 <body>
 
 <div class="container">
     <!-- 头部介绍 -->
     <header>
-        <h1>🎨 TuKuai-Studio 影音组件工坊</h1>
-        <p class="subtitle">100% 原生 Web Components 架构 · 全球高速 CDN 极速分发 · 5 套自研高拟真流光主题</p>
+        <div class="header-eyebrow">TUKUAI STUDIO · UI COMPONENTS</div>
+        <h1>TuKuai UI 影音组件工坊</h1>
+        <p class="subtitle">基于原生 Web Components 构建的轻量影音组件库，开箱即用，样式天然隔离。</p>
         <div class="badge-bar">
-            <span class="badge">🚀 单文件 CDN 一行引入</span>
-            <span class="badge">🎵 经典 APlayer 封面交互</span>
-            <span class="badge">🎬 闲置隐藏 + 一键截帧</span>
-            <span class="badge">💎 5 套定制流光主题</span>
-            <span class="badge">🛡️ 样式沙盒零污染</span>
+            <span class="badge">单文件 CDN 引入</span>
+            <span class="badge">Shadow DOM 样式隔离</span>
+            <span class="badge">经典 APlayer 交互</span>
+            <span class="badge">5 套流光主题</span>
         </div>
     </header>
 
@@ -708,7 +739,7 @@
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                     一键复制 CDN
                 </button>
-                <a href="../resources/tukuai-ui.min.js" download="tukuai-ui.min.js" class="btn-download" title="下载 resources 目录下的本地独立版 tukuai-ui.min.js 脚本 (35KB)">
+                <a href="../assets/tukuai-ui.min.js" download="tukuai-ui.min.js" class="btn-download" title="下载 resources 目录下的本地独立版 tukuai-ui.min.js 脚本 (35KB)">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                     下载 JS 文件
                 </a>
@@ -718,20 +749,20 @@
 
     <!-- ================= 🎵 音乐播放器 5 套全样式展示板块 ================= -->
     <div class="section-title">
-        <span>🎵 音乐播放器全样式展示 (TuKuai-Audio)</span>
+        <span>音乐播放器全样式展示 (TuKuai-Audio)</span>
         <span style="font-size:0.82rem; color:#10b981; font-weight:normal;">5 种风格精选网络 CDN 试听曲目</span>
     </div>
     <p class="card-tip">支持点击专辑封面播放/暂停、悬停或点按喇叭呼出纵向音量槽、单曲循环与进度条拖拽：</p>
 
     <!-- 样式 1：落日暖阳 (Sunset Mode) -->
     <div class="style-label" style="border-left-color:#f59e0b;">
-        <span>🌅 样式 1：落日暖阳 (Sunset Mode) · 暖金琥珀渐变</span>
+        <span>落日暖阳 (Sunset Mode)</span>
         <code>mode="sunset"</code>
     </div>
     <tukuai-audio
             url="https://music.163.com/song/media/outer/url?id=1436709403.mp3"
             name="夏天的风"
-            artist="火羊瞌睡了 / 温岚 · 落日暖阳版"
+            artist="火羊瞌睡了 / 温岚"
             cover="https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=600&h=600&fit=crop&q=85"
             mode="sunset"
             loop>
@@ -739,52 +770,52 @@
 
     <!-- 样式 2：赛博霓虹 (Cyberpunk Mode) -->
     <div class="style-label" style="border-left-color:#d946ef;">
-        <span>⚡ 样式 2：赛博霓虹 (Cyberpunk Mode) · 霓虹魅紫高光电音</span>
+        <span>赛博霓虹 (Cyberpunk Mode)</span>
         <code>mode="cyberpunk"</code>
     </div>
     <tukuai-audio
             url="https://music.163.com/song/media/outer/url?id=29947420.mp3"
             name="Fade"
-            artist="Alan Walker · 经典电音脉冲版"
+            artist="Alan Walker"
             cover="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=600&h=600&fit=crop&q=85"
             mode="cyberpunk">
     </tukuai-audio>
 
     <!-- 样式 3：深海星河 (Ocean Mode) -->
     <div class="style-label" style="border-left-color:#38bdf8;">
-        <span>🌊 样式 3：深海星河 (Ocean Mode) · 蔚蓝潮汐空灵流光</span>
+        <span>深海星河 (Ocean Mode)</span>
         <code>mode="ocean"</code>
     </div>
     <tukuai-audio
             url="https://music.163.com/song/media/outer/url?id=1294951288.mp3"
             name="溯 (Reverse)"
-            artist="CORSAK胡梦周 / 马吟吟 · 深海空灵版"
+            artist="CORSAK胡梦周 / 马吟吟"
             cover="https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=600&h=600&fit=crop&q=85"
             mode="ocean">
     </tukuai-audio>
 
     <!-- 样式 4：极客黑曜 (Dark Mode) -->
     <div class="style-label" style="border-left-color:#10b981;">
-        <span>🌌 样式 4：极客黑曜 (Dark Mode) · 经典暗夜黑翡翠极光 (默认)</span>
+        <span>极客黑曜 (Dark Mode)</span>
         <code>mode="dark"</code>
     </div>
     <tukuai-audio
             url="https://music.163.com/song/media/outer/url?id=1330348068.mp3"
             name="起风了"
-            artist="买辣椒也用券 · 暗夜黑曜版"
+            artist="买辣椒也用券"
             cover="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=600&h=600&fit=crop&q=85"
             mode="dark">
     </tukuai-audio>
 
     <!-- 样式 5：极简凝白 (Light Mode) -->
     <div class="style-label" style="border-left-color:#ec4899;">
-        <span>⚪ 样式 5：极简凝白 (Light Mode) · 粉紫通透磨砂凝白</span>
+        <span>极简凝白 (Light Mode)</span>
         <code>mode="light"</code>
     </div>
     <tukuai-audio
             url="https://music.163.com/song/media/outer/url?id=458647488.mp3"
-            name="天空之城 (钢琴版)"
-            artist="久石让 / 纯净钢琴 · 极简凝白版"
+            name="天空之城"
+            artist="久石让 / 纯净钢琴"
             cover="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=600&fit=crop&q=85"
             mode="light">
     </tukuai-audio>
@@ -792,67 +823,67 @@
 
     <!-- ================= 🎬 视频播放器全样式展示板块 ================= -->
     <div class="section-title">
-        <span>🎬 视频播放器全样式展示 (TuKuai-Player)</span>
+        <span>视频播放器全样式展示 (TuKuai-Player)</span>
         <span style="font-size:0.82rem; color:#06b6d4; font-weight:normal;">5 种风格精选全球 CDN 演示视频 (16:9 全宽满屏)</span>
     </div>
-    <p class="card-tip">支持中央微光大按钮、播放闲置 2.5 秒控制栏自动淡出、📸 右下角一键高清截帧、双击全屏：</p>
+    <p class="card-tip">支持中央微光大按钮、播放闲置 2.5 秒控制栏自动淡出、右下角一键高清截帧、双击全屏：</p>
 
     <!-- 视频 1：赛博朋克极光 (Cyberpunk Mode) -->
     <div class="style-label" style="border-left-color:#d946ef;">
-        <span>⚡ 视频样式 1：赛博朋克极光 (Cyberpunk Mode)</span>
+        <span>赛博霓虹 (Cyberpunk Mode)</span>
         <code>mode="cyberpunk"</code>
     </div>
     <tukuai-player
             url="https://www.w3schools.com/html/mov_bbb.mp4"
-            title="Big Buck Bunny · 3D赛博极光演示"
-            pic="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1280&h=720&fit=crop&q=85"
+            title="Big Buck Bunny"
+            pic="imgs/video_cyberpunk.jpg"
             mode="cyberpunk">
     </tukuai-player>
 
     <!-- 视频 2：极客暗黑 (Dark Mode) -->
     <div class="style-label" style="border-left-color:#10b981;">
-        <span>🌌 视频样式 2：极客暗黑黑曜石 (Dark Mode)</span>
+        <span>极客黑曜 (Dark Mode)</span>
         <code>mode="dark"</code>
     </div>
     <tukuai-player
-            url="https://www.w3schools.com/tags/movie.mp4"
-            title="Midnight River · 极客暗黑野性探索"
-            pic="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1280&h=720&fit=crop&q=85"
+            url="media/video/MidnightRiver.mp4"
+            title="Rust Cargo Compilation"
+            pic="imgs/video_dark.jpg"
             mode="dark">
     </tukuai-player>
 
     <!-- 视频 3：落日余晖 (Sunset Mode) -->
     <div class="style-label" style="border-left-color:#f59e0b;">
-        <span>🌅 视频样式 3：落日暖阳熔金 (Sunset Mode)</span>
+        <span>落日暖阳 (Sunset Mode)</span>
         <code>mode="sunset"</code>
     </div>
     <tukuai-player
             url="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4"
-            title="Sunshine Bloom · 落日暖阳绽放 (MDN Open)"
+            title="Sunshine Bloom (MDN Open)"
             pic="https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?w=1280&h=720&fit=crop&q=85"
             mode="sunset">
     </tukuai-player>
 
     <!-- 视频 4：深海幽蓝 (Ocean Mode) -->
     <div class="style-label" style="border-left-color:#38bdf8;">
-        <span>🌊 视频样式 4：深海星河幽蓝 (Ocean Mode)</span>
+        <span>深海星河 (Ocean Mode)</span>
         <code>mode="ocean"</code>
     </div>
     <tukuai-player
             url="https://vjs.zencdn.net/v/oceans.mp4"
-            title="Oceans Deep · 深海生灵纪录片 (VideoJS CDN)"
+            title="Oceans Deep (VideoJS CDN)"
             pic="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=1280&h=720&fit=crop&q=85"
             mode="ocean">
     </tukuai-player>
 
     <!-- 视频 5：极简凝白 (Light Mode) -->
     <div class="style-label" style="border-left-color:#ec4899;">
-        <span>⚪ 视频样式 5：极简凝白磨砂 (Light Mode)</span>
+        <span>极简凝白 (Light Mode)</span>
         <code>mode="light"</code>
     </div>
     <tukuai-player
             url="https://raw.githubusercontent.com/mediaelement/mediaelement-files/master/echo-hereweare.mp4"
-            title="Echo Here We Are · 极简凝白光影"
+            title="Echo Here We Are"
             pic="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1280&h=720&fit=crop&q=85"
             mode="light">
     </tukuai-player>
@@ -865,7 +896,7 @@
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
                 可视化代码生成器（拿走即用）
             </div>
-            <span style="font-size:0.82rem; color:#facc15;">💡 默认填入可全球直链访问的在线媒体，复制到任意 HTML 均可直接运行</span>
+            <span style="font-size:0.82rem; color:#facc15;">默认填入可全球直链访问的在线媒体，复制到任意 HTML 均可直接运行</span>
         </div>
 
         <div class="generator-grid">
@@ -873,8 +904,8 @@
                 <div class="form-group">
                     <label class="form-label">选择组件类型</label>
                     <select class="form-select" id="gen-type" onchange="onTypeChange()">
-                        <option value="audio">🎵 音乐播放器 &lt;tukuai-audio&gt;</option>
-                        <option value="player">🎬 视频播放器 &lt;tukuai-player&gt;</option>
+                        <option value="audio">音乐播放器 &lt;tukuai-audio&gt;</option>
+                        <option value="player">视频播放器 &lt;tukuai-player&gt;</option>
                     </select>
                 </div>
 
@@ -904,11 +935,11 @@
                 <div class="form-group">
                     <label class="form-label">流光主题模式 (mode)</label>
                     <select class="form-select" id="gen-mode" onchange="renderGenCode()">
-                        <option value="sunset">sunset (落日暖阳 - 琥珀熔金)</option>
-                        <option value="cyberpunk">cyberpunk (赛博霓虹 - 魅紫高光)</option>
-                        <option value="ocean">ocean (深海星河 - 蔚蓝潮汐)</option>
-                        <option value="dark">dark (极客黑曜 - 暗夜黑翡翠)</option>
-                        <option value="light">light (极简凝白 - 清新粉紫磨砂)</option>
+                        <option value="sunset">sunset (落日暖阳)</option>
+                        <option value="cyberpunk">cyberpunk (赛博霓虹)</option>
+                        <option value="ocean">ocean (深海星河)</option>
+                        <option value="dark">dark (极客黑曜)</option>
+                        <option value="light">light (极简凝白)</option>
                     </select>
                 </div>
 
@@ -953,11 +984,11 @@
 
     <!-- ================= 📖 属性与参数配置手册 ================= -->
     <div class="section-title">
-        <span>📖 完整 API 属性配置手册</span>
-        <span style="font-size:0.78rem; color:#94a3b8; font-weight:normal;">📱 手机端可左右滑动表格</span>
+        <span>完整 API 属性配置手册</span>
+        <span style="font-size:0.78rem; color:#94a3b8; font-weight:normal;">手机端可左右滑动表格</span>
     </div>
 
-    <h3 style="font-size:1rem; margin:16px 0 8px; color:#facc15;">🎵 &lt;tukuai-audio&gt; 标签属性表</h3>
+    <h3 style="font-size:1rem; margin:16px 0 8px; color:#facc15;">&lt;tukuai-audio&gt; 标签属性表</h3>
     <div class="doc-table-wrap">
         <table class="doc-table">
             <thead>
@@ -1015,7 +1046,7 @@
         </table>
     </div>
 
-    <h3 style="font-size:1rem; margin:28px 0 8px; color:#06b6d4;">🎬 &lt;tukuai-player&gt; 视频标签属性表</h3>
+    <h3 style="font-size:1rem; margin:28px 0 8px; color:#06b6d4;">&lt;tukuai-player&gt; 视频标签属性表</h3>
     <div class="doc-table-wrap">
         <table class="doc-table">
             <thead>
@@ -1421,9 +1452,29 @@
     }
 
     // 初始化
+    updateThemeToggleBtn(document.documentElement.dataset.theme || 'dark');
+
+    
+    // ==========================================
+    // 🌓 纯粹跟随主页面嵌入式白天/黑夜主题同步内核
+    // ==========================================
+    function applyTheme(theme) {
+        if (theme !== 'light' && theme !== 'dark') return;
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+    }
+
+    // 实时监听来自主页 index.html 的 postMessage 主题广播
+    window.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'tukuai-theme') {
+            applyTheme(event.data.theme);
+        }
+    });
+
     window.addEventListener('DOMContentLoaded', () => {
         renderGenCode();
     });
 </script>
+
 </body>
 </html>
