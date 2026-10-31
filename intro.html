@@ -443,7 +443,7 @@
   </div>
 
   <!-- 左上角：背景音乐控制胶囊 -->
-  <div id="ambient-toggle" class="ambient-pill" title="点击开关背景音乐">
+  <div id="ambient-toggle" class="ambient-pill">
     <span class="wave-symbol">🎵</span>
     <span id="ambient-text">Hello World</span>
     <!-- 扬声器开启图标 -->
@@ -483,7 +483,7 @@
 
     <!-- 极简毛玻璃胶囊进入按钮 -->
     <div class="btn-container">
-      <a href="index.html" class="glass-btn" id="enter-btn" title="点击进入图快工坊主页">
+      <a href="index.html" class="glass-btn" id="enter-btn">
         <span>进入工坊</span>
         <span class="btn-arrow">&rarr;</span>
       </a>
@@ -680,6 +680,17 @@
         }
       }
     });
+  
+    // 彻底隐藏全站所有原生悬停提示 (Tooltips)
+    document.addEventListener('mouseover', e => {
+      let el = e.target;
+      while (el && el !== document) {
+        if (el.hasAttribute && el.hasAttribute('title')) {
+          el.removeAttribute('title');
+        }
+        el = el.parentElement;
+      }
+    }, { capture: true, passive: true });
   })();
   </script>
 </body>
