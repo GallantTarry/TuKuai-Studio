@@ -435,13 +435,13 @@
 </head>
 <body>
 
-  <!-- 视频背景 (静音以保证全终端100%无阻碍自动起播) -->
+
+    <!-- 视频背景 (静音以保证全终端100%无阻碍自动起播，去除了autoplay，由音频就绪后同步触发) -->
   <div id="video-wrapper">
     <video
       id="bg-video"
       playsinline
       muted
-      autoplay
       preload="auto"
       disablePictureInPicture
     >
@@ -449,9 +449,9 @@
     </video>
   </div>
 
-  <!-- 独立背景音频播放器：即使视频播放完毕，《言叶之庭》钢琴曲依然在网页中持续轻柔循环 -->
+<!-- 独立背景音频播放器：即使视频播放完毕，《言叶之庭》钢琴曲依然在网页中持续轻柔循环 -->
   <audio id="ambient-audio" loop preload="auto">
-    <source src="audio/言叶之庭.acc" type="audio/aac" />
+    <source src="audio/言叶之庭.aac" type="audio/aac" />
   </audio>
 
   <!-- 雾化毛玻璃层 -->
@@ -554,27 +554,57 @@
       }
     }
 
-    // 播放背景音乐
-    function playAmbientAudio() {
+    // 补回 detachGestures 定义
+    function detachGestures() {
+      window.removeEventListener('pointerdown', onFirstGesture);
+      window.removeEventListener('touchstart', onFirstGesture);
+      window.removeEventListener('keydown', onFirstGesture);
+    }
+
+    // 【核心同步启动器】：只有音乐出声，视频才准播放！
+    function startSynchronizedExperience() {
+      // 1. 设置起播进度：音乐超前 1 秒（跳过 0.28s 空白 + 1.0s 前奏）
+      ambientAudio.currentTime = 1.28;
+      video.currentTime = 0;
+
       ambientAudio.volume = 0;
       ambientAudio.loop = true;
+
+      // 2. 尝试播放音频
       const promise = ambientAudio.play();
       if (promise !== undefined) {
         promise.then(() => {
-          rampVolume(ambientAudio, TARGET_AMBIENT_VOL, 600);
+          // ★★★ 核心关键：只有音乐被允许播放了，视频才准启动！★★★
+          video.play().catch(function () {});
+          rampVolume(ambientAudio, TARGET_AMBIENT_VOL, 200); // 200ms 快速出声
           updateAudioUI(true, 'Hello');
           detachGestures();
         }).catch(() => {
-          // 浏览器强安全策略拦截起播，展示交互轻触提示
-          updateAudioUI(false, 'World');
+          // 浏览器强行拦截无交互声音：视频坚决不播，保持定格在首帧！
+          video.pause();
+          isAudioPlaying = false;
+          updateAudioUI(false, '点击启程'); // 提示用户点击屏幕任意处开始
         });
+      }
+    }
+
+    // 首次交互被动触发：用户任意点击屏幕，音画同步瞬间起飞！
+    function onFirstGesture() {
+      if (ambientAudio.paused || !isAudioPlaying) {
+        startSynchronizedExperience();
       }
     }
 
     // 切换环境音开关
     function toggleAmbientAudio() {
       if (ambientAudio.paused || !isAudioPlaying) {
+        if (video && !video.paused) {
+          ambientAudio.currentTime = Math.max(0.28, video.currentTime + 1.0);
+        }
         ambientAudio.play().then(() => {
+          if (!isRevealed && video.paused) {
+            video.play().catch(function () {});
+          }
           rampVolume(ambientAudio, TARGET_AMBIENT_VOL, 300);
           updateAudioUI(true, 'Hello');
         }).catch(() => {});
@@ -587,44 +617,30 @@
       detachGestures();
     }
 
-    // 首次交互被动触发
-    function onFirstGesture() {
-      if (ambientAudio.paused || !isAudioPlaying) {
-        playAmbientAudio();
-      }
-      detachGestures();
-    }
+    // 监听有效交互手势
+    window.addEventListener('pointerdown', onFirstGesture, { passive: true });
+    window.addEventListener('touchstart', onFirstGesture, { passive: true });
+    window.addEventListener('keydown', onFirstGesture, { passive: true });
 
-    function detachGestures() {
-      window.removeEventListener('pointerdown', onFirstGesture);
-      window.removeEventListener('touchstart', onFirstGesture);
-      window.removeEventListener('keydown', onFirstGesture);
-      window.removeEventListener('wheel', onFirstGesture);
-      window.removeEventListener('mousemove', onFirstGesture);
-    }
-
-    // 提前在显存中完成大图异步预解码，彻底消除弹出时偶发的矩形边框闪烁
+    // 提前在显存中完成大图异步预解码
     const logoPreload = new Image();
     logoPreload.src = 'imgs/TuKuaiStudio.png';
     if (logoPreload.decode) {
       logoPreload.decode().catch(function () {});
     }
 
-    // 尝试直接静音起播环境音（若允许无阻碍自动播放）
-    playAmbientAudio();
-
-    // 监听任意用户微弱交互以确保100%能够开启声音
-    window.addEventListener('pointerdown', onFirstGesture, { once: true, passive: true });
-    window.addEventListener('touchstart', onFirstGesture, { once: true, passive: true });
-    window.addEventListener('keydown', onFirstGesture, { once: true, passive: true });
-    window.addEventListener('wheel', onFirstGesture, { once: true, passive: true });
-    window.addEventListener('mousemove', onFirstGesture, { once: true, passive: true });
-
-    if (ambientToggle) {
+        if (ambientToggle) {
       ambientToggle.addEventListener('click', function (e) {
         e.stopPropagation();
         toggleAmbientAudio();
       });
+    }
+
+// 等待音频就绪后发起首次同步尝试
+    if (ambientAudio.readyState >= 2) {
+      startSynchronizedExperience();
+    } else {
+      ambientAudio.addEventListener('canplay', startSynchronizedExperience, { once: true });
     }
 
     // 视频结束并转化为毛玻璃雾化UI
