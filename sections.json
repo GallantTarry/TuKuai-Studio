@@ -1,0 +1,96 @@
+[
+  {
+    "id": "home",
+    "name": "首页",
+    "href": "index.html",
+    "description": "给灵感，一点颜色。",
+    "keywords": "主页 工坊 五色 彩色 spectrum palette",
+    "status": "home"
+  },
+  {
+    "id": "ui",
+    "name": "UI",
+    "color": "blue",
+    "href": "?view=ui",
+    "description": "TuKuai-UI 与 TuKuai-JUI 的组件工坊",
+    "keywords": "界面 蓝色 components blue",
+    "status": "group",
+    "children": [
+      {
+        "id": "tukuai-ui",
+        "name": "TuKuai-UI",
+        "description": "音频、视频与原生 Web Components",
+        "keywords": "影音 播放器 audio video",
+        "status": "available",
+        "url": "TuKuaiUI/TuKuaiUI.html"
+      },
+      {
+        "id": "tukuai-jui",
+        "name": "TuKuai-JUI",
+        "description": "独立入口已预留，更多界面正在酝酿。",
+        "keywords": "jui 界面",
+        "status": "planned",
+        "url": "",
+        "badge": "待开发",
+        "label": "UI / TUKUAI-JUI",
+        "sculpture": "layers"
+      }
+    ]
+  },
+  {
+    "id": "green",
+    "name": "Core",
+    "badge": "02",
+    "color": "green",
+    "href": "?view=green",
+    "ariaLabel": "第二个组件板块，绿色，Core",
+    "description": "种下一点新的想法，让它自在地生长。",
+    "keywords": "绿色 生长 green core 02",
+    "status": "planned",
+    "label": "02 / COMING SOON",
+    "sculpture": "leaf",
+    "children": []
+  },
+  {
+    "id": "yellow",
+    "name": "IO",
+    "badge": "03",
+    "color": "yellow",
+    "href": "?view=yellow",
+    "ariaLabel": "第三个组件板块，黄色，IO",
+    "description": "给尚未成形的灵感，留一束温暖的光。",
+    "keywords": "黄色 日光 yellow io 03",
+    "status": "planned",
+    "label": "03 / COMING SOON",
+    "sculpture": "sun",
+    "children": []
+  },
+  {
+    "id": "purple",
+    "name": "Net",
+    "badge": "04",
+    "color": "purple",
+    "href": "?view=purple",
+    "ariaLabel": "第四个组件板块，紫色，Net",
+    "description": "想象不必急着定义，新的形状正在酝酿。",
+    "keywords": "紫色 想象 purple net 04",
+    "status": "planned",
+    "label": "04 / COMING SOON",
+    "sculpture": "layers",
+    "children": []
+  },
+  {
+    "id": "red",
+    "name": "Sys",
+    "badge": "05",
+    "color": "red",
+    "href": "?view=red",
+    "ariaLabel": "第五个组件板块，红色，Sys",
+    "description": "把一点热爱放在这里，等待下一次美好发生。",
+    "keywords": "红色 珊瑚 red sys 05",
+    "status": "planned",
+    "label": "05 / COMING SOON",
+    "sculpture": "ribbon",
+    "children": []
+  }
+]

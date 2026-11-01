@@ -2581,8 +2581,8 @@
         }
 
         .nav-group.is-open > .nav-link {
-            color: var(--blue);
-            background: color-mix(in srgb, var(--blue) 7%, transparent)
+            color: var(--tone, var(--blue));
+            background: color-mix(in srgb, var(--tone, var(--blue)) 7%, transparent)
         }
 
         .nav-group.is-open > .nav-link:after {
@@ -3747,30 +3747,7 @@
                 <use href="#flower-logo"/>
             </svg>
             <span>TuKuai <em>Studio</em><small>土 块 工 坊</small></span></a>
-        <nav class="main-nav" aria-label="六个板块">
-            <a class="nav-link" data-key="home" href="index.html" aria-current="page">首页</a>
-            <div class="nav-group" id="ui-navigation">
-                <button class="nav-link" data-key="ui" id="ui-menu-button" aria-expanded="false"
-                        aria-controls="ui-submenu">UI
-                    <svg class="icon nav-chevron" aria-hidden="true">
-                        <use href="#chevron"/>
-                    </svg>
-                </button>
-                <div class="ui-submenu" id="ui-submenu" aria-label="UI 子板块" hidden><a href="?view=tukuai-ui"><span>TuKuai-UI</span>
-                    <svg class="icon" aria-hidden="true">
-                        <use href="#external"/>
-                    </svg>
-                </a><a href="?view=tukuai-jui"><span>TuKuai-JUI</span><small>待开发</small></a></div>
-            </div>
-            <a class="nav-link" data-key="green" href="?view=green"
-               aria-label="第二个组件板块，绿色，待开发">待开发<small>02</small></a>
-            <a class="nav-link" data-key="yellow" href="?view=yellow"
-               aria-label="第三个组件板块，黄色，待开发">待开发<small>03</small></a>
-            <a class="nav-link" data-key="purple" href="?view=purple"
-               aria-label="第四个组件板块，紫色，待开发">待开发<small>04</small></a>
-            <a class="nav-link" data-key="red" href="?view=red"
-               aria-label="第五个组件板块，红色，待开发">待开发<small>05</small></a>
-        </nav>
+        <nav class="main-nav" id="main-nav" aria-label="六个板块"></nav>
         <div class="header-actions">
             <div class="theme-switch" role="group" aria-label="日夜主题">
                 <button class="theme-option" data-theme-choice="light" aria-label="白天主题" aria-pressed="false">
@@ -3940,7 +3917,7 @@
                 <use href="#flower-logo"/>
             </svg>
             <div><h2>共同搭建，<span class="spectrum-heading"><span>彩</span><span>色</span><span>世</span><span>界</span><span>。</span></span></h2>
-                <p>世界很大，但我保证，你的那盒蜡笔绝不会被夺走。</p></div>
+                <p>世界很大，但我保证，你的画笔绝不会被夺走。</p></div>
             <div class="color-line" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
         </section>
     </div>
@@ -4042,7 +4019,7 @@
     </section>
 </main>
 <footer class="site-footer" id="site-footer">
-    <div class="footer-inner wrap"><span>© <span id="year">2026</span> TuKuai Studio · All rights reserved.</span><span>ONE CRAYON, WHOLE UNIVERSE.</span>
+    <div class="footer-inner wrap"><span>© <span id="year">2026</span> TuKuai Studio · All rights reserved.</span><span>THE PAST CANNOT BE CURED.</span>
     </div>
 </footer>
 <dialog id="search-dialog" aria-labelledby="search-title">
@@ -4066,13 +4043,14 @@
         href="TuKuaiUI/TuKuaiUI.html">直接打开 TuKuai UI ↗</a></p>
 </noscript>
 <script>
-    (() => {
+    (async () => {
         'use strict';
-        // 六个大板块；UI 下的两个子入口共用一个主导航位置。
-        const sections = [
+        // 1. 内置保底配置（当无法网络请求 sections.json 时生效）
+        const fallbackSections = [
             {
                 id: 'home',
                 name: '首页',
+                href: 'index.html',
                 description: '给灵感，一点颜色。',
                 keywords: '主页 工坊 五色 彩色 spectrum palette',
                 status: 'home'
@@ -4080,73 +4058,120 @@
             {
                 id: 'ui',
                 name: 'UI',
+                color: 'blue',
+                href: '?view=ui',
                 description: 'TuKuai-UI 与 TuKuai-JUI 的组件工坊',
                 keywords: '界面 蓝色 components blue',
-                status: 'group'
+                status: 'group',
+                children: [
+                    {
+                        id: 'tukuai-ui',
+                        name: 'TuKuai-UI',
+                        description: '音频、视频与原生 Web Components',
+                        keywords: '影音 播放器 audio video',
+                        status: 'available',
+                        url: 'TuKuaiUI/TuKuaiUI.html'
+                    },
+                    {
+                        id: 'tukuai-jui',
+                        name: 'TuKuai-JUI',
+                        description: '独立入口已预留，更多界面正在酝酿。',
+                        keywords: 'jui 界面',
+                        status: 'planned',
+                        url: '',
+                        badge: '待开发',
+                        label: 'UI / TUKUAI-JUI',
+                        sculpture: 'layers'
+                    }
+                ]
             },
             {
                 id: 'green',
-                name: '待开发 · 02',
+                name: 'Core',
+                badge: '02',
+                color: 'green',
+                href: '?view=green',
+                ariaLabel: '第二个组件板块，绿色，Core',
                 description: '种下一点新的想法，让它自在地生长。',
-                keywords: '绿色 生长 green',
+                keywords: '绿色 生长 green core 02',
                 status: 'planned',
                 label: '02 / COMING SOON',
-                sculpture: 'leaf'
+                sculpture: 'leaf',
+                children: []
             },
             {
                 id: 'yellow',
-                name: '待开发 · 03',
+                name: 'IO',
+                badge: '03',
+                color: 'yellow',
+                href: '?view=yellow',
+                ariaLabel: '第三个组件板块，黄色，IO',
                 description: '给尚未成形的灵感，留一束温暖的光。',
-                keywords: '黄色 日光 yellow',
+                keywords: '黄色 日光 yellow io 03',
                 status: 'planned',
                 label: '03 / COMING SOON',
-                sculpture: 'sun'
+                sculpture: 'sun',
+                children: []
             },
             {
                 id: 'purple',
-                name: '待开发 · 04',
+                name: 'Net',
+                badge: '04',
+                color: 'purple',
+                href: '?view=purple',
+                ariaLabel: '第四个组件板块，紫色，Net',
                 description: '想象不必急着定义，新的形状正在酝酿。',
-                keywords: '紫色 想象 purple',
+                keywords: '紫色 想象 purple net 04',
                 status: 'planned',
                 label: '04 / COMING SOON',
-                sculpture: 'layers'
+                sculpture: 'layers',
+                children: []
             },
             {
                 id: 'red',
-                name: '待开发 · 05',
+                name: 'Sys',
+                badge: '05',
+                color: 'red',
+                href: '?view=red',
+                ariaLabel: '第五个组件板块，红色，Sys',
                 description: '把一点热爱放在这里，等待下一次美好发生。',
-                keywords: '红色 珊瑚 red',
+                keywords: '红色 珊瑚 red sys 05',
                 status: 'planned',
                 label: '05 / COMING SOON',
-                sculpture: 'ribbon'
+                sculpture: 'ribbon',
+                children: []
             }
         ];
-        // 填写新组件的 url 并设 status:'available' 即可交给 iframe 加载。
-        const uiChildren = [
-            {
-                id: 'tukuai-ui',
-                parent: 'ui',
-                name: 'TuKuai-UI',
-                description: '音频、视频与原生 Web Components',
-                keywords: '影音 播放器 audio video',
-                status: 'available',
-                url: 'TuKuaiUI/TuKuaiUI.html'
-            },
-            {
-                id: 'tukuai-jui',
-                parent: 'ui',
-                name: 'TuKuai-JUI',
-                description: '独立入口已预留，更多界面正在酝酿。',
-                keywords: 'jui 界面',
-                status: 'planned',
-                url: '',
-                label: 'UI / TUKUAI-JUI',
-                sculpture: 'layers'
+
+        // 2. 优先从根目录独立的 sections.json 动态加载配置
+        let sections = fallbackSections;
+        try {
+            const res = await fetch('sections.json');
+            if (res.ok) {
+                const data = await res.json();
+                if (Array.isArray(data) && data.length > 0) {
+                    sections = data;
+                }
             }
-        ];
+        } catch (err) {
+            if (location.protocol === 'file:') {
+                console.info('[TuKuai Studio] 提示: 当前通过 file:// 协议直接双击打开，浏览器安全沙箱限制了本地 fetch，已自动使用内置配置。在 WebStorm / VS Code Live Server 或服务器环境下将实时读取根目录的 sections.json。');
+            }
+        }
+
+        // 扁平化数据供全局搜索及路由索引
+        const entries = [];
+        sections.forEach(item => {
+            entries.push(item);
+            if (Array.isArray(item.children)) {
+                item.children.forEach(child => {
+                    entries.push({ ...child, parent: item.id });
+                });
+            }
+        });
+
         const $ = selector => document.querySelector(selector);
         const requested = new URLSearchParams(location.search).get('view');
-        const entries = [...sections, ...uiChildren];
         const current = entries.find(item => item.id === requested) || sections[0];
         let theme = document.documentElement.dataset.theme;
         const iframe = $('#component-frame');
@@ -4154,6 +4179,151 @@
         let loadingTimer;
         document.body.dataset.page = current.id === 'home' ? 'home' : 'inner';
         $('#year').textContent = new Date().getFullYear();
+
+        // 数据驱动渲染顶部标题栏导航
+        function renderNavigation() {
+            const nav = $('.main-nav');
+            if (!nav) return;
+            nav.replaceChildren();
+
+            sections.forEach(item => {
+                const hasChildren = Array.isArray(item.children) && item.children.length > 0;
+                if (!hasChildren) {
+                    const link = document.createElement('a');
+                    link.className = 'nav-link';
+                    link.dataset.key = item.id;
+                    link.href = item.href || (item.id === 'home' ? 'index.html' : '?view=' + item.id);
+                    if (item.ariaLabel) link.setAttribute('aria-label', item.ariaLabel);
+                    link.innerHTML = `${item.name}${item.badge ? `<small>${item.badge}</small>` : ''}`;
+                    nav.appendChild(link);
+                } else {
+                    const group = document.createElement('div');
+                    group.className = 'nav-group';
+                    group.dataset.key = item.id;
+                    group.id = `${item.id}-navigation`;
+
+                    const btn = document.createElement('button');
+                    btn.className = 'nav-link';
+                    btn.dataset.key = item.id;
+                    btn.id = `${item.id}-menu-button`;
+                    btn.setAttribute('aria-expanded', 'false');
+                    btn.setAttribute('aria-controls', `${item.id}-submenu`);
+                    btn.innerHTML = `${item.name}${item.badge ? `<small>${item.badge}</small>` : ''}<svg class="icon nav-chevron" aria-hidden="true"><use href="#chevron"/></svg>`;
+
+                    const submenu = document.createElement('div');
+                    submenu.className = 'ui-submenu';
+                    submenu.id = `${item.id}-submenu`;
+                    submenu.setAttribute('aria-label', `${item.name} 子板块`);
+                    submenu.hidden = true;
+
+                    submenu.innerHTML = item.children.map(child => `
+                        <a href="?view=${child.id}">
+                            <span>${child.name}</span>
+                            ${child.status === 'available' ? `<svg class="icon" aria-hidden="true"><use href="#external"/></svg>` : (child.badge ? `<small>${child.badge}</small>` : '')}
+                        </a>
+                    `).join('');
+
+                    group.appendChild(btn);
+                    group.appendChild(submenu);
+                    nav.appendChild(group);
+                }
+            });
+        }
+
+        renderNavigation();
+
+        // 统一处理所有导航分组（含子菜单）的交互行为
+        let activePinnedGroup = null;
+
+        function closeAllMenus() {
+            document.querySelectorAll('.nav-group').forEach(group => {
+                const sub = group.querySelector('.ui-submenu');
+                const btn = group.querySelector('.nav-link');
+                if (sub) sub.hidden = true;
+                if (btn) btn.setAttribute('aria-expanded', 'false');
+                group.classList.remove('is-open');
+            });
+            activePinnedGroup = null;
+        }
+
+        function setMenuGroup(group, open) {
+            const sub = group.querySelector('.ui-submenu');
+            const btn = group.querySelector('.nav-link');
+            if (!sub || !btn) return;
+            sub.hidden = !open;
+            btn.setAttribute('aria-expanded', String(open));
+            group.classList.toggle('is-open', open);
+        }
+
+        function initNavInteractions() {
+            document.querySelectorAll('.nav-group').forEach(group => {
+                const btn = group.querySelector('.nav-link');
+                const sub = group.querySelector('.ui-submenu');
+                if (!btn || !sub) return;
+
+                group.addEventListener('pointerenter', event => {
+                    if (event.pointerType === 'mouse' || event.pointerType === 'pen') {
+                        if (!activePinnedGroup || activePinnedGroup === group) {
+                            setMenuGroup(group, true);
+                        }
+                    }
+                });
+
+                group.addEventListener('pointerleave', () => {
+                    if (activePinnedGroup !== group) {
+                        setMenuGroup(group, false);
+                    }
+                });
+
+                btn.addEventListener('click', () => {
+                    if (activePinnedGroup === group) {
+                        activePinnedGroup = null;
+                        setMenuGroup(group, false);
+                    } else {
+                        closeAllMenus();
+                        activePinnedGroup = group;
+                        setMenuGroup(group, true);
+                    }
+                });
+
+                btn.addEventListener('keydown', event => {
+                    if (event.key === 'ArrowDown') {
+                        event.preventDefault();
+                        setMenuGroup(group, true);
+                        const firstA = sub.querySelector('a');
+                        if (firstA) firstA.focus();
+                    }
+                });
+
+                group.addEventListener('focusout', event => {
+                    if (!group.contains(event.relatedTarget)) {
+                        if (activePinnedGroup === group) activePinnedGroup = null;
+                        setMenuGroup(group, false);
+                    }
+                });
+            });
+
+            document.addEventListener('click', event => {
+                if (!event.target.closest('.nav-group')) {
+                    closeAllMenus();
+                }
+            });
+
+            document.addEventListener('keydown', event => {
+                if (event.key === 'Escape') {
+                    const openGroup = document.querySelector('.nav-group.is-open');
+                    if (openGroup) {
+                        const btn = openGroup.querySelector('.nav-link');
+                        closeAllMenus();
+                        if (btn) btn.focus();
+                    }
+                }
+            });
+        }
+
+        initNavInteractions();
+
+        // 统一设置当前激活标签的高亮状态
         document.querySelectorAll('.nav-link').forEach(link => {
             if (link.dataset.key === (current.parent || current.id)) link.setAttribute('aria-current', 'page');
             else link.removeAttribute('aria-current');
@@ -4199,53 +4369,6 @@
             } catch {
             }
         }));
-        const menuGroup = $('#ui-navigation');
-        const menuButton = $('#ui-menu-button');
-        const submenu = $('#ui-submenu');
-        let pinned = false;
-
-        function setMenu(open) {
-            submenu.hidden = !open;
-            menuButton.setAttribute('aria-expanded', String(open));
-            menuGroup.classList.toggle('is-open', open);
-        }
-
-        menuGroup.addEventListener('pointerenter', event => {
-            if (event.pointerType === 'mouse' || event.pointerType === 'pen') setMenu(true);
-        });
-        menuGroup.addEventListener('pointerleave', () => {
-            if (!pinned) setMenu(false);
-        });
-        menuButton.addEventListener('click', () => {
-            pinned = !pinned;
-            setMenu(pinned);
-        });
-        menuButton.addEventListener('keydown', event => {
-            if (event.key === 'ArrowDown') {
-                event.preventDefault();
-                setMenu(true);
-                submenu.querySelector('a').focus();
-            }
-        });
-        menuGroup.addEventListener('focusout', event => {
-            if (!menuGroup.contains(event.relatedTarget)) {
-                pinned = false;
-                setMenu(false);
-            }
-        });
-        document.addEventListener('click', event => {
-            if (!menuGroup.contains(event.target)) {
-                pinned = false;
-                setMenu(false);
-            }
-        });
-        document.addEventListener('keydown', event => {
-            if (event.key === 'Escape' && !submenu.hidden) {
-                pinned = false;
-                setMenu(false);
-                menuButton.focus();
-            }
-        });
 
         function loadFrame() {
             clearTimeout(loadingTimer);
@@ -4286,7 +4409,7 @@
                 const coming = $('#coming-view');
                 coming.hidden = false;
                 coming.classList.add(current.parent ? 'jui' : current.id);
-                $('#coming-title').textContent = current.parent ? current.name : '待开发';
+                $('#coming-title').textContent = current.name || '待开发';
                 $('#coming-index').textContent = current.label;
                 $('#coming-description').textContent = current.description;
                 $('#coming-sculpture').className = 'sculpture ' + current.sculpture;
@@ -4331,8 +4454,7 @@
 
         function openSearch() {
             if (dialog.open) return;
-            pinned = false;
-            setMenu(false);
+            closeAllMenus();
             renderResults();
             dialog.showModal();
             input.focus();
