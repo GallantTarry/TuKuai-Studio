@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#f7faff">
-    <meta name="description" content="TuKuai Studio 土块工坊。以色彩连接灵感，探索 UI 工坊 与持续生长的创作工具。">
+    <meta name="theme-color" content="#f6f1e6">
+    <meta name="description" content="TuKuai Studio 土块工坊。以色彩连接灵感，探索 Comp 组件工坊与持续生长的创作工具。">
     <title>TuKuai Studio · 给灵感，一点颜色。</title>
     <link rel="icon"
           href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='22' y='2' width='20' height='37' rx='10' fill='%23fa7c85' transform='rotate(-72 32 32)'/%3E%3Crect x='22' y='2' width='20' height='37' rx='10' fill='%2368bdf5'/%3E%3Crect x='22' y='2' width='20' height='37' rx='10' fill='%2348cba1' transform='rotate(72 32 32)'/%3E%3Crect x='22' y='2' width='20' height='37' rx='10' fill='%23f5ca55' transform='rotate(144 32 32)'/%3E%3Crect x='22' y='2' width='20' height='37' rx='10' fill='%23ae7de8' transform='rotate(216 32 32)'/%3E%3C/svg%3E">
@@ -2470,37 +2470,64 @@
             }
         }
 
-        /* v2: one day/night system; neutral content pages, colored home and navigation. */
+        /* v2: one day/night system; warm cream light theme & deep obsidian night theme. */
         :root {
-            --page: #fff;
-            --surface: #f6f6f6;
-            --surface-raised: #fff;
-            --neutral-ink: #242424;
-            --neutral-muted: #777;
-            --neutral-faint: #999;
-            --neutral-line: #e5e5e5;
-            --header-bg: #f9fbfef0;
-            --ink: #17283f;
-            --line: #dfe7f1
+            --page: #f6f1e6;
+            --surface: #efe8d8;
+            --surface-raised: #faf6ed;
+            --neutral-ink: #28241e;
+            --neutral-muted: #787065;
+            --neutral-faint: #9c9284;
+            --neutral-line: #e2d9c6;
+            --header-bg: #f6f1e6e6;
+            --ink: #28241e;
+            --muted: #787065;
+            --line: #e2d9c6
         }
 
         html[data-theme=dark] {
             color-scheme: dark;
-            --page: #111;
-            --surface: #191919;
-            --surface-raised: #1d1d1d;
-            --neutral-ink: #e9e9e9;
-            --neutral-muted: #aaa;
-            --neutral-faint: #858585;
-            --neutral-line: #303030;
-            --header-bg: #14171eef;
-            --ink: #e5ebf5;
-            --line: #2b3341;
+            --page: #0f1116;
+            --surface: #151821;
+            --surface-raised: #1b1f2b;
+            --neutral-ink: #ece8df;
+            --neutral-muted: #969ba7;
+            --neutral-faint: #6e7483;
+            --neutral-line: #252b38;
+            --header-bg: #0f1116e3;
+            --ink: #ece8df;
+            --muted: #969ba7;
+            --line: #252b38;
             --blue: #7ab7ff;
             --green: #63cfa6;
             --yellow: #e6c46e;
             --purple: #bc96ed;
             --red: #ef9ba5
+        }
+
+        html[data-theme=dark] ::selection {
+            background: #2b4263;
+            color: #f5f2eb
+        }
+
+        /* Five-Color Studio Spectrum Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--page)
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--blue) 0%, var(--green) 25%, var(--yellow) 50%, var(--purple) 75%, var(--red) 100%);
+            border-radius: 999px;
+            border: 2px solid var(--page)
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            border-width: 1px
         }
 
         body {
@@ -2516,32 +2543,45 @@
             gap: 19px
         }
 
+        /* Unified Top-Right Header Controls: Day/Night Switch, Search Trigger, Website Link */
         .header-actions {
-            gap: 11px
+            gap: 9px
+        }
+
+        .theme-switch,
+        .search-trigger,
+        .website-link {
+            height: 36px;
+            border: 1px solid var(--line);
+            background: color-mix(in srgb, var(--surface-raised) 82%, transparent);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 10px;
+            box-shadow: 0 1px 2px #00000008;
+            transition: border-color .24s var(--ease), background .24s var(--ease), color .24s var(--ease), box-shadow .24s var(--ease)
         }
 
         .theme-switch {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             padding: 3px;
             gap: 2px;
-            border: 1px solid var(--neutral-line);
-            background: var(--surface);
-            border-radius: 9px;
             flex-shrink: 0
         }
 
         .theme-option {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 5px;
-            padding: 6px 8px;
-            border-radius: 6px;
-            color: var(--neutral-faint);
-            font-size: 10px;
-            line-height: 1.2;
-            white-space: nowrap
+            height: 28px;
+            padding: 0 10px;
+            border-radius: 7px;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1;
+            white-space: nowrap;
+            transition: background .22s var(--ease), color .22s var(--ease), box-shadow .22s var(--ease)
         }
 
         .theme-option .icon {
@@ -2550,13 +2590,76 @@
         }
 
         .theme-option[aria-pressed=true] {
-            color: var(--neutral-ink);
-            background: var(--surface-raised);
-            box-shadow: 0 1px 4px #0000000b
+            color: var(--ink);
+            background: var(--page);
+            box-shadow: 0 1px 3px #00000012;
+            font-weight: 500
+        }
+
+        html[data-theme=dark] .theme-option[aria-pressed=true] {
+            background: #252b3a;
+            box-shadow: 0 1px 4px #00000045
         }
 
         .theme-option:hover {
-            color: var(--neutral-ink)
+            color: var(--ink)
+        }
+
+        .search-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 12px;
+            color: var(--muted);
+            font-size: 11px;
+            min-width: 142px
+        }
+
+        .search-trigger .icon {
+            width: 14px;
+            height: 14px
+        }
+
+        .search-trigger kbd {
+            font: 9px/1.4 monospace;
+            padding: 2px 5px;
+            border-radius: 5px;
+            border: 1px solid var(--line);
+            background: color-mix(in srgb, var(--page) 75%, transparent);
+            color: var(--muted);
+            margin-left: auto;
+            transition: border-color .24s var(--ease), color .24s var(--ease)
+        }
+
+        .search-trigger:hover,
+        .theme-switch:hover {
+            border-color: color-mix(in srgb, var(--ink) 20%, var(--line));
+            background: var(--surface-raised);
+            color: var(--ink)
+        }
+
+        .search-trigger:hover kbd {
+            border-color: color-mix(in srgb, var(--ink) 18%, var(--line));
+            color: var(--ink)
+        }
+
+        .website-link {
+            display: grid;
+            place-items: center;
+            width: 36px;
+            color: var(--muted);
+            flex-shrink: 0
+        }
+
+        .website-link .icon {
+            width: 15px;
+            height: 15px
+        }
+
+        .website-link:hover {
+            border-color: color-mix(in srgb, var(--blue) 42%, var(--line));
+            background: var(--surface-raised);
+            color: var(--blue)
         }
 
         .nav-group {
@@ -2573,7 +2676,7 @@
         .nav-chevron {
             width: 10px;
             height: 10px;
-            transition: transform .2s
+            transition: transform .28s var(--ease)
         }
 
         .nav-group.is-open .nav-chevron {
@@ -2590,19 +2693,33 @@
             transform: none
         }
 
+        /* Smooth Dropdown Fade-In & Slide Reveal */
         .ui-submenu {
             position: absolute;
-            top: calc(100% + 3px);
+            top: calc(100% + 6px);
             left: 50%;
-            transform: translateX(-50%);
-            min-width: 210px;
+            transform: translateX(-50%) translateY(-8px) scale(.97);
+            min-width: 214px;
             padding: 7px;
-            border: 1px solid var(--neutral-line);
-            background: var(--surface-raised);
-            border-radius: 12px;
-            box-shadow: 0 14px 40px #152c4915;
-            color: var(--neutral-ink);
-            z-index: 60
+            border: 1px solid var(--line);
+            background: color-mix(in srgb, var(--surface-raised) 95%, transparent);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 13px;
+            box-shadow: 0 18px 44px -10px #15223822, 0 2px 6px #0000000a;
+            color: var(--ink);
+            z-index: 60;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity .26s var(--ease), transform .26s var(--ease), visibility .26s
+        }
+
+        .nav-group.is-open .ui-submenu {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: translateX(-50%) translateY(0) scale(1)
         }
 
         .ui-submenu:before {
@@ -2618,13 +2735,15 @@
             align-items: center;
             justify-content: space-between;
             gap: 20px;
-            padding: 13px 12px;
+            padding: 12px 13px;
             font-size: 12px;
-            border-radius: 7px
+            border-radius: 8px;
+            transition: background .2s var(--ease), padding-left .2s var(--ease), color .2s var(--ease)
         }
 
         .ui-submenu a:hover, .ui-submenu a:focus-visible {
-            background: var(--surface)
+            background: var(--surface);
+            padding-left: 16px
         }
 
         .ui-submenu small {
@@ -2642,56 +2761,28 @@
             overflow: visible
         }
 
-        .search-trigger {
-            min-width: 124px
-        }
-
         .brand em {
             color: #65778e
         }
 
-        .website-link {
-            color: var(--neutral-muted)
-        }
-
         html[data-theme=dark] .brand em {
-            color: #a5b1c5
+            color: #b4bece
         }
 
         html[data-theme=dark] .brand small {
-            color: #7f8da2
+            color: #798396
         }
 
         html[data-theme=dark] .nav-link {
-            color: #96a2b5
+            color: #969fb0
         }
 
         html[data-theme=dark] .nav-link:hover, html[data-theme=dark] .nav-link[aria-current=page], html[data-theme=dark] .nav-group.is-open > .nav-link {
             color: var(--tone)
         }
 
-        html[data-theme=dark] .search-trigger {
-            background: #ffffff05;
-            color: #8491a6;
-            border-color: #303744
-        }
-
-        html[data-theme=dark] kbd {
-            color: #8591a2;
-            border-color: #39404b
-        }
-
-        html[data-theme=dark] .website-link:hover {
-            background: #283445;
-            color: #b1ccea
-        }
-
-        html[data-theme=dark] .home-view {
-            background: radial-gradient(ellipse 55% 28% at 82% 12%, #203b5b77, transparent 95%), #13171e
-        }
-
         html[data-theme=dark] .hero-copy > p {
-            color: #9aa8bd
+            color: var(--muted)
         }
 
         html[data-theme=dark] .eyebrow {
@@ -2726,20 +2817,20 @@
         }
 
         html[data-theme=dark] .art-stage:before {
-            background: radial-gradient(circle, #40649344, transparent 70%)
+            background: radial-gradient(circle, #35507538, transparent 70%)
         }
 
         html[data-theme=dark] .orbit {
-            border-color: #4c6a8d55
+            border-color: #3d526e55
         }
 
         html[data-theme=dark] .orbit.second {
-            border-color: #4c6a8d44
+            border-color: #3d526e38
         }
 
         html[data-theme=dark] .orbit:after {
-            border-color: #192331;
-            background: #769fce
+            border-color: var(--page);
+            background: #7ab7ff
         }
 
         html[data-theme=dark] .art-tag {
@@ -2753,11 +2844,11 @@
         }
 
         html[data-theme=dark] .flower-shadow {
-            background: #0004
+            background: #00000055
         }
 
         html[data-theme=dark] .section-label, html[data-theme=dark] .section-head > p {
-            color: #8192a9
+            color: var(--muted)
         }
 
         html[data-theme=dark] .ui-feature {
@@ -2855,11 +2946,12 @@
         }
 
         html[data-theme=dark] .site-footer {
-            background: #10141a
+            background: color-mix(in srgb, var(--surface) 70%, var(--page));
+            border-color: var(--line)
         }
 
         html[data-theme=dark] .footer-inner {
-            color: #7f8ca0
+            color: var(--muted)
         }
 
         /* Inner pages intentionally use only neutral surfaces and controls. */
@@ -2966,228 +3058,6 @@
             letter-spacing: -1px
         }
 
-        .ui-hub {
-            min-height: calc(100dvh - 89px);
-            padding: 62px 0 75px;
-            background: var(--page);
-            color: var(--neutral-ink)
-        }
-
-        .inner-wrap {
-            width: min(1000px, calc(100% - 64px));
-            margin: auto
-        }
-
-        .inner-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 11px;
-            color: var(--neutral-muted);
-            margin-bottom: 54px
-        }
-
-        .inner-back .icon {
-            width: 15px;
-            height: 15px
-        }
-
-        .hub-eyebrow {
-            font: 9px monospace;
-            letter-spacing: 2px;
-            color: var(--neutral-faint)
-        }
-
-        .hub-heading {
-            font-size: 64px;
-            font-weight: 550;
-            letter-spacing: -3px;
-            margin-top: 15px
-        }
-
-        .hub-intro {
-            color: var(--neutral-muted);
-            font-size: 13px;
-            line-height: 2;
-            margin-top: 16px
-        }
-
-        .hub-grid {
-            display: grid;
-            grid-template-columns:1fr 1fr;
-            gap: 22px;
-            margin-top: 42px
-        }
-
-        .hub-card {
-            display: flex;
-            flex-direction: column;
-            border: 1px solid var(--neutral-line);
-            border-radius: 14px;
-            background: var(--surface-raised);
-            overflow: hidden
-        }
-
-        .hub-card-art {
-            height: 150px;
-            display: grid;
-            place-items: center;
-            background: var(--surface);
-            border-bottom: 1px solid var(--neutral-line)
-        }
-
-        .hub-wireframe {
-            width: 142px;
-            padding: 12px;
-            border: 1px solid var(--neutral-line);
-            border-radius: 9px;
-            background: var(--surface-raised);
-            box-shadow: 0 12px 22px #00000005;
-            transform: rotate(-4deg)
-        }
-
-        .hub-wireframe > i {
-            display: block;
-            height: 5px;
-            width: 32px;
-            background: var(--neutral-line);
-            border-radius: 4px
-        }
-
-        .wire-player {
-            display: flex;
-            gap: 9px;
-            align-items: center;
-            margin-top: 14px
-        }
-
-        .wire-cover {
-            width: 33px;
-            height: 37px;
-            border: 1px solid var(--neutral-line);
-            border-radius: 5px;
-            background: var(--surface)
-        }
-
-        .wire-track {
-            flex: 1
-        }
-
-        .wire-track i {
-            display: block;
-            height: 4px;
-            background: var(--neutral-line);
-            border-radius: 2px;
-            margin-top: 5px
-        }
-
-        .wire-track i:nth-child(2) {
-            width: 70%
-        }
-
-        .wire-play {
-            width: 18px;
-            height: 18px;
-            display: grid;
-            place-items: center;
-            border: 1px solid var(--neutral-line);
-            border-radius: 50%;
-            font-size: 6px;
-            color: var(--neutral-muted)
-        }
-
-        .jui-wireframe {
-            width: 114px;
-            height: 87px;
-            border: 1px solid var(--neutral-line);
-            border-radius: 10px;
-            background: var(--surface-raised);
-            box-shadow: 0 12px 22px #00000005;
-            transform: rotate(4deg);
-            padding: 11px
-        }
-
-        .jui-wireframe > i {
-            display: block;
-            width: 20px;
-            height: 4px;
-            background: var(--neutral-line);
-            border-radius: 4px;
-            margin-bottom: 12px
-        }
-
-        .jui-grid {
-            display: grid;
-            grid-template-columns:24px 1fr;
-            gap: 8px;
-            height: 43px
-        }
-
-        .jui-grid i {
-            border: 1px solid var(--neutral-line);
-            border-radius: 3px;
-            background: var(--surface)
-        }
-
-        .hub-card-copy {
-            padding: 25px
-        }
-
-        .hub-card-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px
-        }
-
-        .hub-card h2 {
-            font-size: 23px;
-            font-weight: 500;
-            letter-spacing: -.7px
-        }
-
-        .hub-state {
-            padding: 4px 7px;
-            border: 1px solid var(--neutral-line);
-            border-radius: 5px;
-            font-size: 9px;
-            color: var(--neutral-muted);
-            white-space: nowrap
-        }
-
-        .hub-card p {
-            font-size: 11px;
-            line-height: 1.9;
-            color: var(--neutral-muted);
-            margin-top: 11px
-        }
-
-        .hub-card a {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 11px;
-            border-top: 1px solid var(--neutral-line);
-            margin-top: 25px;
-            padding-top: 16px;
-            color: var(--neutral-ink)
-        }
-
-        .hub-card a .icon {
-            width: 16px;
-            height: 16px
-        }
-
-        .hub-card a:hover {
-            text-decoration: underline
-        }
-
-        .hub-note {
-            margin-top: 27px;
-            font-size: 10px;
-            color: var(--neutral-faint)
-        }
-
         dialog {
             background: var(--surface-raised);
             color: var(--neutral-ink);
@@ -3195,7 +3065,8 @@
         }
 
         dialog::backdrop {
-            background: #0004
+            background: #0006;
+            backdrop-filter: blur(4px)
         }
 
         .dialog-top h2 {
@@ -3255,7 +3126,8 @@
 
         @media (max-width: 1160px) {
             .theme-option {
-                padding: 6px
+                width: 28px;
+                padding: 0
             }
 
             .theme-option span {
@@ -3263,7 +3135,7 @@
             }
 
             .search-trigger {
-                min-width: 105px
+                min-width: 112px
             }
 
             .header-actions {
@@ -3280,10 +3152,6 @@
                 justify-content: center;
                 gap: 14px
             }
-
-            .ui-hub {
-                min-height: calc(100dvh - 111px)
-            }
         }
 
         @media (max-width: 650px) {
@@ -3295,12 +3163,22 @@
                 gap: 4px
             }
 
+            .theme-switch,
+            .search-trigger,
+            .website-link {
+                height: 30px;
+                border-radius: 8px
+            }
+
             .theme-switch {
                 padding: 2px
             }
 
             .theme-option {
-                padding: 5px
+                width: 24px;
+                height: 24px;
+                padding: 0;
+                border-radius: 6px
             }
 
             .theme-option .icon {
@@ -3310,11 +3188,13 @@
 
             .search-trigger {
                 min-width: 0;
-                width: 29px
+                width: 30px;
+                padding: 0;
+                justify-content: center
             }
 
             .website-link {
-                width: 28px
+                width: 30px
             }
 
             .main-nav {
@@ -3335,56 +3215,21 @@
             .ui-submenu {
                 min-width: 185px;
                 left: 10px;
-                transform: none;
+                transform: translateY(-8px) scale(.97);
                 top: calc(100% + 4px)
             }
 
-            .ui-submenu a {
-                padding: 13px 10px;
-                font-size: 11px
+            .nav-group.is-open .ui-submenu {
+                transform: translateY(0) scale(1)
             }
 
-            .ui-hub {
-                padding: 32px 0 45px
+            .ui-submenu a {
+                padding: 12px 10px;
+                font-size: 11px
             }
 
             .inner-wrap {
                 width: calc(100% - 40px)
-            }
-
-            .inner-back {
-                margin-bottom: 35px
-            }
-
-            .hub-heading {
-                font-size: 49px;
-                margin-top: 13px
-            }
-
-            .hub-intro {
-                font-size: 12px
-            }
-
-            .hub-grid {
-                grid-template-columns:1fr;
-                gap: 18px;
-                margin-top: 28px
-            }
-
-            .hub-card-art {
-                height: 130px
-            }
-
-            .hub-card-copy {
-                padding: 22px
-            }
-
-            .hub-card h2 {
-                font-size: 22px
-            }
-
-            .hub-card p {
-                font-size: 11px
             }
 
             .coming-content h1 {
@@ -3413,10 +3258,6 @@
 
             .nav-link {
                 padding-inline: 8px
-            }
-
-            .theme-option {
-                padding: 4px
             }
 
             .theme-switch {
@@ -3465,11 +3306,71 @@
         }
 
         .home-view {
-            background: radial-gradient(ellipse 35% 18% at 77% 8%, #dcefff7a, transparent 90%), radial-gradient(ellipse 28% 18% at 96% 20%, #dcf5e969, transparent 95%), radial-gradient(ellipse 35% 20% at 60% 29%, #fff1c13b, transparent 90%), radial-gradient(ellipse 32% 18% at 3% 12%, #eddef94f, transparent 90%), radial-gradient(ellipse 30% 22% at 10% 31%, #ffe6e849, transparent 90%), #fdfdfd
+            background:
+                radial-gradient(ellipse 38% 20% at 77% 10%, #e4edf666, transparent 90%),
+                radial-gradient(ellipse 28% 18% at 95% 22%, #e2efe759, transparent 95%),
+                radial-gradient(ellipse 36% 22% at 60% 29%, #f6ead070, transparent 90%),
+                radial-gradient(ellipse 32% 18% at 5% 14%, #ebe3f350, transparent 90%),
+                radial-gradient(ellipse 30% 22% at 10% 31%, #f5e3e350, transparent 90%),
+                radial-gradient(ellipse 40% 26% at 85% 75%, #ebe2cf45, transparent 90%),
+                var(--page)
+        }
+
+        html[data-theme=light] .nav-link {
+            color: #6e665b
+        }
+
+        html[data-theme=light] .brand em {
+            color: #787065
+        }
+
+        html[data-theme=light] .brand small {
+            color: #9c9284
+        }
+
+        html[data-theme=light] .hero-copy > p {
+            color: var(--muted)
+        }
+
+        html[data-theme=light] .art-stage:before {
+            background: radial-gradient(circle, #ece2cc85, transparent 70%)
+        }
+
+        html[data-theme=light] .orbit {
+            border-color: #dcd1bc99
+        }
+
+        html[data-theme=light] .orbit.second {
+            border-color: #dcd1bc66
+        }
+
+        html[data-theme=light] .orbit:after {
+            border-color: var(--page);
+            background: #c79f4b
+        }
+
+        html[data-theme=light] .flower-shadow {
+            background: #8a785822
+        }
+
+        html[data-theme=light] .site-footer {
+            background: #efe9dc;
+            border-color: var(--line)
+        }
+
+        html[data-theme=light] .footer-inner {
+            color: var(--muted)
         }
 
         html[data-theme=dark] .home-view {
-            background: radial-gradient(ellipse 35% 18% at 77% 8%, #32618633, transparent 90%), radial-gradient(ellipse 28% 18% at 96% 20%, #31675422, transparent 95%), radial-gradient(ellipse 35% 20% at 60% 29%, #8c713311, transparent 90%), radial-gradient(ellipse 32% 18% at 3% 12%, #71518b22, transparent 90%), radial-gradient(ellipse 30% 22% at 10% 31%, #8a4b5b19, transparent 90%), #15171c
+            background:
+                radial-gradient(ellipse 42% 22% at 78% 10%, #243e5c38, transparent 90%),
+                radial-gradient(ellipse 32% 20% at 92% 24%, #1f473b29, transparent 95%),
+                radial-gradient(ellipse 38% 24% at 58% 32%, #4d3e1e1f, transparent 90%),
+                radial-gradient(ellipse 36% 22% at 8% 16%, #3d2c5229, transparent 90%),
+                radial-gradient(ellipse 38% 28% at 18% 68%, #4a273221, transparent 92%),
+                radial-gradient(ellipse 40% 28% at 84% 78%, #26365226, transparent 92%),
+                var(--page)
         }
 
         .hero h1 .spectrum-heading,
@@ -3542,7 +3443,7 @@
 
         html[data-theme=dark] .hero-actions .primary-button {
             color: var(--neutral-ink);
-            background: linear-gradient(#24262d, #24262d) padding-box, linear-gradient(115deg, #6ab9ef, #5fcda5, #efc75a, #ad82df, #ed939e) border-box;
+            background: linear-gradient(#1f2431, #1f2431) padding-box, linear-gradient(115deg, #6ab9ef, #5fcda5, #efc75a, #ad82df, #ed939e) border-box;
             border-color: transparent
         }
 
@@ -3668,6 +3569,575 @@
                 gap: 2px
             }
         }
+
+        /* Scroll-Triggered Reveal Choreography */
+        [data-reveal] {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity .88s cubic-bezier(.19, 1, .22, 1), transform .88s cubic-bezier(.19, 1, .22, 1);
+            transition-delay: calc(var(--reveal-order, 0) * 95ms)
+        }
+
+        [data-reveal].is-visible {
+            opacity: 1;
+            transform: translateY(0)
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            [data-reveal] {
+                opacity: 1;
+                transform: none;
+                transition: none
+            }
+        }
+
+        /* Editorial & Museum-Grade Aesthetic Adornments */
+        .hero-epigraph {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            font: 500 10px/1.4 "Georgia", "Times New Roman", serif;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+            color: var(--neutral-faint)
+        }
+
+        .spectrum-dots {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px
+        }
+
+        .spectrum-dots i {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            display: inline-block
+        }
+
+        .spectrum-dots i:nth-child(1) { background: var(--blue) }
+        .spectrum-dots i:nth-child(2) { background: var(--green) }
+        .spectrum-dots i:nth-child(3) { background: var(--yellow) }
+        .spectrum-dots i:nth-child(4) { background: var(--purple) }
+        .spectrum-dots i:nth-child(5) { background: var(--red) }
+
+        .hero-note {
+            color: var(--muted)
+        }
+
+        .hero-note span {
+            background: var(--line)
+        }
+
+        .hero-note small {
+            color: var(--neutral-faint)
+        }
+
+        /* 3D Icon Stage Peripheral Adornments */
+        .art-tag {
+            color: var(--muted);
+            pointer-events: none;
+            z-index: 3
+        }
+
+        .art-tag.top {
+            top: 3%;
+            right: 3%;
+            padding: 6px 11px;
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--surface-raised) 76%, transparent);
+            border: 1px solid var(--line);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 14px #00000008
+        }
+
+        .art-tag.top i {
+            width: 6px;
+            height: 6px;
+            border: 0;
+            background: conic-gradient(#5aa9ed, #40ba92, #e9bd4b, #a77bdc, #e88391, #5aa9ed);
+            border-radius: 50%;
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--blue) 14%, transparent)
+        }
+
+        .art-tag.top-left {
+            top: 4%;
+            left: 3%;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 3px
+        }
+
+        .art-tag.top-left .art-coord {
+            font: italic 11px/1.2 "Georgia", "Times New Roman", serif;
+            letter-spacing: 1.8px;
+            color: var(--ink);
+            opacity: .75
+        }
+
+        .art-tag.top-left small {
+            font: 8px/1.4 monospace;
+            letter-spacing: 1.6px;
+            color: var(--neutral-faint)
+        }
+
+        .art-tag.bottom {
+            bottom: 2%;
+            left: 3%;
+            padding: 7px 12px;
+            border-radius: 12px;
+            background: color-mix(in srgb, var(--surface-raised) 76%, transparent);
+            border: 1px solid var(--line);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 14px #00000008;
+            color: var(--muted)
+        }
+
+        .mini-palette i {
+            box-shadow: 0 2px 5px #00000012
+        }
+
+        .art-tag.bottom-right {
+            bottom: 4%;
+            right: 4%;
+            font: italic 10px/1.2 "Georgia", "Times New Roman", serif;
+            letter-spacing: 2px;
+            color: var(--neutral-faint);
+            gap: 8px
+        }
+
+        .art-tag.bottom-right i {
+            width: 18px;
+            height: 1px;
+            background: linear-gradient(90deg, var(--blue), var(--purple), var(--red))
+        }
+
+        @media (max-width: 650px) {
+            .art-tag.top-left,
+            .art-tag.bottom-right {
+                display: none
+            }
+        }
+
+        .horizon-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            margin: 0 auto 12px;
+            opacity: .75
+        }
+
+        .horizon-divider:before,
+        .horizon-divider:after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--line) 35%, var(--line) 65%, transparent)
+        }
+
+        .horizon-gem {
+            font: italic 11px/1 "Georgia", "Times New Roman", serif;
+            letter-spacing: 4px;
+            color: var(--neutral-faint);
+            user-select: none
+        }
+
+        .section-head {
+            position: relative;
+            padding-bottom: 22px;
+            margin-bottom: 34px;
+            border-bottom: 1px solid var(--line)
+        }
+
+        .section-head:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 180px;
+            height: 2px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--blue), var(--green), var(--yellow), var(--purple), var(--red))
+        }
+
+        .section-kicker {
+            display: block;
+            font: italic 11px/1.4 "Georgia", "Times New Roman", serif;
+            letter-spacing: 2.4px;
+            color: var(--neutral-faint);
+            margin-bottom: 10px
+        }
+
+        .section-poetic {
+            margin: 0;
+            font-family: "Georgia", "Times New Roman", "Songti SC", "STSong", serif;
+            font-style: italic;
+            font-size: 13px;
+            line-height: 1.75;
+            color: var(--muted);
+            text-align: right;
+            max-width: 340px
+        }
+
+        /* v4: Equal-area artistic geometric mosaic for the 5 major domains (Comp, Core, IO, Net, Sys) */
+        .mosaic-stage {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(6, minmax(92px, 1fr));
+            gap: 20px;
+            margin-top: 8px;
+            position: relative
+        }
+
+        .mosaic-card {
+            --tone: var(--blue);
+            --tint: linear-gradient(140deg, #f5f5f1 0%, #eaeff4 100%);
+            --border: #d7dee6;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 32px 34px;
+            background: var(--tint);
+            border: 1px solid var(--border);
+            box-shadow: inset 0 1px 0 #ffffff80, 0 12px 32px -18px #28241e12;
+            overflow: hidden;
+            isolation: isolate;
+            cursor: default;
+            transition: border-color .4s var(--ease), box-shadow .4s var(--ease), transform .4s var(--ease)
+        }
+
+        .mosaic-card:hover {
+            border-color: color-mix(in srgb, var(--tone) 42%, var(--border));
+            box-shadow: inset 0 1px 0 #ffffff99, 0 20px 44px -18px color-mix(in srgb, var(--tone) 18%, transparent)
+        }
+
+        /* All 5 blocks occupy EXACTLY 12 grid cells (10x6 = 60 cells total, 60 / 5 = 12 cells each)
+           Combined with different aspect ratios and sculptural interlocking corner radii */
+        .mosaic-card.comp {
+            grid-column: 1 / 5;
+            grid-row: 1 / 4;
+            --tone: var(--blue);
+            --tint: linear-gradient(140deg, #f8f5ed 0%, #e8eff7 100%);
+            --border: #d5dfe9;
+            border-radius: 38px 18px 46px 18px
+        }
+
+        .mosaic-card.core {
+            grid-column: 5 / 11;
+            grid-row: 1 / 3;
+            --tone: var(--green);
+            --tint: linear-gradient(140deg, #f7f5ed 0%, #e5f0ea 100%);
+            --border: #d2e1d7;
+            border-radius: 18px 38px 18px 46px;
+            flex-direction: row;
+            align-items: stretch;
+            gap: 28px
+        }
+
+        .mosaic-card.sys {
+            grid-column: 1 / 5;
+            grid-row: 4 / 7;
+            --tone: var(--red);
+            --tint: linear-gradient(140deg, #faf3ec 0%, #f5e5e4 100%);
+            --border: #e6d3d2;
+            border-radius: 18px 46px 18px 38px
+        }
+
+        .mosaic-card.io {
+            grid-column: 5 / 8;
+            grid-row: 3 / 7;
+            --tone: var(--yellow);
+            --tint: linear-gradient(145deg, #fbf5e8 0%, #f4ead1 100%);
+            --border: #e5d8bc;
+            border-radius: 46px 18px 30px 26px
+        }
+
+        .mosaic-card.net {
+            grid-column: 8 / 11;
+            grid-row: 3 / 7;
+            --tone: var(--purple);
+            --tint: linear-gradient(145deg, #f8f3ef 0%, #ede6f3 100%);
+            --border: #dcd4e6;
+            border-radius: 18px 30px 38px 46px
+        }
+
+        .mosaic-card:before {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: radial-gradient(circle, color-mix(in srgb, var(--tone) 13%, transparent), transparent 70%);
+            top: -55px;
+            right: -55px;
+            z-index: -1;
+            pointer-events: none
+        }
+
+        .mosaic-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+            position: relative;
+            z-index: 2
+        }
+
+        .mosaic-title {
+            font-size: 30px;
+            font-weight: 600;
+            letter-spacing: -1px;
+            color: var(--ink);
+            line-height: 1.1;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .mosaic-title:before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--tone);
+            box-shadow: 0 0 0 4px color-mix(in srgb, var(--tone) 15%, transparent)
+        }
+
+        .mosaic-num {
+            font: italic 13px/1 "Georgia", "Times New Roman", serif;
+            letter-spacing: 1.5px;
+            color: var(--neutral-faint);
+            transition: color .35s var(--ease)
+        }
+
+        .mosaic-card:hover .mosaic-num {
+            color: var(--tone)
+        }
+
+        .mosaic-art {
+            position: relative;
+            min-height: 112px;
+            display: grid;
+            place-items: center;
+            margin-block: 6px;
+            z-index: 1;
+            pointer-events: none
+        }
+
+        .mosaic-svg {
+            width: 116px;
+            height: 116px;
+            overflow: visible;
+            transition: transform .55s cubic-bezier(.19, 1, .22, 1)
+        }
+
+        .mosaic-card:hover .mosaic-svg {
+            transform: translateY(-3px) scale(1.04)
+        }
+
+        .mosaic-card.core .mosaic-art {
+            width: 170px;
+            min-height: 100%;
+            margin-block: 0;
+            flex-shrink: 0;
+            order: 2
+        }
+
+        .mosaic-card.core .mosaic-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 2
+        }
+
+        .mosaic-quote {
+            position: relative;
+            z-index: 2;
+            margin: 0;
+            padding-top: 14px;
+            border-top: 1px solid color-mix(in srgb, var(--tone) 18%, transparent)
+        }
+
+        .mosaic-quote p {
+            font-family: Georgia, "Times New Roman", "Songti SC", serif;
+            font-style: italic;
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--ink);
+            opacity: .9;
+            letter-spacing: .1px
+        }
+
+        .mosaic-quote footer {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .mosaic-quote cite {
+            font: 600 11px/1.4 Inter, "Segoe UI", sans-serif;
+            letter-spacing: .4px;
+            color: var(--tone);
+            font-style: normal
+        }
+
+        .mosaic-era {
+            font: italic 10px/1.4 "Georgia", "Times New Roman", serif;
+            letter-spacing: .8px;
+            color: var(--neutral-faint)
+        }
+
+        html[data-theme=dark] .mosaic-card {
+            box-shadow: inset 0 1px 0 #ffffff0a, 0 18px 42px -18px #00000075
+        }
+
+        html[data-theme=dark] .mosaic-card:hover {
+            box-shadow: inset 0 1px 0 #ffffff14, 0 22px 48px -16px color-mix(in srgb, var(--tone) 22%, #000000)
+        }
+
+        html[data-theme=dark] .mosaic-card.comp {
+            --tint: linear-gradient(140deg, #161d2a 0%, #152336 100%);
+            --border: #263952
+        }
+
+        html[data-theme=dark] .mosaic-card.core {
+            --tint: linear-gradient(140deg, #15211f 0%, #152923 100%);
+            --border: #244238
+        }
+
+        html[data-theme=dark] .mosaic-card.io {
+            --tint: linear-gradient(145deg, #211f19 0%, #282318 100%);
+            --border: #3f3825
+        }
+
+        html[data-theme=dark] .mosaic-card.net {
+            --tint: linear-gradient(145deg, #1d1928 0%, #241d33 100%);
+            --border: #3a2e4d
+        }
+
+        html[data-theme=dark] .mosaic-card.sys {
+            --tint: linear-gradient(140deg, #24191f 0%, #2c1c23 100%);
+            --border: #462b35
+        }
+
+        html[data-theme=dark] .mosaic-quote p {
+            color: #e6e2d8
+        }
+
+        /* Closing Editorial Colophon */
+        .editorial-colophon {
+            margin-top: 68px;
+            padding-top: 36px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 12px
+        }
+
+        .colophon-ornament {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            color: var(--neutral-faint)
+        }
+
+        .colophon-ornament:before,
+        .colophon-ornament:after {
+            content: "";
+            width: 56px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--line), transparent)
+        }
+
+        .colophon-flower {
+            width: 18px;
+            height: 18px;
+            opacity: .85
+        }
+
+        .colophon-verse {
+            font-family: "Georgia", "Times New Roman", "Songti SC", "STSong", serif;
+            font-size: 14px;
+            letter-spacing: 3px;
+            color: var(--ink);
+            opacity: .82
+        }
+
+        .colophon-sub {
+            font: 500 9px/1.4 "Georgia", "Times New Roman", serif;
+            letter-spacing: 3.2px;
+            text-transform: uppercase;
+            color: var(--neutral-faint)
+        }
+
+        @media (max-width: 1080px) {
+            .mosaic-stage {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: auto
+            }
+
+            .mosaic-card.comp,
+            .mosaic-card.core,
+            .mosaic-card.io,
+            .mosaic-card.net,
+            .mosaic-card.sys {
+                grid-column: auto;
+                grid-row: auto;
+                min-height: 280px
+            }
+
+            .mosaic-card.core {
+                grid-column: 1 / -1;
+                min-height: 230px
+            }
+        }
+
+        @media (max-width: 680px) {
+            .section-head {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px
+            }
+
+            .section-poetic {
+                text-align: left
+            }
+
+            .mosaic-stage {
+                grid-template-columns: 1fr;
+                gap: 15px
+            }
+
+            .mosaic-card.comp,
+            .mosaic-card.core,
+            .mosaic-card.io,
+            .mosaic-card.net,
+            .mosaic-card.sys {
+                flex-direction: column;
+                min-height: 0;
+                padding: 24px 22px;
+                border-radius: 26px 16px 28px 16px
+            }
+
+            .mosaic-card.core .mosaic-art {
+                width: 100%;
+                min-height: 96px;
+                order: 0
+            }
+
+            .mosaic-title {
+                font-size: 26px
+            }
+        }
     </style>
 </head>
 <body>
@@ -3776,12 +4246,15 @@
 <main id="main">
     <div class="home-view" id="home-view">
         <section class="hero wrap" aria-labelledby="hero-title">
-            <div class="hero-copy">
-                <div class="eyebrow"><i></i> A LITTLE STUDIO. A COLORFUL WORLD.</div>
+            <div class="hero-copy" data-reveal style="--reveal-order:0">
+                <div class="hero-epigraph" aria-hidden="true">
+                    <span class="spectrum-dots"><i></i><i></i><i></i><i></i><i></i></span>
+                    <span>LUMEN · FORMA · ORDO</span>
+                </div>
                 <h1 id="hero-title">给灵感，<br><span
                         class="spectrum-heading"><span>一</span><span>点</span><span>颜</span><span>色</span><span>。</span></span>
                 </h1>
-                <p>一块灵感，无限可能。<br>把对色彩与细节的热爱，写进每一个组件。<br>在这里，让下一个好想法慢慢发生。</p>
+                <p>一块灵感，无限可能。<br>把对世界的热爱，写进每一个组件。</p>
                 <div class="hero-actions"><a class="primary-button" href="#collection">查看整个工坊
                     <svg class="icon">
                         <use href="#down"/>
@@ -3789,7 +4262,7 @@
                 </a></div>
                 <div class="hero-note"><b></b> 独立构建，持续生长<span></span><small>MADE WITH CARE</small></div>
             </div>
-            <div class="art-stage" id="art-stage">
+            <div class="art-stage" id="art-stage" data-reveal style="--reveal-order:1">
                 <div class="orbit" aria-hidden="true"></div>
                 <div class="orbit second" aria-hidden="true"></div>
                 <div class="flower-shadow" aria-hidden="true"></div>
@@ -3804,170 +4277,159 @@
                         </div>
                     </div>
                 </div>
-                <div class="art-tag top"><i></i> 五种色彩，同一份热爱</div>
-                <div class="art-tag bottom"><span class="mini-palette"
-                                                  aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span>FIVE COLORS.<br>ONE STUDIO.</span>
+                <div class="art-tag top-left" aria-hidden="true">
+                    <span class="art-coord">N° 05 / 72°</span>
+                    <small>COMP · CORE · IO · NET · SYS</small>
+                </div>
+                <div class="art-tag top"><i></i><span>五种色彩，同一份热爱</span></div>
+                <div class="art-tag bottom">
+                    <span class="mini-palette" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+                    <span>FIVE COLORS.<br>ONE STUDIO.</span>
+                </div>
+                <div class="art-tag bottom-right" aria-hidden="true">
+                    <span>HARMONIC ORBIT</span><i></i>
                 </div>
             </div>
-            <div class="hero-bottom"><span>SMALL PIECES. ENDLESS POSSIBILITIES.</span><a href="#collection">向下，发现更多
-                <svg class="icon">
-                    <use href="#down"/>
-                </svg>
-            </a></div>
         </section>
+        <div class="horizon-divider wrap" aria-hidden="true" data-reveal>
+            <span class="horizon-gem">✦ · ✦ · ✦</span>
+        </div>
         <section class="collection wrap" id="collection" aria-labelledby="collection-title">
-            <div class="section-head">
+            <div class="section-head" data-reveal>
                 <div>
-                    <div class="section-label"><b>01 /</b> THE COLLECTION</div>
-                    <h2 id="collection-title">从一块开始，慢慢长大。</h2></div>
-                <p>一个已经出发的想法，四个留给未来的位置。<br>每一种颜色，都有值得期待的下一步。</p></div>
-            <article class="ui-feature">
-                <div class="feature-copy">
-                    <div class="module-label"><i></i> 01 — UI Components</div>
-                    <h3>UI</h3>
-                      <p>从一个组件开始，为界面带来更多可能。<br>最好的 UI，是让人在使用时忘记它的存在，只留下流畅、愉悦与水到渠成的秩序。</p>
-                    <div class="feature-bottom"><a class="small-cta" href="?view=ui">探索 UI 板块
-                        <svg class="icon">
-                            <use href="#external"/>
-                        </svg>
-                    </a><span class="available"><i></i> TuKuai-UI 已开放</span></div>
+                    <span class="section-kicker" aria-hidden="true">§ 01 — QUINQUE ELEMENTA</span>
+                    <h2 id="collection-title">从一块开始，慢慢长大。</h2>
                 </div>
-                <div class="feature-art" aria-hidden="true"><span class="float-tag audio">♫ &nbsp; AUDIO</span>
-                    <div class="mock-window">
-                        <div class="mock-bar"><i></i><i></i><i></i><span>TUKUAI UI / OCEAN</span></div>
-                        <div class="mock-player">
-                            <div class="mock-cover"></div>
-                            <div class="mock-track"><strong>让美好，有声有色。</strong><small>A MOMENT OF CALM.</small>
-                                <div class="wave"><i style="--h:6px"></i><i style="--h:12px"></i><i
-                                        style="--h:18px"></i><i style="--h:9px"></i><i style="--h:22px"></i><i
-                                        style="--h:15px"></i><i style="--h:24px"></i><i style="--h:11px"></i><i
-                                        style="--h:18px"></i><i style="--h:8px"></i><i style="--h:14px"></i><i
-                                        style="--h:22px"></i><i style="--h:16px"></i><i style="--h:10px"></i><i
-                                        style="--h:19px"></i><i style="--h:13px"></i><i style="--h:7px"></i><i
-                                        style="--h:11px"></i></div>
-                            </div>
-                            <span class="mock-play">▶</span></div>
-                        <div class="mock-seek"></div>
-                    </div>
-                    <span class="float-tag video">▷ &nbsp; VIDEO</span></div>
-            </article>
-            <div class="future-grid">
-                <a class="future-card green" href="?view=green" aria-label="查看绿色板块，待开发">
-                    <div class="future-art" aria-hidden="true"><span class="future-number">02 / GROWTH</span>
-                        <div class="sculpture leaf"></div>
-                    </div>
-                    <div class="future-info">
-                        <div class="future-title"><h3>待开发</h3>
-                            <svg class="icon">
-                                <use href="#external"/>
-                            </svg>
-                        </div>
-                        <p>种下一点新的想法，<br>让它自在地生长。</p>
-                        <div class="future-bottom">IDEAS IN BLOOM<span><i></i> 敬请期待</span></div>
-                    </div>
-                </a>
-
-                <a class="future-card yellow" href="?view=yellow" aria-label="查看黄色板块，待开发">
-                    <div class="future-art" aria-hidden="true"><span class="future-number">03 / SUNLIGHT</span>
-                        <div class="sculpture sun"></div>
-                    </div>
-                    <div class="future-info">
-                        <div class="future-title"><h3>待开发</h3>
-                            <svg class="icon">
-                                <use href="#external"/>
-                            </svg>
-                        </div>
-                        <p>给尚未成形的灵感，<br>留一束温暖的光。</p>
-                        <div class="future-bottom">A LITTLE POSSIBILITY<span><i></i> 敬请期待</span></div>
-                    </div>
-                </a>
-                <a class="future-card purple" href="?view=purple" aria-label="查看紫色板块，待开发">
-                    <div class="future-art" aria-hidden="true"><span class="future-number">04 / IMAGINATION</span>
-                        <div class="sculpture layers"><i></i></div>
-                    </div>
-                    <div class="future-info">
-                        <div class="future-title"><h3>待开发</h3>
-                            <svg class="icon">
-                                <use href="#external"/>
-                            </svg>
-                        </div>
-                        <p>想象不必急着定义，<br>新的形状正在酝酿。</p>
-                        <div class="future-bottom">ROOM TO IMAGINE<span><i></i> 敬请期待</span></div>
-                    </div>
-                </a>
-                <a class="future-card red" href="?view=red" aria-label="查看红色板块，待开发">
-                    <div class="future-art" aria-hidden="true"><span class="future-number">05 / WARMTH</span>
-                        <div class="sculpture ribbon"></div>
-                    </div>
-                    <div class="future-info">
-                        <div class="future-title"><h3>待开发</h3>
-                            <svg class="icon">
-                                <use href="#external"/>
-                            </svg>
-                        </div>
-                        <p>把一点热爱放在这里，<br>等待下一次美好发生。</p>
-                        <div class="future-bottom">SOMETHING TO LOVE<span><i></i> 敬请期待</span></div>
-                    </div>
-                </a>
+                <p class="section-poetic">“彩縷織錦，方寸棲靈。<br>以智慧之度量，雕琢器皿之榮美。”</p>
             </div>
-            <div class="collection-note"><span></span> 不着急，一块一块，把喜欢的世界搭起来。<span></span></div>
-        </section>
-        <section class="studio-note wrap" aria-label="关于土块工坊">
-            <svg class="note-flower" aria-hidden="true">
-                <use href="#flower-logo"/>
-            </svg>
-            <div><h2>共同搭建，<span class="spectrum-heading"><span>彩</span><span>色</span><span>世</span><span>界</span><span>。</span></span></h2>
-                <p>世界很大，但我保证，你的画笔绝不会被夺走。</p></div>
-            <div class="color-line" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="mosaic-stage">
+                <article class="mosaic-card comp" data-reveal style="--reveal-order:0">
+                    <div class="mosaic-head">
+                        <h3 class="mosaic-title">Comp</h3>
+                        <span class="mosaic-num" aria-hidden="true">I · Forma</span>
+                    </div>
+                    <div class="mosaic-art" aria-hidden="true">
+                        <svg class="mosaic-svg" viewBox="0 0 120 120" fill="none">
+                            <circle cx="46" cy="60" r="30" fill="#64b5f6" fill-opacity="0.22" stroke="#3989ec" stroke-width="1.6"/>
+                            <rect x="48" y="28" width="46" height="46" rx="14" fill="#3989ec" fill-opacity="0.14" stroke="#3989ec" stroke-width="1.6"/>
+                            <rect x="34" y="66" width="54" height="22" rx="11" fill="var(--surface-raised)" fill-opacity="0.72" stroke="#3989ec" stroke-width="1.6"/>
+                            <circle cx="71" cy="51" r="4" fill="#3989ec"/>
+                        </svg>
+                    </div>
+                    <blockquote class="mosaic-quote" lang="en">
+                        <p>“Simple things should be simple, complex things should be possible.”</p>
+                        <footer>
+                            <cite>— Alan Kay</cite>
+                            <span class="mosaic-era">Object &amp; Interface</span>
+                        </footer>
+                    </blockquote>
+                </article>
+
+                <article class="mosaic-card core" data-reveal style="--reveal-order:1">
+                    <div class="mosaic-body">
+                        <div class="mosaic-head">
+                            <h3 class="mosaic-title">Core</h3>
+                            <span class="mosaic-num" aria-hidden="true">II · Ratio</span>
+                        </div>
+                        <blockquote class="mosaic-quote" lang="en">
+                            <p>“We can only see a short distance ahead, but we can see plenty there that needs to be done.”</p>
+                            <footer>
+                                <cite>— Alan M. Turing</cite>
+                                <span class="mosaic-era">1950 · Computation</span>
+                            </footer>
+                        </blockquote>
+                    </div>
+                    <div class="mosaic-art" aria-hidden="true">
+                        <svg class="mosaic-svg" viewBox="0 0 120 120" fill="none">
+                            <ellipse cx="60" cy="60" rx="46" ry="22" transform="rotate(-24 60 60)" stroke="#27ad80" stroke-width="1.5" stroke-dasharray="4 4"/>
+                            <polygon points="60,18 92,60 60,102 28,60" fill="#4cc8a2" fill-opacity="0.2" stroke="#27ad80" stroke-width="1.6" stroke-linejoin="round"/>
+                            <polygon points="60,34 78,60 60,86 42,60" fill="#27ad80" fill-opacity="0.24" stroke="#27ad80" stroke-width="1.5" stroke-linejoin="round"/>
+                            <circle cx="60" cy="60" r="4.5" fill="#27ad80"/>
+                        </svg>
+                    </div>
+                </article>
+
+                <article class="mosaic-card sys" data-reveal style="--reveal-order:2">
+                    <div class="mosaic-head">
+                        <h3 class="mosaic-title">Sys</h3>
+                        <span class="mosaic-num" aria-hidden="true">III · Ordo</span>
+                    </div>
+                    <div class="mosaic-art" aria-hidden="true">
+                        <svg class="mosaic-svg" viewBox="0 0 120 120" fill="none">
+                            <ellipse cx="60" cy="60" rx="42" ry="20" transform="rotate(-30 60 60)" fill="#f57483" fill-opacity="0.16" stroke="#e16e7d" stroke-width="1.6"/>
+                            <ellipse cx="60" cy="60" rx="42" ry="20" transform="rotate(30 60 60)" fill="#e16e7d" fill-opacity="0.16" stroke="#e16e7d" stroke-width="1.6"/>
+                            <circle cx="60" cy="60" r="12" fill="var(--surface-raised)" fill-opacity="0.72" stroke="#e16e7d" stroke-width="1.6"/>
+                            <circle cx="60" cy="60" r="4" fill="#e16e7d"/>
+                        </svg>
+                    </div>
+                    <blockquote class="mosaic-quote" lang="en">
+                        <p>“UNIX is basically a simple operating system, but you have to be a genius to understand the simplicity.”</p>
+                        <footer>
+                            <cite>— Dennis M. Ritchie</cite>
+                            <span class="mosaic-era">1972 · Operating Systems</span>
+                        </footer>
+                    </blockquote>
+                </article>
+
+                <article class="mosaic-card io" data-reveal style="--reveal-order:3">
+                    <div class="mosaic-head">
+                        <h3 class="mosaic-title">IO</h3>
+                        <span class="mosaic-num" aria-hidden="true">IV · Fluxus</span>
+                    </div>
+                    <div class="mosaic-art" aria-hidden="true">
+                        <svg class="mosaic-svg" viewBox="0 0 120 120" fill="none">
+                            <circle cx="60" cy="60" r="20" fill="#f7ce5c" fill-opacity="0.28" stroke="#d5a32e" stroke-width="1.6"/>
+                            <path d="M30 38 A38 38 0 0 0 30 82" stroke="#d5a32e" stroke-width="1.6" stroke-linecap="round"/>
+                            <path d="M90 38 A38 38 0 0 1 90 82" stroke="#d5a32e" stroke-width="1.6" stroke-linecap="round"/>
+                            <path d="M18 28 A52 52 0 0 0 18 92" stroke="#d5a32e" stroke-width="1.4" stroke-opacity="0.55" stroke-linecap="round"/>
+                            <path d="M102 28 A52 52 0 0 1 102 92" stroke="#d5a32e" stroke-width="1.4" stroke-opacity="0.55" stroke-linecap="round"/>
+                            <circle cx="60" cy="60" r="5" fill="#d5a32e"/>
+                        </svg>
+                    </div>
+                    <blockquote class="mosaic-quote" lang="en">
+                        <p>“The fundamental problem of communication is that of reproducing at one point either exactly or approximately a message selected at another point.”</p>
+                        <footer>
+                            <cite>— Claude E. Shannon</cite>
+                            <span class="mosaic-era">1948 · Information Theory</span>
+                        </footer>
+                    </blockquote>
+                </article>
+
+                <article class="mosaic-card net" data-reveal style="--reveal-order:4">
+                    <div class="mosaic-head">
+                        <h3 class="mosaic-title">Net</h3>
+                        <span class="mosaic-num" aria-hidden="true">V · Nexus</span>
+                    </div>
+                    <div class="mosaic-art" aria-hidden="true">
+                        <svg class="mosaic-svg" viewBox="0 0 120 120" fill="none">
+                            <circle cx="60" cy="60" r="36" fill="#ad7de5" fill-opacity="0.15" stroke="#9664d6" stroke-width="1.6"/>
+                            <ellipse cx="60" cy="60" rx="36" ry="15" transform="rotate(-28 60 60)" stroke="#9664d6" stroke-width="1.5"/>
+                            <ellipse cx="60" cy="60" rx="15" ry="36" transform="rotate(-28 60 60)" stroke="#9664d6" stroke-width="1.5"/>
+                            <circle cx="42" cy="40" r="4" fill="#9664d6"/>
+                            <circle cx="78" cy="80" r="4" fill="#9664d6"/>
+                            <circle cx="82" cy="44" r="3.5" fill="#9664d6"/>
+                        </svg>
+                    </div>
+                    <blockquote class="mosaic-quote" lang="en">
+                        <p>“The Web as I envisaged it, we have not seen it yet. The future is still so much bigger than the past.”</p>
+                        <footer>
+                            <cite>— Sir Tim Berners-Lee</cite>
+                            <span class="mosaic-era">1989 · World Wide Web</span>
+                        </footer>
+                    </blockquote>
+                </article>
+            </div>
+            <div class="editorial-colophon" data-reveal>
+                <div class="colophon-ornament" aria-hidden="true">
+                    <svg class="colophon-flower">
+                        <use href="#flower-logo"/>
+                    </svg>
+                </div>
+                <p class="colophon-verse">微塵出造化，氣息動生靈.</p>
+                <span class="colophon-sub">TuKuai Studio · Craft &amp; Spectrum</span>
+            </div>
         </section>
     </div>
-    <section class="ui-hub" id="ui-hub" aria-labelledby="hub-title" hidden>
-        <div class="inner-wrap"><a class="inner-back" href="index.html">
-            <svg class="icon" aria-hidden="true">
-                <use href="#back"/>
-            </svg>
-            返回首页</a>
-            <div class="hub-eyebrow">UI / INTERFACE COLLECTION</div>
-            <h1 class="hub-heading" id="hub-title">UI</h1>
-            <p class="hub-intro">从细节出发，让界面拥有更多可能。<br>选择一个组件工坊，继续探索。</p>
-            <div class="hub-grid">
-                <article class="hub-card">
-                    <div class="hub-card-art" aria-hidden="true">
-                        <div class="hub-wireframe"><i></i>
-                            <div class="wire-player">
-                                <div class="wire-cover"></div>
-                                <div class="wire-track"><i></i><i></i></div>
-                                <div class="wire-play">▶</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="hub-card-copy">
-                        <div class="hub-card-top"><h2>TuKuai-UI</h2><span class="hub-state">已开放</span></div>
-                        <p>影音组件与交互实验室。<br>探索现有组件，试试自己的灵感。</p><a href="?view=tukuai-ui">进入
-                        TuKuai-UI
-                        <svg class="icon" aria-hidden="true">
-                            <use href="#arrow"/>
-                        </svg>
-                    </a></div>
-                </article>
-                <article class="hub-card">
-                    <div class="hub-card-art" aria-hidden="true">
-                        <div class="jui-wireframe"><i></i>
-                            <div class="jui-grid"><i></i><i></i></div>
-                        </div>
-                    </div>
-                    <div class="hub-card-copy">
-                        <div class="hub-card-top"><h2>TuKuai-JUI</h2><span class="hub-state">待开发</span></div>
-                        <p>为下一种界面，留一个位置。<br>独立入口已准备好，内容正在等待构建。</p><a href="?view=tukuai-jui">查看
-                        TuKuai-JUI
-                        <svg class="icon" aria-hidden="true">
-                            <use href="#arrow"/>
-                        </svg>
-                    </a></div>
-                </article>
-            </div>
-            <p class="hub-note">同属 UI 板块，各自独立生长。</p></div>
-    </section>
     <section class="workspace" id="workspace" aria-label="TuKuai UI 组件工坊" hidden>
         <div class="workspace-toolbar">
             <div class="workspace-title"><a class="back-link" href="index.html">
@@ -4010,17 +4472,12 @@
                 <svg class="icon">
                     <use href="#back"/>
                 </svg>
-                回到工坊</a><a href="?view=ui">先逛逛 UI 工坊
-                <svg class="icon">
-                    <use href="#arrow"/>
-                </svg>
-            </a></div>
+                回到工坊</a></div>
         </div>
     </section>
 </main>
 <footer class="site-footer" id="site-footer">
-    <div class="footer-inner wrap"><span>© <span id="year">2026</span> TuKuai Studio · All rights reserved.</span><span>THE PAST CANNOT BE CURED.</span>
-    </div>
+    <div class="footer-inner wrap"><span>© <span id="year">2026</span> TuKuai Studio · All rights reserved.</span></div>
 </footer>
 <dialog id="search-dialog" aria-labelledby="search-title">
     <div class="dialog-top"><h2 id="search-title">寻找下一块灵感</h2>
@@ -4034,7 +4491,7 @@
         <svg class="icon">
             <use href="#search"/>
         </svg>
-        <input type="search" id="search-input" aria-label="搜索板块名称或关键词" placeholder="搜索 UI、音频、视频、待开发…"
+        <input type="search" id="search-input" aria-label="搜索板块名称或关键词" placeholder="搜索 Comp、Core、音频、视频…"
                autocomplete="off"></label>
     <div class="search-results" id="search-results" aria-live="polite"></div>
     <div class="search-footer"><span>搜索板块与组件。</span><span><kbd>Esc</kbd> 关闭</span></div>
@@ -4045,90 +4502,7 @@
 <script>
     (async () => {
         'use strict';
-        // 1. 内置保底配置（当无法网络请求 sections.json 时生效）
-        const fallbackSections = [
-            {
-                id: 'home',
-                name: '首页',
-                href: 'index.html',
-                description: '给灵感，一点颜色。',
-                keywords: '主页 工坊 五色 彩色 spectrum palette',
-                status: 'home'
-            },
-            {
-                id: 'ui',
-                name: 'UI',
-                badge: '00',
-                color: 'blue',
-                href: '?view=ui',
-                ariaLabel: '第一个组件板块，蓝色，UI',
-                description: '从一个组件开始，为界面带来更多可能。',
-                keywords: '界面 蓝色 components blue ui',
-                status: 'planned',
-                label: '01 / COMING SOON',
-                sculpture: 'layers',
-                children: []
-            },
-            {
-                id: 'green',
-                name: 'Core',
-                badge: '00',
-                color: 'green',
-                href: '?view=green',
-                ariaLabel: '第二个组件板块，绿色，Core',
-                description: '种下一点新的想法，让它自在地生长。',
-                keywords: '绿色 生长 green core 02',
-                status: 'planned',
-                label: '02 / COMING SOON',
-                sculpture: 'leaf',
-                children: []
-            },
-            {
-                id: 'yellow',
-                name: 'IO',
-                badge: '00',
-                color: 'yellow',
-                href: '?view=yellow',
-                ariaLabel: '第三个组件板块，黄色，IO',
-                description: '给尚未成形的灵感，留一束温暖的光。',
-                keywords: '黄色 日光 yellow io 03',
-                status: 'planned',
-                label: '03 / COMING SOON',
-                sculpture: 'sun',
-                children: []
-            },
-            {
-                id: 'purple',
-                name: 'Net',
-                badge: '00',
-                color: 'purple',
-                href: '?view=purple',
-                ariaLabel: '第四个组件板块，紫色，Net',
-                description: '想象不必急着定义，新的形状正在酝酿。',
-                keywords: '紫色 想象 purple net 04',
-                status: 'planned',
-                label: '04 / COMING SOON',
-                sculpture: 'layers',
-                children: []
-            },
-            {
-                id: 'red',
-                name: 'Sys',
-                badge: '00',
-                color: 'red',
-                href: '?view=red',
-                ariaLabel: '第五个组件板块，红色，Sys',
-                description: '把一点热爱放在这里，等待下一次美好发生。',
-                keywords: '红色 珊瑚 red sys 05',
-                status: 'planned',
-                label: '05 / COMING SOON',
-                sculpture: 'ribbon',
-                children: []
-            }
-        ];
-
-        // 2. 优先从根目录独立的 sections.json 动态加载配置
-        let sections = fallbackSections;
+        let sections = [];
         try {
             const res = await fetch('sections.json');
             if (res.ok) {
@@ -4137,10 +4511,7 @@
                     sections = data;
                 }
             }
-        } catch (err) {
-            if (location.protocol === 'file:') {
-                console.info('[TuKuai Studio] 提示: 当前通过 file:// 协议直接双击打开，浏览器安全沙箱限制了本地 fetch，已自动使用内置配置。在 WebStorm / VS Code Live Server 或服务器环境下将实时读取根目录的 sections.json。');
-            }
+        } catch {
         }
 
         // 扁平化数据供全局搜索及路由索引
@@ -4156,7 +4527,8 @@
 
         const $ = selector => document.querySelector(selector);
         const requested = new URLSearchParams(location.search).get('view');
-        const current = entries.find(item => item.id === requested) || sections[0];
+        const matched = entries.find(item => item.id === requested && item.status !== 'group');
+        const current = matched || sections[0] || { id: 'home', name: '首页', status: 'home' };
         let theme = document.documentElement.dataset.theme;
         const iframe = $('#component-frame');
         const frameStatus = $('#frame-status');
@@ -4198,7 +4570,7 @@
                     submenu.className = 'ui-submenu';
                     submenu.id = `${item.id}-submenu`;
                     submenu.setAttribute('aria-label', `${item.name} 子板块`);
-                    submenu.hidden = true;
+                    submenu.setAttribute('aria-hidden', 'true');
 
                     submenu.innerHTML = item.children.map(child => `
                         <a href="?view=${child.id}">
@@ -4223,7 +4595,7 @@
             document.querySelectorAll('.nav-group').forEach(group => {
                 const sub = group.querySelector('.ui-submenu');
                 const btn = group.querySelector('.nav-link');
-                if (sub) sub.hidden = true;
+                if (sub) sub.setAttribute('aria-hidden', 'true');
                 if (btn) btn.setAttribute('aria-expanded', 'false');
                 group.classList.remove('is-open');
             });
@@ -4234,7 +4606,7 @@
             const sub = group.querySelector('.ui-submenu');
             const btn = group.querySelector('.nav-link');
             if (!sub || !btn) return;
-            sub.hidden = !open;
+            sub.setAttribute('aria-hidden', String(!open));
             btn.setAttribute('aria-expanded', String(open));
             group.classList.toggle('is-open', open);
         }
@@ -4338,7 +4710,7 @@
             theme = next;
             document.documentElement.dataset.theme = theme;
             document.documentElement.style.colorScheme = theme;
-            document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#14171e' : '#f9fbfe';
+            document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#0f1116' : '#f6f1e6';
             document.querySelectorAll('[data-theme-choice]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.themeChoice === theme)));
             updateLinks();
             syncFrameTheme();
@@ -4353,6 +4725,22 @@
             } catch {
             }
         }));
+
+        // 滚动渐显动效 (Scroll-Triggered Reveal)
+        const revealItems = document.querySelectorAll('[data-reveal]');
+        if ('IntersectionObserver' in window) {
+            const revealObserver = new IntersectionObserver((entriesList, obs) => {
+                entriesList.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -36px 0px' });
+            revealItems.forEach(el => revealObserver.observe(el));
+        } else {
+            revealItems.forEach(el => el.classList.add('is-visible'));
+        }
 
         function loadFrame() {
             clearTimeout(loadingTimer);
@@ -4379,8 +4767,7 @@
             $('#home-view').hidden = true;
             $('#site-footer').hidden = true;
             document.title = current.name + ' · TuKuai Studio';
-            if (current.status === 'group') $('#ui-hub').hidden = false;
-            else if (current.status === 'available' && current.url) {
+            if (current.status === 'available' && current.url) {
                 $('#workspace').hidden = false;
                 $('#workspace').setAttribute('aria-label', current.name + ' 组件工坊');
                 $('.workspace-title>span').textContent = current.name;
@@ -4407,12 +4794,12 @@
 
         function renderResults() {
             const query = input.value.trim().toLocaleLowerCase();
-            const matches = entries.filter(item => (item.name + ' ' + item.description + ' ' + item.keywords).toLocaleLowerCase().includes(query));
+            const matches = entries.filter(item => item.status !== 'group' && (item.name + ' ' + item.description + ' ' + item.keywords).toLocaleLowerCase().includes(query));
             results.replaceChildren();
             if (!matches.length) {
                 const empty = document.createElement('p');
                 empty.className = 'search-empty';
-                empty.textContent = '还没有找到这个灵感。试试“UI”“视频”或“待开发”。';
+                empty.textContent = '还没有找到这个灵感。试试“TuKuai-UI”“Core”或“视频”。';
                 results.append(empty);
                 return;
             }
@@ -4429,7 +4816,7 @@
                 description.textContent = item.description;
                 copy.append(name, description);
                 const state = document.createElement('span');
-                state.textContent = item.status === 'planned' ? '待开发' : item.status === 'group' ? '板块' : item.id === 'home' ? '首页' : '已开放 ↗';
+                state.textContent = item.status === 'planned' ? '待开发' : item.id === 'home' ? '首页' : '已开放 ↗';
                 link.append(dot, copy, state);
                 results.append(link);
             });

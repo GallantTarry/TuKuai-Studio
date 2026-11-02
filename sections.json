@@ -9,12 +9,11 @@
   },
   {
     "id": "ui",
-    "name": "UI",
+    "name": "Comp",
     "badge": "02",
     "color": "blue",
-    "href": "?view=ui",
-    "description": "TuKuai-UI 与 TuKuai-JUI 的组件工坊",
-    "keywords": "界面 蓝色 components blue",
+    "description": "Simple things should be simple, complex things should be possible. — Alan Kay",
+    "keywords": "界面 蓝色 components blue comp ui Alan Kay",
     "status": "group",
     "children": [
       {
@@ -33,7 +32,7 @@
         "status": "planned",
         "url": "",
         "badge": "待开发",
-        "label": "UI / TUKUAI-JUI",
+        "label": "COMP / TUKUAI-JUI",
         "sculpture": "layers"
       }
     ]
@@ -45,10 +44,10 @@
     "color": "green",
     "href": "?view=green",
     "ariaLabel": "第二个组件板块，绿色，Core",
-    "description": "种下一点新的想法，让它自在地生长。",
-    "keywords": "绿色 生长 green core 02",
+    "description": "We can only see a short distance ahead, but we can see plenty there that needs to be done. — Alan M. Turing",
+    "keywords": "绿色 生长 green core 02 Alan Turing",
     "status": "planned",
-    "label": "02 / COMING SOON",
+    "label": "02 / CORE",
     "sculpture": "leaf",
     "children": []
   },
@@ -59,10 +58,10 @@
     "color": "yellow",
     "href": "?view=yellow",
     "ariaLabel": "第三个组件板块，黄色，IO",
-    "description": "给尚未成形的灵感，留一束温暖的光。",
-    "keywords": "黄色 日光 yellow io 03",
+    "description": "The fundamental problem of communication is that of reproducing at one point either exactly or approximately a message selected at another point. — Claude E. Shannon",
+    "keywords": "黄色 日光 yellow io 03 Claude Shannon",
     "status": "planned",
-    "label": "03 / COMING SOON",
+    "label": "03 / IO",
     "sculpture": "sun",
     "children": []
   },
@@ -73,10 +72,10 @@
     "color": "purple",
     "href": "?view=purple",
     "ariaLabel": "第四个组件板块，紫色，Net",
-    "description": "想象不必急着定义，新的形状正在酝酿。",
-    "keywords": "紫色 想象 purple net 04",
+    "description": "The Web as I envisaged it, we have not seen it yet. The future is still so much bigger than the past. — Sir Tim Berners-Lee",
+    "keywords": "紫色 想象 purple net 04 Tim Berners-Lee",
     "status": "planned",
-    "label": "04 / COMING SOON",
+    "label": "04 / NET",
     "sculpture": "layers",
     "children": []
   },
@@ -87,10 +86,10 @@
     "color": "red",
     "href": "?view=red",
     "ariaLabel": "第五个组件板块，红色，Sys",
-    "description": "把一点热爱放在这里，等待下一次美好发生。",
-    "keywords": "红色 珊瑚 red sys 05",
+    "description": "UNIX is basically a simple operating system, but you have to be a genius to understand the simplicity. — Dennis M. Ritchie",
+    "keywords": "红色 珊瑚 red sys 05 Dennis Ritchie",
     "status": "planned",
-    "label": "05 / COMING SOON",
+    "label": "05 / SYS",
     "sculpture": "ribbon",
     "children": []
   }

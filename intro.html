@@ -7,6 +7,8 @@
   <title>别来无恙</title>
   <link rel="icon" href="imgs/TuKuaiStudio.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="imgs/TuKuaiStudio.ico" type="image/x-icon" />
+  <!-- 预加载首帧海报与高清 Logo，彻底杜绝移动端与桌面端首屏黑屏 -->
+  <link rel="preload" as="image" href="imgs/intro_poster.jpg" fetchpriority="high" />
   <link rel="preload" as="image" href="imgs/TuKuaiStudio.png" />
   <style>
     /* 全局重置 */
@@ -16,6 +18,7 @@
       box-sizing: border-box;
       user-select: none;
       -webkit-user-select: none;
+      -webkit-touch-callout: none;
     }
 
     html, body {
@@ -23,13 +26,14 @@
       height: 100%;
       height: 100dvh;
       overflow: hidden;
-      background: #000;
+      /* 使用晴空海面主色调兜底，彻底告别任何黑屏闪烁 */
+      background: #b8d7e2;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Serif SC", STSong, SimSun, serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* 视频背景全屏层 */
+    /* 视频背景全屏层：内置首帧高清背景图，0毫秒立现画面 */
     #video-wrapper {
       position: fixed;
       inset: 0;
@@ -38,7 +42,10 @@
       height: 100dvh;
       z-index: 1;
       overflow: hidden;
-      background: #000;
+      background: #b8d7e2 url("imgs/intro_poster.jpg") center center / cover no-repeat;
+      transition: filter 1.5s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: filter, transform;
     }
 
     #bg-video {
@@ -47,16 +54,15 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center;
-      transition: filter 1.6s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
-      will-change: filter, transform;
+      object-position: center center;
+      background: transparent;
+      transform: translateZ(0);
     }
 
     /* 视频播放完毕后：背景转化为清爽毛玻璃雾化状态 */
-    body.frosted-active #bg-video {
-      filter: blur(28px) brightness(0.96) saturate(125%);
-      transform: scale(1.08); /* 放大8%消除窗口边缘模糊露出的黑边 */
+    body.frosted-active #video-wrapper {
+      filter: blur(28px) brightness(0.97) saturate(125%);
+      transform: scale(1.08);
     }
 
     /* 雾化毛玻璃层 (Frosted Mist Glass Layer) */
@@ -78,7 +84,7 @@
         rgba(215, 235, 250, 0.65) 100%
       );
       box-shadow: inset 0 0 140px rgba(255, 255, 255, 0.45);
-      transition: opacity 1.35s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 1.25s cubic-bezier(0.16, 1, 0.3, 1);
       will-change: opacity;
     }
 
@@ -98,7 +104,119 @@
       opacity: 1;
     }
 
-    /* 纯净UI高光容器 (层级位于毛玻璃之上，保持绝对锐利) */
+    /* 移动端/浏览器自动播放受限时的诗意轻触唤醒层（全屏任意处轻触即刻同步起播） */
+    #touch-veil {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 11vh;
+      opacity: 0;
+      pointer-events: none;
+      cursor: pointer;
+      background: radial-gradient(
+        circle at 50% 82%,
+        rgba(12, 32, 52, 0.18) 0%,
+        rgba(12, 32, 52, 0) 60%
+      );
+      transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body.awaiting-gesture #touch-veil {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .touch-cue {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      transform: translateY(0);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease;
+    }
+
+    body.awaiting-gesture .touch-cue:active {
+      transform: scale(0.95);
+    }
+
+    /* 呼吸水波光环 */
+    .touch-ripple-ring {
+      position: relative;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.28);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      box-shadow: 0 8px 28px rgba(15, 40, 68, 0.18),
+                  inset 0 1px 1.5px rgba(255, 255, 255, 0.92);
+    }
+
+    .touch-ripple-ring::before,
+    .touch-ripple-ring::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      animation: ripplePulse 2.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+      pointer-events: none;
+    }
+
+    .touch-ripple-ring::after {
+      animation-delay: 1.4s;
+    }
+
+    .touch-core-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.95);
+      animation: coreBreathe 2.2s ease-in-out infinite;
+    }
+
+    @keyframes ripplePulse {
+      0% {
+        transform: scale(1);
+        opacity: 0.75;
+      }
+      100% {
+        transform: scale(2.15);
+        opacity: 0;
+      }
+    }
+
+    @keyframes coreBreathe {
+      0%, 100% {
+        transform: scale(0.9);
+        opacity: 0.85;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 1;
+      }
+    }
+
+    .touch-caption {
+      font-size: 0.82rem;
+      font-weight: 400;
+      letter-spacing: 0.42em;
+      padding-left: 0.42em;
+      color: rgba(255, 255, 255, 0.96);
+      text-shadow: 0 2px 12px rgba(10, 30, 52, 0.42);
+    }
+
+    /* 纯净UI高光容器 (层级位于毛玻璃之上，与第二声钢琴和弦同步浮现) */
     #ui-container {
       position: fixed;
       inset: 0;
@@ -108,7 +226,7 @@
       z-index: 10;
       pointer-events: none;
       opacity: 0;
-      transition: opacity 1.25s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+      transition: opacity 1.15s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     body.frosted-active #ui-container {
@@ -121,11 +239,16 @@
       position: absolute;
       top: 41.7%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%) scale(0.96);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      transition: transform 1.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    body.frosted-active .ui-content {
+      transform: translate(-50%, -50%) scale(1);
     }
 
     /* 柔透微光晕 */
@@ -194,7 +317,7 @@
       filter: drop-shadow(0 0 28px rgba(255, 255, 255, 0.98))
               drop-shadow(0 0 65px rgba(130, 210, 255, 0.7))
               drop-shadow(0 16px 36px rgba(15, 35, 60, 0.18));
-      transition: filter 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: filter 0.45s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
       cursor: pointer;
     }
 
@@ -205,199 +328,222 @@
               drop-shadow(0 20px 45px rgba(15, 35, 60, 0.22));
     }
 
-    /* 下方跳转按钮区 (居中沉底，平滑上浮) */
-    .btn-container {
+    /* ==========================================================
+       全新极简高定「流光晶透羽化入口」设计 (Portal Entry)
+       ========================================================== */
+    .portal-container {
       position: fixed;
-      bottom: 10vh;
+      bottom: 9.2vh;
       left: 50%;
-      transform: translateX(-50%) translateY(24px);
+      transform: translateX(-50%) translateY(20px);
       opacity: 0;
       pointer-events: none;
-      transition: opacity 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.35s,
-                  transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.35s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      transition: opacity 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.18s,
+                  transform 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.18s;
     }
 
-    body.frosted-active .btn-container {
+    body.frosted-active .portal-container {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
       pointer-events: auto;
     }
 
-    /* 磨砂质感极简胶囊按钮 (Glassmorphism Pill Button) */
-    .glass-btn {
+    .portal-entry {
       position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      padding: 13px 44px 13px 48px;
+      gap: 14px;
+      padding: 12px 36px 12px 42px;
       border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.45);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1.5px solid rgba(255, 255, 255, 0.9);
-      box-shadow: 0 10px 32px rgba(18, 45, 65, 0.14),
-                  inset 0 1.5px 1.5px rgba(255, 255, 255, 0.95),
-                  0 0 24px rgba(255, 255, 255, 0.5);
-      color: #1b2e3e;
       text-decoration: none;
-      font-size: 1.05rem;
-      font-weight: 500;
-      letter-spacing: 0.38em;
-      white-space: nowrap;
+      color: #16293a;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.56) 0%,
+        rgba(255, 255, 255, 0.28) 100%
+      );
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.86);
+      box-shadow: 0 12px 36px rgba(16, 42, 68, 0.10),
+                  0 2px 8px rgba(16, 42, 68, 0.04),
+                  inset 0 1px 1.5px rgba(255, 255, 255, 0.96),
+                  0 0 28px rgba(255, 255, 255, 0.42);
       cursor: pointer;
       overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* 按钮内部扫光高光动效 */
-    .glass-btn::after {
+    /* 五色微光极光底衬（呼应图快五瓣色彩，轻盈若隐若现） */
+    .portal-entry::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(
+        90deg,
+        rgba(250, 124, 133, 0.14),
+        rgba(104, 189, 245, 0.16),
+        rgba(72, 203, 161, 0.14),
+        rgba(245, 202, 85, 0.14),
+        rgba(174, 125, 232, 0.14)
+      );
+      opacity: 0.55;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+
+    /* 丝绸流光掠影 */
+    .portal-entry::after {
       content: "";
       position: absolute;
       top: -50%;
-      left: -60%;
-      width: 40%;
+      left: -75%;
+      width: 45%;
       height: 200%;
       background: linear-gradient(
         90deg,
         rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.65) 50%,
+        rgba(255, 255, 255, 0.75) 50%,
         rgba(255, 255, 255, 0) 100%
       );
       transform: rotate(25deg);
-      transition: left 0.75s ease;
+      transition: left 0.85s cubic-bezier(0.16, 1, 0.3, 1);
       pointer-events: none;
     }
 
-    .glass-btn:hover::after {
-      left: 120%;
+    .portal-entry:hover::after {
+      left: 135%;
     }
 
-    .glass-btn:hover {
-      background: rgba(255, 255, 255, 0.75);
+    .portal-entry:hover {
+      transform: translateY(-2.5px) scale(1.025);
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.78) 0%,
+        rgba(255, 255, 255, 0.46) 100%
+      );
       border-color: #ffffff;
-      color: #0b1c2b;
-      transform: translateY(-2px) scale(1.03);
-      box-shadow: 0 14px 42px rgba(45, 120, 180, 0.25),
-                  inset 0 1.5px 1.5px #ffffff,
-                  0 0 35px rgba(255, 255, 255, 0.85);
+      color: #0c1d2c;
+      box-shadow: 0 16px 44px rgba(32, 95, 150, 0.18),
+                  inset 0 1.5px 2px #ffffff,
+                  0 0 38px rgba(255, 255, 255, 0.82);
     }
 
-    .glass-btn:active {
-      transform: translateY(1px) scale(0.98);
-      box-shadow: 0 6px 20px rgba(18, 45, 65, 0.15);
+    .portal-entry:hover::before {
+      opacity: 0.95;
     }
 
-    .glass-btn .btn-arrow {
+    .portal-entry:active {
+      transform: translateY(0.5px) scale(0.98);
+    }
+
+    /* 左侧呼吸星芒微点 */
+    .portal-spark {
+      position: relative;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3989ec, #27ad80);
+      box-shadow: 0 0 10px rgba(57, 137, 236, 0.65);
+      flex-shrink: 0;
+      animation: sparkPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes sparkPulse {
+      0%, 100% {
+        transform: scale(0.9);
+        opacity: 0.75;
+      }
+      50% {
+        transform: scale(1.25);
+        opacity: 1;
+      }
+    }
+
+    .portal-label {
+      position: relative;
+      z-index: 1;
+      font-size: 0.96rem;
+      font-weight: 500;
+      letter-spacing: 0.42em;
+      white-space: nowrap;
+    }
+
+    .portal-icon {
+      position: relative;
+      z-index: 1;
+      width: 18px;
+      height: 18px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.35s ease;
+      color: #243b4f;
+       opacity: 0.82;
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
     }
 
-    .glass-btn:hover .btn-arrow {
+    .portal-icon svg {
+      width: 17px;
+      height: 17px;
+      stroke: currentColor;
+      stroke-width: 1.65;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .portal-entry:hover .portal-icon {
       transform: translateX(4px);
-    }
-
-    /* 左上角潮汐海鸥环境音控制胶囊 (Ambient Sound Pill) */
-    .ambient-pill {
-      position: fixed;
-      top: 24px;
-      left: 28px;
-      z-index: 50;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 18px;
-      border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.26);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.55);
-      box-shadow: 0 8px 24px rgba(0, 20, 40, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.8);
-      color: #1a2e3b;
-      font-size: 0.86rem;
-      letter-spacing: 0.12em;
-      cursor: pointer;
-      opacity: 0.9;
-      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .ambient-pill:hover {
       opacity: 1;
-      background: rgba(255, 255, 255, 0.45);
-      border-color: rgba(255, 255, 255, 0.9);
-      transform: scale(1.03);
-      box-shadow: 0 10px 28px rgba(0, 20, 40, 0.18), inset 0 1px 1px #ffffff;
     }
 
-    .ambient-pill .wave-symbol {
-      font-size: 1.05rem;
-      line-height: 1;
-      filter: drop-shadow(0 0 6px rgba(100, 180, 255, 0.6));
-      animation: waveFloat 3s ease-in-out infinite;
+    /* 底部纤细呼吸流光线 */
+    .portal-hairline {
+      width: 36px;
+      height: 1.5px;
+      border-radius: 999px;
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0.88),
+        rgba(255, 255, 255, 0)
+      );
+      opacity: 0.75;
+      transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
     }
 
-    @keyframes waveFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-2px); }
-    }
-
-    .ambient-pill svg {
-      width: 15px;
-      height: 15px;
-      flex-shrink: 0;
-      color: currentColor;
-    }
-
-    /* 引导页毛玻璃状态下微调胶囊样式，与纯白透亮视觉融合 */
-    body.frosted-active .ambient-pill {
-      background: rgba(255, 255, 255, 0.42);
-      border-color: rgba(255, 255, 255, 0.85);
-      box-shadow: 0 10px 30px rgba(15, 35, 60, 0.08), inset 0 1px 1.5px #ffffff;
-    }
-
-    /* 右上角跳过按钮 */
-    .skip-btn {
-      position: fixed;
-      top: 24px;
-      right: 28px;
-      z-index: 50;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 18px;
-      border-radius: 9999px;
-      background: rgba(255, 255, 255, 0.18);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.45);
-      color: rgba(255, 255, 255, 0.9);
-      font-size: 0.85rem;
-      letter-spacing: 0.15em;
-      cursor: pointer;
-      opacity: 0.85;
-      transition: all 0.3s ease;
-    }
-
-    .skip-btn:hover {
+    .portal-container:hover .portal-hairline {
+      width: 72px;
       opacity: 1;
-      background: rgba(255, 255, 255, 0.32);
-      border-color: rgba(255, 255, 255, 0.8);
-      color: #ffffff;
-      transform: scale(1.04);
     }
 
-    body.frosted-active .skip-btn {
+    /* 转场进入工坊时的丝滑羽化离场动效 */
+    body.leaving-stage #ui-container,
+    body.leaving-stage #frost-overlay,
+    body.leaving-stage #video-wrapper {
       opacity: 0;
-      pointer-events: none;
-      transform: translateY(-10px);
+      transform: scale(1.04);
+      transition: opacity 0.38s ease, transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* 移动端视口适配 */
+    body.leaving-stage {
+      background: #f9fbfe;
+      transition: background 0.38s ease;
+    }
+
+    /* 移动端视口精细适配 */
     @media (max-width: 640px) {
+      #video-wrapper {
+        background-position: 49.2% center;
+      }
+
       #bg-video {
         object-position: 49.2% center;
       }
@@ -406,41 +552,47 @@
         width: clamp(260px, 70vw, 360px);
         height: clamp(260px, 70vw, 360px);
       }
+
       .logo-halo {
         width: clamp(280px, 75vw, 380px);
         height: clamp(280px, 75vw, 380px);
       }
-      .glass-btn {
-        padding: 12px 34px 12px 38px;
-        font-size: 0.95rem;
-        letter-spacing: 0.3em;
-      }
-      .btn-container {
+
+      .portal-container {
         bottom: 8vh;
       }
-      .skip-btn {
-        top: 18px;
-        right: 18px;
-        padding: 5px 14px;
-        font-size: 0.8rem;
+
+      .portal-entry {
+        padding: 11px 30px 11px 36px;
+        gap: 11px;
       }
-      .ambient-pill {
-        top: 18px;
-        left: 18px;
-        padding: 5px 13px;
+
+      .portal-label {
+        font-size: 0.9rem;
+        letter-spacing: 0.36em;
+      }
+
+      #touch-veil {
+        padding-bottom: 9.5vh;
+      }
+
+      .touch-caption {
         font-size: 0.78rem;
+        letter-spacing: 0.36em;
       }
     }
   </style>
 </head>
 <body>
 
-
-    <!-- 视频背景 (静音以保证全终端100%无阻碍自动起播，去除了autoplay，由音频就绪后同步触发) -->
+  <!-- 视频背景：内联 poster 首帧图与预解码，杜绝任何移动端黑屏 -->
   <div id="video-wrapper">
     <video
       id="bg-video"
+      poster="imgs/intro_poster.jpg"
       playsinline
+      webkit-playsinline
+      x5-playsinline
       muted
       preload="auto"
       disablePictureInPicture
@@ -449,8 +601,8 @@
     </video>
   </div>
 
-<!-- 独立背景音频播放器：即使视频播放完毕，《言叶之庭》钢琴曲依然在网页中持续轻柔循环 -->
-  <audio id="ambient-audio" loop preload="auto">
+  <!-- 黄金适耳定制音频：已精确对齐两次 UI 浮现和弦，并删去后续多余音乐 -->
+  <audio id="ambient-audio" preload="auto">
     <source src="audio/言叶之庭.aac" type="audio/aac" />
   </audio>
 
@@ -459,31 +611,17 @@
     <div class="frost-noise"></div>
   </div>
 
-  <!-- 左上角：背景音乐控制胶囊 -->
-  <div id="ambient-toggle" class="ambient-pill">
-    
-    <span id="ambient-text">Hello</span>
-    <!-- 扬声器开启图标 -->
-    <svg id="icon-sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-    </svg>
-    <!-- 扬声器静音图标 -->
-    <svg id="icon-sound-off" style="display: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-      <line x1="23" y1="9" x2="17" y2="15"></line>
-      <line x1="17" y1="9" x2="23" y2="15"></line>
-    </svg>
+  <!-- 移动端/受限环境下的诗意轻触唤醒层（全屏任意处轻触即刻音画同步起播，无跳过按钮干扰） -->
+  <div id="touch-veil" role="button" tabindex="0" aria-label="轻触开启音画体验">
+    <div class="touch-cue">
+      <div class="touch-ripple-ring">
+        <span class="touch-core-dot"></span>
+      </div>
+      <span class="touch-caption">轻触画面 · 聆听花开</span>
+    </div>
   </div>
 
-  <!-- 右上角跳过按钮 -->
-  <button id="skip-btn" class="skip-btn" type="button" aria-label="跳过视频">
-    <span>跳过</span>
-    <span style="font-size: 1.1em; line-height: 1;">&rsaquo;</span>
-  </button>
-
-  <!-- 纯净毛玻璃UI层：保持锐利高光 -->
+  <!-- 纯净毛玻璃 UI 层：与第二声清脆钢琴和弦同步浮现 -->
   <main id="ui-container" aria-hidden="true">
     <div class="ui-content">
       <div class="logo-halo"></div>
@@ -498,12 +636,19 @@
       </div>
     </div>
 
-    <!-- 极简毛玻璃胶囊进入按钮 -->
-    <div class="btn-container">
-      <a href="index.html" class="glass-btn" id="enter-btn">
-        <span>进入工坊</span>
-        <span class="btn-arrow">&rarr;</span>
+    <!-- 全新极简高定「流光晶透羽化入口」 -->
+    <div class="portal-container">
+      <a href="index.html" class="portal-entry" id="enter-btn">
+        <span class="portal-spark"></span>
+        <span class="portal-label">进入工坊</span>
+        <span class="portal-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M5 12h13" />
+            <path d="M13 6l6 6-6 6" />
+          </svg>
+        </span>
       </a>
+      <div class="portal-hairline" aria-hidden="true"></div>
     </div>
   </main>
 
@@ -511,16 +656,42 @@
   (function () {
     const video = document.getElementById('bg-video');
     const ambientAudio = document.getElementById('ambient-audio');
-    const skipBtn = document.getElementById('skip-btn');
     const logoImg = document.getElementById('ui-logo');
-    const ambientToggle = document.getElementById('ambient-toggle');
-    const ambientText = document.getElementById('ambient-text');
-    const iconSoundOn = document.getElementById('icon-sound-on');
-    const iconSoundOff = document.getElementById('icon-sound-off');
-    
+    const enterBtn = document.getElementById('enter-btn');
+    const touchVeil = document.getElementById('touch-veil');
+
     let isRevealed = false;
-    let isAudioPlaying = false;
-    const TARGET_AMBIENT_VOL = 0.28; // 声音小点，轻柔舒适适耳音量
+    let isExperienceRunning = false;
+    let isNavigating = false;
+    let syncRafId = null;
+
+    // 黄金适耳音量：配合已母带柔化处理的言叶之庭音频，温润清透不刺耳
+    const GOLDEN_AUDIO_VOL = 0.68;
+    // 第二声和弦（网页毛玻璃 UI 浮现）精确时间点
+    const UI_REVEAL_TIME = 4.16;
+
+    // 提前在显存中完成首帧与 Logo 异步预解码，彻底消除闪烁
+    ['imgs/intro_poster.jpg', 'imgs/TuKuaiStudio.png'].forEach(function (src) {
+      const img = new Image();
+      img.src = src;
+      if (img.decode) {
+        img.decode().catch(function () {});
+      }
+    });
+
+    // 确保移动端视频解码器立即渲染首帧画面，绝不出现黑屏
+    function primeVideoFirstFrame() {
+      if (!isExperienceRunning && video.readyState >= 1) {
+        try {
+          if (video.currentTime === 0) {
+            video.currentTime = 0.001;
+          }
+        } catch (err) {}
+      }
+    }
+
+    video.addEventListener('loadedmetadata', primeVideoFirstFrame, { once: true });
+    video.addEventListener('loadeddata', primeVideoFirstFrame, { once: true });
 
     // 平滑音量渐变调节
     function rampVolume(audioEl, targetVol, durationMs, onComplete) {
@@ -529,7 +700,7 @@
       function step(now) {
         const elapsed = now - startTime;
         const progress = Math.min(elapsed / durationMs, 1);
-        audioEl.volume = startVol + (targetVol - startVol) * progress;
+        audioEl.volume = Math.max(0, Math.min(1, startVol + (targetVol - startVol) * progress));
         if (progress < 1) {
           requestAnimationFrame(step);
         } else if (onComplete) {
@@ -539,126 +710,160 @@
       requestAnimationFrame(step);
     }
 
-    // 更新环境音胶囊 UI
-    function updateAudioUI(playing, label) {
-      isAudioPlaying = playing;
-      if (ambientText) {
-        ambientText.textContent = label || (playing ? 'Hello' : 'World');
+    // 音画帧级同步巡检器：确保手机端与电脑端全程音画严丝合缝
+    function startSyncLoop() {
+      if (syncRafId) {
+        cancelAnimationFrame(syncRafId);
       }
-      if (iconSoundOn && iconSoundOff) {
-        iconSoundOn.style.display = playing ? 'inline-block' : 'none';
-        iconSoundOff.style.display = playing ? 'none' : 'inline-block';
+      function checkSync() {
+        if (isRevealed) return;
+
+        if (!video.paused && !ambientAudio.paused) {
+          const vTime = video.currentTime;
+          const aTime = ambientAudio.currentTime;
+          // 若音画偏差超过 75ms，立即校准音频时钟与视频帧严格对齐
+          if (Math.abs(aTime - vTime) > 0.075 && vTime < UI_REVEAL_TIME) {
+            try {
+              ambientAudio.currentTime = vTime;
+            } catch (err) {}
+          }
+          // 紧贴第二声和弦起点（4.16s）触发毛玻璃 UI 浮现，实现“UI出来响一下”精准同步
+          if (vTime >= UI_REVEAL_TIME) {
+            revealFrostedUI();
+            return;
+          }
+        }
+        syncRafId = requestAnimationFrame(checkSync);
       }
-      if (ambientToggle) {
-        ambientToggle.style.opacity = playing ? '0.92' : '0.65';
-      }
+      syncRafId = requestAnimationFrame(checkSync);
     }
 
-    // 补回 detachGestures 定义
-    function detachGestures() {
-      window.removeEventListener('pointerdown', onFirstGesture);
-      window.removeEventListener('touchstart', onFirstGesture);
-      window.removeEventListener('keydown', onFirstGesture);
+    function detachGestureListeners() {
+      window.removeEventListener('pointerdown', onUserGestureStart);
+      window.removeEventListener('touchstart', onUserGestureStart);
+      window.removeEventListener('click', onUserGestureStart);
+      window.removeEventListener('keydown', onUserGestureStart);
     }
 
-    // 【核心同步启动器】：只有音乐出声，视频才准播放！
+    // 【核心音画同步启动器】：保证手机端与电脑端 100% 从第 0 帧同步播放完整动画与黄金适耳音乐
     function startSynchronizedExperience() {
-      // 1. 设置起播进度：音乐超前 1 秒（跳过 0.28s 空白 + 1.0s 前奏）
-      ambientAudio.currentTime = 1.28;
-      video.currentTime = 0;
+      if (isExperienceRunning || isRevealed) return;
 
+      ambientAudio.loop = false;
       ambientAudio.volume = 0;
-      ambientAudio.loop = true;
 
-      // 2. 尝试播放音频
-      const promise = ambientAudio.play();
-      if (promise !== undefined) {
-        promise.then(() => {
-          // ★★★ 核心关键：只有音乐被允许播放了，视频才准启动！★★★
-          video.play().catch(function () {});
-          rampVolume(ambientAudio, TARGET_AMBIENT_VOL, 200); // 200ms 快速出声
-          updateAudioUI(true, 'Hello');
-          detachGestures();
-        }).catch(() => {
-          // 浏览器强行拦截无交互声音：视频坚决不播，保持定格在首帧！
+      try {
+        ambientAudio.currentTime = 0;
+        video.currentTime = 0;
+      } catch (err) {}
+
+      const playPromise = ambientAudio.play();
+      if (playPromise !== undefined) {
+        playPromise.then(function () {
+          isExperienceRunning = true;
+          document.body.classList.remove('awaiting-gesture');
+          detachGestureListeners();
+
+          // 音频获批出声的同一毫秒立即启动视频并锁死同步时钟
+          video.play().then(function () {
+            rampVolume(ambientAudio, GOLDEN_AUDIO_VOL, 160);
+            startSyncLoop();
+          }).catch(function () {
+            rampVolume(ambientAudio, GOLDEN_AUDIO_VOL, 160);
+            startSyncLoop();
+          });
+        }).catch(function () {
+          // 浏览器策略要求首次触屏解锁声音：保持阳光海面首帧，浮现轻触诗意引导
           video.pause();
-          isAudioPlaying = false;
-          updateAudioUI(false, '点击启程'); // 提示用户点击屏幕任意处开始
+          primeVideoFirstFrame();
+          isExperienceRunning = false;
+          document.body.classList.add('awaiting-gesture');
         });
       }
     }
 
-    // 首次交互被动触发：用户任意点击屏幕，音画同步瞬间起飞！
-    function onFirstGesture() {
-      if (ambientAudio.paused || !isAudioPlaying) {
+    function onUserGestureStart() {
+      if (!isExperienceRunning && !isRevealed) {
         startSynchronizedExperience();
       }
     }
 
-    // 切换环境音开关
-    function toggleAmbientAudio() {
-      if (ambientAudio.paused || !isAudioPlaying) {
-        if (video && !video.paused) {
-          ambientAudio.currentTime = Math.max(0.28, video.currentTime + 1.0);
-        }
-        ambientAudio.play().then(() => {
-          if (!isRevealed && video.paused) {
-            video.play().catch(function () {});
-          }
-          rampVolume(ambientAudio, TARGET_AMBIENT_VOL, 300);
-          updateAudioUI(true, 'Hello');
-        }).catch(() => {});
-      } else {
-        rampVolume(ambientAudio, 0, 250, () => {
-          ambientAudio.pause();
-          updateAudioUI(false, 'World');
-        });
-      }
-      detachGestures();
-    }
-
-    // 监听有效交互手势
-    window.addEventListener('pointerdown', onFirstGesture, { passive: true });
-    window.addEventListener('touchstart', onFirstGesture, { passive: true });
-    window.addEventListener('keydown', onFirstGesture, { passive: true });
-
-    // 提前在显存中完成大图异步预解码
-    const logoPreload = new Image();
-    logoPreload.src = 'imgs/TuKuaiStudio.png';
-    if (logoPreload.decode) {
-      logoPreload.decode().catch(function () {});
-    }
-
-        if (ambientToggle) {
-      ambientToggle.addEventListener('click', function (e) {
+    // 绑定全屏任意处轻触/点击/按键唤醒
+    window.addEventListener('pointerdown', onUserGestureStart, { passive: true });
+    window.addEventListener('touchstart', onUserGestureStart, { passive: true });
+    window.addEventListener('click', onUserGestureStart, { passive: true });
+    window.addEventListener('keydown', onUserGestureStart, { passive: true });
+    if (touchVeil) {
+      touchVeil.addEventListener('click', function (e) {
         e.stopPropagation();
-        toggleAmbientAudio();
+        onUserGestureStart();
       });
     }
 
-// 等待音频就绪后发起首次同步尝试
-    if (ambientAudio.readyState >= 2) {
-      startSynchronizedExperience();
-    } else {
-      ambientAudio.addEventListener('canplay', startSynchronizedExperience, { once: true });
+    // 当音视频均具备起播条件时立即发起同步起播尝试
+    function tryInitialLaunch() {
+      if (ambientAudio.readyState >= 2 && video.readyState >= 2) {
+        startSynchronizedExperience();
+      }
     }
 
-    // 视频结束并转化为毛玻璃雾化UI
+    if (ambientAudio.readyState >= 2 && video.readyState >= 2) {
+      tryInitialLaunch();
+    } else {
+      ambientAudio.addEventListener('canplay', tryInitialLaunch, { once: true });
+      video.addEventListener('canplay', tryInitialLaunch, { once: true });
+    }
+
+    // 若移动端网络波动引起视频短暂缓冲，音频同步暂停与恢复，杜绝音画错位
+    video.addEventListener('waiting', function () {
+      if (isExperienceRunning && !isRevealed && !ambientAudio.paused) {
+        ambientAudio.pause();
+      }
+    });
+
+    video.addEventListener('playing', function () {
+      if (isExperienceRunning && !isRevealed && ambientAudio.paused) {
+        try {
+          ambientAudio.currentTime = video.currentTime;
+        } catch (err) {}
+        ambientAudio.play().catch(function () {});
+      }
+    });
+
+    // 视频到达尾帧并转化为毛玻璃雾化 UI（与第二声钢琴和弦 4.18s 严格同步）
     function revealFrostedUI() {
       if (isRevealed) return;
       isRevealed = true;
 
-      // 视频暂停在最终精美尾帧
+      if (syncRafId) {
+        cancelAnimationFrame(syncRafId);
+        syncRafId = null;
+      }
+
+      document.body.classList.remove('awaiting-gesture');
+      detachGestureListeners();
+
+      // 定格在视频精美尾帧
       try {
         video.pause();
       } catch (err) {}
 
-      // 注意：此处 ambientAudio 绝不暂停！持续循环播放背景音乐
-      if (ambientAudio.paused) {
-        ambientAudio.play().catch(() => {});
+      // 确保第二声和弦（4.18s）与网页毛玻璃 UI 浮现严丝合缝同步响起，响完自然消散
+      if (!ambientAudio.paused) {
+        if (Math.abs(ambientAudio.currentTime - UI_REVEAL_TIME) > 0.14) {
+          try {
+            ambientAudio.currentTime = UI_REVEAL_TIME;
+          } catch (err) {}
+        }
+      } else if (isExperienceRunning) {
+        try {
+          ambientAudio.currentTime = UI_REVEAL_TIME;
+          ambientAudio.volume = GOLDEN_AUDIO_VOL;
+          ambientAudio.play().catch(function () {});
+        } catch (err) {}
       }
 
-      // 激活毛玻璃全屏雾化与高光UI
+      // 激活毛玻璃全屏雾化与高光 UI
       document.body.classList.add('frosted-active');
       const uiContainer = document.getElementById('ui-container');
       if (uiContainer) {
@@ -669,40 +874,45 @@
     // 1. 视频自然播放到结尾转场
     video.addEventListener('ended', revealFrostedUI, { once: true });
 
-    // 2. 紧贴视频尾帧 (剩余 0.15 秒) 提前平滑转场，避免黑屏
+    // 2. 紧贴视频尾帧触发平滑转场与第二声和弦同步
     video.addEventListener('timeupdate', function () {
-      if (video.duration && video.currentTime >= video.duration - 0.15) {
+      if (video.currentTime >= UI_REVEAL_TIME || (video.duration && video.currentTime >= video.duration - 0.1)) {
         revealFrostedUI();
       }
     });
 
-    // 3. 点击跳过按钮转场
-    skipBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      if (video.duration) {
-        try {
-          video.currentTime = Math.max(0, video.duration - 0.05);
-        } catch (err) {}
-      }
-      revealFrostedUI();
-    });
-
-    // 4. 容错兜底：若视频异常无法加载，直接展示毛玻璃UI
+    // 3. 容错兜底：若视频资源异常，展示毛玻璃 UI
     video.addEventListener('error', function () {
-      console.warn('视频未响应，直接展示毛玻璃工坊引导界面。');
       revealFrostedUI();
     });
 
-    // 5. 键盘空格/回车键快速跳过视频
-    document.addEventListener('keydown', function (e) {
-      if (e.code === 'Space' || e.code === 'Enter') {
-        if (!isRevealed) {
-          revealFrostedUI();
-        }
+    // 4. 优雅丝滑转场进入主站 index.html（点击中央五瓣 Logo 或底部流光入口均可进入）
+    function navigateToStudio(e) {
+      if (e) {
+        e.preventDefault();
       }
-    });
+      if (isNavigating) return;
+      isNavigating = true;
 
-    // 6. 页面可见性管理：切后台时暂停，切回时恢复
+      document.body.classList.add('leaving-stage');
+      if (!ambientAudio.paused) {
+        rampVolume(ambientAudio, 0, 320, function () {
+          ambientAudio.pause();
+        });
+      }
+      setTimeout(function () {
+        window.location.href = 'index.html';
+      }, 360);
+    }
+
+    if (enterBtn) {
+      enterBtn.addEventListener('click', navigateToStudio);
+    }
+    if (logoImg) {
+      logoImg.addEventListener('click', navigateToStudio);
+    }
+
+    // 5. 页面可见性管理：切后台时暂停，切回时同步恢复
     document.addEventListener('visibilitychange', function () {
       if (document.hidden) {
         if (!isRevealed && !video.paused) {
@@ -712,17 +922,18 @@
           ambientAudio.pause();
         }
       } else {
-        if (!isRevealed && video.paused) {
+        if (isExperienceRunning && !isRevealed) {
+          try {
+            ambientAudio.currentTime = video.currentTime;
+          } catch (err) {}
           video.play().catch(function () {});
-        }
-        if (isAudioPlaying && ambientAudio.paused) {
           ambientAudio.play().catch(function () {});
         }
       }
     });
-  
+
     // 彻底隐藏全站所有原生悬停提示 (Tooltips)
-    document.addEventListener('mouseover', e => {
+    document.addEventListener('mouseover', function (e) {
       let el = e.target;
       while (el && el !== document) {
         if (el.hasAttribute && el.hasAttribute('title')) {
