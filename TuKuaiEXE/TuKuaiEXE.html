@@ -594,8 +594,11 @@
         turnstileSiteKey: '0x4AAAAAAGA1Xo1IyeEK1QRX',
         maxPackageBytes: 1024 * 1024 * 1024,
         uploadConcurrency: 3,
-        downloadChunkBytes: 4 * 1024 * 1024,
-        downloadConcurrency: 3,
+        downloadChunkBytes: 1536 * 1024,
+        downloadConcurrency: 2,
+        downloadIdleTimeoutMs: 25000,
+        downloadMaxChunkTimeMs: 150000,
+        downloadMaxRetries: 5,
     };
 
     const $ = (id) => document.getElementById(id);
@@ -1183,11 +1186,32 @@
         });
     }
 
-    async function fetchChunkOnce(url, expectedLen, onProgressBytes, timeoutMs = 45000) {
+    async function fetchChunkOnce(url, expectedLen, onProgressBytes) {
+        const idleTimeoutMs = TUKUAI_EXE_CONFIG.downloadIdleTimeoutMs || 25000;
+        const maxChunkTimeMs = TUKUAI_EXE_CONFIG.downloadMaxChunkTimeMs || 150000;
         const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(new Error('下载分片超时')), timeoutMs);
+        let abortedReason = '';
+        let idleTimer = null;
+        let reader = null;
+
+        const abortWith = (reason) => {
+            if (!abortedReason) {
+                abortedReason = reason;
+                controller.abort();
+            }
+        };
+        const resetIdleTimer = () => {
+            clearTimeout(idleTimer);
+            idleTimer = setTimeout(() => abortWith('分片传输停滞超时，正在重连…'), idleTimeoutMs);
+        };
+
+        resetIdleTimer();
+        const maxTimer = setTimeout(() => abortWith('单分片下载总耗时过长，正在重连…'), maxChunkTimeMs);
+
         try {
             const res = await fetch(url, { cache: 'no-store', signal: controller.signal });
+            resetIdleTimer();
+
             if (res.status !== 200 && res.status !== 206) {
                 let errMsg = `下载分片失败 (HTTP ${res.status})`;
                 try {
@@ -1211,12 +1235,13 @@
             }
 
             const out = new Uint8Array(expectedLen);
-            const reader = res.body.getReader();
+            reader = res.body.getReader();
             let offset = 0;
             while (true) {
                 const { done, value } = await reader.read();
                 if (done) break;
                 if (!value || value.byteLength === 0) continue;
+                resetIdleTimer();
                 if (offset + value.byteLength > expectedLen) {
                     const err = new Error('分片数据超出预期长度');
                     err.retryable = true;
@@ -1233,18 +1258,28 @@
             }
             return out;
         } catch (err) {
-            if (err?.name === 'AbortError' || err instanceof TypeError) {
-                const netErr = new Error('网络波动，正在自动重连该分片…');
+            if (reader) {
+                reader.cancel().catch(() => {});
+            }
+            if (abortedReason || err?.name === 'AbortError' || err instanceof TypeError) {
+                const netErr = new Error(abortedReason || '网络波动，正在自动重连该分片…');
                 netErr.retryable = true;
                 throw netErr;
             }
             throw err;
         } finally {
-            clearTimeout(timer);
+            clearTimeout(idleTimer);
+            clearTimeout(maxTimer);
         }
     }
 
-    async function fetchChunkWithRetry(url, expectedLen, onProgressBytes, maxRetries = 3) {
+    async function fetchChunkWithRetry(
+        url,
+        expectedLen,
+        onProgressBytes,
+        onRetry,
+        maxRetries = TUKUAI_EXE_CONFIG.downloadMaxRetries || 5
+    ) {
         for (let attempt = 0; attempt <= maxRetries; attempt++) {
             try {
                 return await fetchChunkOnce(url, expectedLen, onProgressBytes);
@@ -1253,7 +1288,8 @@
                     throw err;
                 }
                 onProgressBytes(0);
-                await new Promise((r) => setTimeout(r, 800 * (attempt + 1)));
+                if (onRetry) onRetry(err, attempt + 1);
+                await new Promise((r) => setTimeout(r, Math.min(6000, 1000 * (attempt + 1))));
             }
         }
     }
@@ -1290,6 +1326,7 @@
         const partLoaded = new Array(totalParts).fill(0);
         const startedAt = Date.now();
         let nextIndex = 0;
+        let retryEvents = 0;
 
         const emit = () => {
             const loaded = partLoaded.reduce((acc, v) => acc + v, 0);
@@ -1297,22 +1334,33 @@
             onProgress(Math.min(total, loaded), total, loaded / elapsedSec, sourceLabel);
         };
 
-        const runWorker = async () => {
+        const runWorker = async (workerIndex) => {
             while (nextIndex < totalParts) {
+                // Step down to a single connection after repeated domestic link drops to reduce contention.
+                if (workerIndex > 0 && retryEvents >= 2) {
+                    return;
+                }
                 const idx = nextIndex++;
                 const start = idx * chunkBytes;
                 const end = Math.min(total - 1, start + chunkBytes - 1);
                 const expectedLen = end - start + 1;
                 const chunkUrl = `${baseDownloadUrl}&start=${start}&end=${end}`;
-                partBuffers[idx] = await fetchChunkWithRetry(chunkUrl, expectedLen, (bytes) => {
-                    partLoaded[idx] = Math.min(expectedLen, bytes);
-                    emit();
-                });
+                partBuffers[idx] = await fetchChunkWithRetry(
+                    chunkUrl,
+                    expectedLen,
+                    (bytes) => {
+                        partLoaded[idx] = Math.min(expectedLen, bytes);
+                        emit();
+                    },
+                    () => {
+                        retryEvents++;
+                    }
+                );
             }
         };
 
         const concurrency = Math.min(TUKUAI_EXE_CONFIG.downloadConcurrency, totalParts);
-        await Promise.all(Array.from({ length: concurrency }, () => runWorker()));
+        await Promise.all(Array.from({ length: concurrency }, (_, workerIndex) => runWorker(workerIndex)));
 
         const blob = new Blob(partBuffers, { type: 'application/zip' });
         partBuffers.length = 0;
