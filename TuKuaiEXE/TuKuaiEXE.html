@@ -459,15 +459,20 @@
         <div class="header-eyebrow">SYS / TUKUAI-EXE</div>
         <h1>TuKuai EXE 云端封装工坊</h1>
         <p class="subtitle">
-            拖入已打包好的桌面应用文件夹（含主 <code>.exe</code>）与 <code>license.txt</code>，云端自动生成标准 Windows x64 安装包（Inno Setup）。中转文件即用即焚，不留存任何源码。
+            拖入已打包好的桌面应用文件夹（含主 <code>.exe</code>）与 <code>license.txt</code>，云端自动生成标准 Windows x64 安装包（Inno Setup）并由 GitHub 原生返回。中转上传包即用即焚，不留存任何源码。
         </p>
         <div class="badge-bar">
             <span class="badge">x64compatible</span>
             <span class="badge">fflate 零压缩打包</span>
             <span class="badge">单包上限 1 GB</span>
-            <span class="badge">纯免费开源架构</span>
+            <span class="badge">GitHub 原生返回</span>
+            <span class="badge">仅海外 / 代理环境</span>
         </div>
     </header>
+
+    <div class="notice-box" id="region-notice">
+        <strong>网络使用说明：</strong>本服务（含前端、边缘接口与 GitHub Actions 原生成品下载）仅支持海外网络或代理环境，<strong>不支持中国大陆直接访问，亦不提供国内备用下载链接</strong>。国内使用请先开启代理。
+    </div>
 
     <div class="notice-box error" id="config-warning" hidden></div>
 
@@ -576,10 +581,9 @@
 
         <div class="result-bar" id="result-bar" hidden>
             <span class="card-hint" id="result-hint">
-                R2 极速缓存保留 1 小时，24 小时内可通过备份通道恢复，解压即可得安装程序。
-                <a id="download-direct-link" href="#" download style="color: var(--red); margin-left: 6px; text-decoration: underline;">浏览器直下备用</a>
+                由 GitHub Actions 原生返回（有效期 24 小时，解压即可得安装程序）。不支持中国大陆直连，国内使用请先开启代理。
             </span>
-            <button type="button" class="btn btn-download" id="download-link">分片极速下载 (.zip)</button>
+            <button type="button" class="btn btn-download" id="download-link">下载安装包 (.zip)</button>
         </div>
     </section>
 </div>
@@ -591,12 +595,10 @@
         // 接入主站时指向绑定在土块.art 下的自定义 Worker 域名（exe.土块.art -> exe.xn--udsye.art）；
         // 如需本地调试可加 ?api=http://127.0.0.1:8787 临时覆盖。
         apiBase: new URLSearchParams(location.search).get('api') || 'https://exe.xn--udsye.art',
-        // 可选下载加速域（如接入 EdgeOne / Cloudflare SaaS 优选域名时填入，留空默认沿用 apiBase）。
-        downloadBase: new URLSearchParams(location.search).get('dl') || '',
         turnstileSiteKey: '0x4AAAAAAGA1Xo1IyeEK1QRX',
         maxPackageBytes: 1024 * 1024 * 1024,
         uploadConcurrency: 3,
-        downloadChunkBytes: 1536 * 1024,
+        downloadChunkBytes: 2 * 1024 * 1024,
         downloadConcurrency: 2,
         downloadIdleTimeoutMs: 25000,
         downloadMaxChunkTimeMs: 150000,
@@ -634,12 +636,6 @@
             return '';
         }
         return null;
-    }
-
-    function resolveDownloadBase(apiBase) {
-        return TUKUAI_EXE_CONFIG.downloadBase
-            ? TUKUAI_EXE_CONFIG.downloadBase.replace(/\/+$/, '')
-            : apiBase;
     }
 
     function applyTheme(theme) {
@@ -1203,7 +1199,7 @@
                     }
 
                     const [msg, pct] = statusMap[data.status] || ['云端处理中…', 70];
-                    setStage('build', pct, msg, data.r2Deleted ? '临时存储已清理' : '');
+                    setStage('build', pct, msg, data.r2Deleted ? '临时上传包已清理' : '');
                 } catch (err) {
                     if (settled) return;
                     failStreak++;
@@ -1348,7 +1344,7 @@
 
         const total = Number(meta.size || 0);
         const fileName = meta.fileName || 'TuKuai-Setup-x64.zip';
-        const sourceLabel = meta.source === 'r2' ? 'R2 极速通道' : 'GitHub 备份通道';
+        const sourceLabel = 'GitHub 原生通道';
 
         if (!Number.isFinite(total) || total <= 0) {
             triggerBlobSave(baseDownloadUrl, fileName);
@@ -1371,7 +1367,7 @@
 
         const runWorker = async (workerIndex) => {
             while (nextIndex < totalParts) {
-                // Step down to a single connection after repeated domestic link drops to reduce contention.
+                // Step down to a single connection after repeated link drops to reduce contention.
                 if (workerIndex > 0 && retryEvents >= 2) {
                     return;
                 }
@@ -1413,7 +1409,7 @@
         const btn = $('download-link');
         state.downloading = true;
         btn.disabled = true;
-        btn.textContent = '正在分片拉取…';
+        btn.textContent = '正在从 GitHub 拉取…';
         showNotice('');
 
         try {
@@ -1431,7 +1427,7 @@
                     setStage(
                         'done',
                         pct,
-                        `正在分片并发下载 (${sourceLabel})…`,
+                        `正在分片下载 (${sourceLabel})…`,
                         `${formatBytes(loaded)} / ${formatBytes(total)}${speedText}`
                     );
                 }
@@ -1445,12 +1441,12 @@
             );
             btn.textContent = '再次保存安装包 (.zip)';
         } catch (err) {
-            setStage('done', 100, 'x64 安装包封装完成！', '分片下载中断，请重试或改用浏览器直下');
+            setStage('done', 100, 'x64 安装包封装完成！', '下载中断，请开启代理后重试');
             showNotice(
-                `分片下载遇到网络异常（${err instanceof Error ? err.message : String(err)}），可重试或点击右侧「浏览器直下备用」。`,
+                `下载遇到网络异常（${err instanceof Error ? err.message : String(err)}）。本服务不支持中国大陆直连，国内使用请确认已开启代理后重试。`,
                 'error'
             );
-            btn.textContent = '重试分片下载 (.zip)';
+            btn.textContent = '重试下载 (.zip)';
         } finally {
             state.downloading = false;
             btn.disabled = false;
@@ -1534,16 +1530,11 @@
 
             const doneData = await pollUntilComplete(apiBase, jobId, jobSecret);
 
-            const readyDetail = doneData?.artifactSize
-                ? `${doneData.artifactName || '安装包'} (${formatBytes(doneData.artifactSize)}) · 点击下方按钮分片下载`
-                : '点击下方按钮分片极速下载';
+            const readyDetail = `${doneData?.artifactName || 'TuKuai-Setup-x64.zip'} · 已由 GitHub 原生生成（24 小时内有效）`;
             setStage('done', 100, 'x64 安装包封装完成！', readyDetail);
-            const downloadBase = resolveDownloadBase(apiBase);
-            const baseDownloadUrl = `${downloadBase}/api/jobs/${jobId}/download?secret=${encodeURIComponent(jobSecret)}`;
-            state.lastDownload = { apiBase: downloadBase, jobId, jobSecret };
-            $('download-link').textContent = '分片极速下载 (.zip)';
+            state.lastDownload = { apiBase, jobId, jobSecret };
+            $('download-link').textContent = '下载安装包 (.zip)';
             $('download-link').disabled = false;
-            $('download-direct-link').href = baseDownloadUrl;
             $('result-bar').hidden = false;
             showNotice(
                 '说明：免费云端封装不含商业数字签名，首次在他人电脑运行若遇 Windows SmartScreen 拦截提示，点击“更多信息 → 仍要运行”即可安装。',

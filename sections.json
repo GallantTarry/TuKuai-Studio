@@ -94,8 +94,8 @@
       {
         "id": "tukuai-exe",
         "name": "TuKuai-EXE",
-        "description": "Windows x64 云端安装包封装（Inno Setup）",
-        "keywords": "exe 安装包 封装 打包 windows x64 inno setup installer",
+        "description": "Windows x64 云端安装包封装（Inno Setup · 仅海外/代理环境）",
+        "keywords": "exe 安装包 封装 打包 windows x64 inno setup installer proxy github",
         "status": "available",
         "url": "TuKuaiEXE/TuKuaiEXE.html"
       }
