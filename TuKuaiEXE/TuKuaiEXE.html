@@ -567,7 +567,7 @@
 
         <div class="stage-list">
             <div class="stage-step" data-stage="pack">1. 本地归档打包</div>
-            <div class="stage-step" data-stage="upload">2. 直传临时中转</div>
+            <div class="stage-step" data-stage="upload">2. 分片并发上传</div>
             <div class="stage-step" data-stage="build">3. 云端封装编译</div>
             <div class="stage-step" data-stage="done">4. 成品可下载</div>
         </div>
@@ -575,21 +575,25 @@
         <div class="notice-box" id="status-notice" hidden></div>
 
         <div class="result-bar" id="result-bar" hidden>
-            <span class="card-hint">产物有效期 24 小时，下载压缩包解压即可得到安装程序。</span>
+            <span class="card-hint">
+                产物有效期 24 小时，解压即可得安装程序。
+                <a id="download-direct-link" href="#" target="_blank" rel="noopener noreferrer" style="color: var(--red); margin-left: 6px; text-decoration: underline;">海外直链备用</a>
+            </span>
             <a class="btn btn-download" id="download-link" href="#" target="_blank" rel="noopener noreferrer">下载 x64 安装包 (.zip)</a>
         </div>
     </section>
 </div>
 
 <script type="module">
-    import { Zip, ZipPassThrough } from 'https://cdn.jsdelivr.net/npm/fflate@0.8.2/esm/browser.js';
+    import { Zip, ZipDeflate, ZipPassThrough } from './fflate.browser.js';
 
     const TUKUAI_EXE_CONFIG = {
-        // 接入 TuKuai-Studio 主站（https://xn--2esp7m.xn--udsye.art）跨域调用 Cloudflare Worker；
+        // 接入主站时指向绑定在土块.art 下的自定义 Worker 域名（exe.土块.art -> exe.xn--udsye.art）；
         // 如需本地调试可加 ?api=http://127.0.0.1:8787 临时覆盖。
-        apiBase: new URLSearchParams(location.search).get('api') || 'https://tukuai-exe-worker.w1961459892.workers.dev',
+        apiBase: new URLSearchParams(location.search).get('api') || 'https://exe.xn--udsye.art',
         turnstileSiteKey: '0x4AAAAAAGA1Xo1IyeEK1QRX',
         maxPackageBytes: 1024 * 1024 * 1024,
+        uploadConcurrency: 3,
     };
 
     const $ = (id) => document.getElementById(id);
@@ -609,7 +613,14 @@
         if (TUKUAI_EXE_CONFIG.apiBase) {
             return TUKUAI_EXE_CONFIG.apiBase.replace(/\/+$/, '');
         }
-        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.endsWith('.workers.dev')) {
+        const host = location.hostname.toLowerCase();
+        if (
+            host === 'localhost' ||
+            host === '127.0.0.1' ||
+            host === 'exe.xn--udsye.art' ||
+            host === 'exe.土块.art' ||
+            host.endsWith('.workers.dev')
+        ) {
             return '';
         }
         return null;
@@ -666,7 +677,14 @@
                 renderTurnstileWidget();
             }
         }, 200);
-        setTimeout(() => clearInterval(timer), 10000);
+        setTimeout(() => {
+            clearInterval(timer);
+            if (!window.turnstile && state.widgetId === null) {
+                const warn = $('config-warning');
+                warn.textContent = '提示：Cloudflare Turnstile 人机验证脚本加载超时，请检查网络或刷新重试。';
+                warn.hidden = false;
+            }
+        }, 12000);
     });
 
     function formatBytes(bytes) {
@@ -946,7 +964,10 @@
         box.hidden = false;
     }
 
-    async function buildStoreZipBlob(onProgress) {
+    const INCOMPRESSIBLE_EXT_RE = /\.(?:zip|7z|rar|gz|bz2|xz|zst|tar|png|jpe?g|webp|gif|ico|mp3|mp4|mov|mkv|avi|webm|wav|flac|ogg|aac|woff2?|pdf|jar|whl|apk|nupkg|pak|asar)$/i;
+    const MAX_DEFLATE_FILE_BYTES = 64 * 1024 * 1024;
+
+    async function buildArchiveZipBlob(onProgress) {
         const chunks = [];
         let settled = false;
 
@@ -968,13 +989,18 @@
                 let done = 0;
 
                 const writeFileEntry = async (entryPath, file) => {
-                    const entry = new ZipPassThrough(entryPath);
+                    const useDeflate = !INCOMPRESSIBLE_EXT_RE.test(entryPath) && file.size <= MAX_DEFLATE_FILE_BYTES;
+                    const entry = useDeflate ? new ZipDeflate(entryPath, { level: 1 }) : new ZipPassThrough(entryPath);
                     zip.add(entry);
                     const reader = file.stream().getReader();
+                    let pushes = 0;
                     while (true) {
                         const { value, done: streamDone } = await reader.read();
                         if (streamDone) break;
                         entry.push(value, false);
+                        if (++pushes % 16 === 0) {
+                            await new Promise((r) => setTimeout(r, 0));
+                        }
                     }
                     entry.push(new Uint8Array(0), true);
                     done++;
@@ -998,26 +1024,107 @@
         });
     }
 
-    function uploadBlobWithProgress(uploadUrl, contentType, blob, onProgress) {
+    function postRawBlobOnce(url, rawBlob, onChunkProgress) {
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
-            xhr.open('PUT', uploadUrl);
-            xhr.setRequestHeader('Content-Type', contentType);
+            xhr.open('POST', url);
+            xhr.timeout = 120000;
             xhr.upload.onprogress = (event) => {
                 if (event.lengthComputable) {
-                    onProgress(event.loaded, event.total);
+                    onChunkProgress(event.loaded);
                 }
             };
             xhr.onload = () => {
+                let parsed = {};
+                try { parsed = JSON.parse(xhr.responseText || '{}'); } catch {}
                 if (xhr.status >= 200 && xhr.status < 300) {
-                    resolve();
-                } else {
-                    reject(new Error(`直传中转存储失败 (HTTP ${xhr.status})`));
+                    onChunkProgress(rawBlob.size);
+                    resolve(parsed);
+                    return;
                 }
+                const err = new Error(parsed.message || `上传分片失败 (HTTP ${xhr.status})`);
+                err.retryable = xhr.status === 429 || xhr.status >= 500;
+                reject(err);
             };
-            xhr.onerror = () => reject(new Error('网络异常或 CORS 未放行，直传 R2 失败'));
-            xhr.send(blob);
+            xhr.onerror = () => {
+                const err = new Error('网络抖动，正在自动重试上传分片…');
+                err.retryable = true;
+                reject(err);
+            };
+            xhr.ontimeout = () => {
+                const err = new Error('分片上传超时，正在自动重试…');
+                err.retryable = true;
+                reject(err);
+            };
+            xhr.send(rawBlob);
         });
+    }
+
+    async function postRawBlobWithRetry(url, rawBlob, onChunkProgress, maxRetries = 3) {
+        for (let attempt = 0; attempt <= maxRetries; attempt++) {
+            try {
+                return await postRawBlobOnce(url, rawBlob, onChunkProgress);
+            } catch (err) {
+                if (!err.retryable || attempt === maxRetries) {
+                    throw err;
+                }
+                onChunkProgress(0);
+                await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
+            }
+        }
+    }
+
+    async function uploadArchiveInChunks(apiBase, createData, archiveBlob, onProgress) {
+        const { jobId, jobSecret, uploadMode, partSize } = createData;
+        const total = archiveBlob.size;
+        const startedAt = Date.now();
+
+        if (uploadMode === 'single') {
+            const url = `${apiBase}/api/jobs/${jobId}/upload?secret=${encodeURIComponent(jobSecret)}`;
+            // Use CORS-safelisted text/plain Blob with POST to skip extra cross-origin OPTIONS preflights.
+            const rawSlice = archiveBlob.slice(0, total, 'text/plain');
+            await postRawBlobWithRetry(url, rawSlice, (loaded) => {
+                const elapsedSec = Math.max(0.2, (Date.now() - startedAt) / 1000);
+                onProgress(loaded, total, loaded / elapsedSec);
+            });
+            return [];
+        }
+
+        const effectivePartSize = partSize || 8 * 1024 * 1024;
+        const totalParts = Math.ceil(total / effectivePartSize);
+        const partLoaded = new Array(totalParts).fill(0);
+        const uploadedParts = new Array(totalParts);
+        let nextIndex = 0;
+
+        const emitProgress = () => {
+            const loaded = partLoaded.reduce((acc, v) => acc + v, 0);
+            const elapsedSec = Math.max(0.2, (Date.now() - startedAt) / 1000);
+            onProgress(Math.min(total, loaded), total, loaded / elapsedSec);
+        };
+
+        const runWorker = async () => {
+            while (nextIndex < totalParts) {
+                const idx = nextIndex++;
+                const partNumber = idx + 1;
+                const start = idx * effectivePartSize;
+                const end = Math.min(total, start + effectivePartSize);
+                const chunkSlice = archiveBlob.slice(start, end, 'text/plain');
+                const url = `${apiBase}/api/jobs/${jobId}/parts/${partNumber}?secret=${encodeURIComponent(jobSecret)}`;
+
+                const res = await postRawBlobWithRetry(url, chunkSlice, (bytes) => {
+                    partLoaded[idx] = Math.min(chunkSlice.size, bytes);
+                    emitProgress();
+                });
+                uploadedParts[idx] = { partNumber: res.partNumber || partNumber, etag: res.etag };
+            }
+        };
+
+        const workers = Array.from(
+            { length: Math.min(TUKUAI_EXE_CONFIG.uploadConcurrency, totalParts) },
+            () => runWorker()
+        );
+        await Promise.all(workers);
+        return uploadedParts;
     }
 
     async function pollUntilComplete(apiBase, jobId, jobSecret) {
@@ -1028,13 +1135,18 @@
         };
 
         return new Promise((resolve, reject) => {
+            let failStreak = 0;
             const tick = async () => {
                 try {
                     const res = await fetch(`${apiBase}/api/jobs/${jobId}?secret=${encodeURIComponent(jobSecret)}`);
                     const data = await res.json();
                     if (!res.ok) {
-                        throw new Error(data.message || '查询构建状态失败');
+                        const fatal = res.status >= 400 && res.status < 500 && res.status !== 429;
+                        const err = new Error(data.message || '查询构建状态失败');
+                        err.fatal = fatal;
+                        throw err;
                     }
+                    failStreak = 0;
 
                     if (data.status === 'succeeded') {
                         clearInterval(state.pollTimer);
@@ -1052,9 +1164,12 @@
                     const [msg, pct] = statusMap[data.status] || ['云端处理中…', 70];
                     setStage('build', pct, msg, data.r2Deleted ? '临时存储已清理' : '');
                 } catch (err) {
-                    clearInterval(state.pollTimer);
-                    state.pollTimer = null;
-                    reject(err);
+                    failStreak++;
+                    if (err?.fatal || failStreak >= 5) {
+                        clearInterval(state.pollTimer);
+                        state.pollTimer = null;
+                        reject(err);
+                    }
                 }
             };
 
@@ -1077,8 +1192,8 @@
         $('job-id-hint').textContent = '';
 
         try {
-            setStage('pack', 5, '正在浏览器内零压缩归档文件…', `共 ${state.appFiles.length} 个文件`);
-            const archiveBlob = await buildStoreZipBlob((done, total) => {
+            setStage('pack', 5, '正在浏览器内打包归档（轻量压缩加速上传）…', `共 ${state.appFiles.length} 个文件`);
+            const archiveBlob = await buildArchiveZipBlob((done, total) => {
                 const pct = 5 + Math.round((done / Math.max(1, total)) * 20);
                 setStage('pack', pct, `正在归档文件 (${done}/${total})…`, formatBytes(state.totalBytes));
             });
@@ -1087,7 +1202,12 @@
                 throw new Error('归档包体积超过 1 GB 上限，请精简目录后重试');
             }
 
-            setStage('upload', 26, '正在校验额度并申请临时上传通道…', formatBytes(archiveBlob.size));
+            setStage(
+                'upload',
+                26,
+                '正在校验额度并建立加密上传通道…',
+                `${formatBytes(archiveBlob.size)}（原 ${formatBytes(state.totalBytes)}）`
+            );
             const createRes = await fetch(`${apiBase}/api/jobs`, {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
@@ -1108,19 +1228,20 @@
                 throw new Error(createData.message || `创建任务失败 (${createRes.status})`);
             }
 
-            const { jobId, jobSecret, uploadUrl, contentType } = createData;
+            const { jobId, jobSecret } = createData;
             $('job-id-hint').textContent = `Job: ${jobId.slice(0, 8)}`;
 
-            await uploadBlobWithProgress(uploadUrl, contentType, archiveBlob, (loaded, total) => {
+            const uploadedParts = await uploadArchiveInChunks(apiBase, createData, archiveBlob, (loaded, total, speedBps) => {
                 const pct = 28 + Math.round((loaded / Math.max(1, total)) * 32);
-                setStage('upload', pct, '正在直传中转存储 (R2)…', `${formatBytes(loaded)} / ${formatBytes(total)}`);
+                const speedText = speedBps > 0 ? ` · ${formatBytes(speedBps)}/s` : '';
+                setStage('upload', pct, '正在分片并发上传至中转站…', `${formatBytes(loaded)} / ${formatBytes(total)}${speedText}`);
             });
 
             setStage('build', 62, '上传完成，正在启动 GitHub Actions Windows 虚拟机…');
             const startRes = await fetch(`${apiBase}/api/jobs/${jobId}/start`, {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
-                body: JSON.stringify({ secret: jobSecret }),
+                body: JSON.stringify({ secret: jobSecret, parts: uploadedParts }),
             });
             const startData = await startRes.json();
             if (!startRes.ok) {
@@ -1130,7 +1251,9 @@
             await pollUntilComplete(apiBase, jobId, jobSecret);
 
             setStage('done', 100, 'x64 安装包封装完成！', '点击下方按钮下载');
-            $('download-link').href = `${apiBase}/api/jobs/${jobId}/download?secret=${encodeURIComponent(jobSecret)}`;
+            const baseDownloadUrl = `${apiBase}/api/jobs/${jobId}/download?secret=${encodeURIComponent(jobSecret)}`;
+            $('download-link').href = baseDownloadUrl;
+            $('download-direct-link').href = `${baseDownloadUrl}&direct=1`;
             $('result-bar').hidden = false;
             showNotice(
                 '说明：免费云端封装不含商业数字签名，首次在他人电脑运行若遇 Windows SmartScreen 拦截提示，点击“更多信息 → 仍要运行”即可安装。',
