@@ -591,6 +591,8 @@
         // 接入主站时指向绑定在土块.art 下的自定义 Worker 域名（exe.土块.art -> exe.xn--udsye.art）；
         // 如需本地调试可加 ?api=http://127.0.0.1:8787 临时覆盖。
         apiBase: new URLSearchParams(location.search).get('api') || 'https://exe.xn--udsye.art',
+        // 可选下载加速域（如接入 EdgeOne / Cloudflare SaaS 优选域名时填入，留空默认沿用 apiBase）。
+        downloadBase: new URLSearchParams(location.search).get('dl') || '',
         turnstileSiteKey: '0x4AAAAAAGA1Xo1IyeEK1QRX',
         maxPackageBytes: 1024 * 1024 * 1024,
         uploadConcurrency: 3,
@@ -632,6 +634,12 @@
             return '';
         }
         return null;
+    }
+
+    function resolveDownloadBase(apiBase) {
+        return TUKUAI_EXE_CONFIG.downloadBase
+            ? TUKUAI_EXE_CONFIG.downloadBase.replace(/\/+$/, '')
+            : apiBase;
     }
 
     function applyTheme(theme) {
@@ -696,7 +704,7 @@
     });
 
     function formatBytes(bytes) {
-        if (bytes < 1024) return `${bytes} B`;
+        if (bytes < 1024) return `${Math.round(bytes)} B`;
         if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
         if (bytes < 1024 * 1024 * 1024) return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
         return `${(bytes / 1024 / 1024 / 1024).toFixed(2)} GB`;
@@ -1144,10 +1152,39 @@
 
         return new Promise((resolve, reject) => {
             let failStreak = 0;
+            let settled = false;
+            if (state.pollTimer) {
+                clearTimeout(state.pollTimer);
+                state.pollTimer = null;
+            }
+
+            const finish = (fn, value) => {
+                if (settled) return;
+                settled = true;
+                if (state.pollTimer) {
+                    clearTimeout(state.pollTimer);
+                    state.pollTimer = null;
+                }
+                fn(value);
+            };
+
+            const scheduleNext = () => {
+                if (!settled) {
+                    state.pollTimer = setTimeout(tick, 3000);
+                }
+            };
+
             const tick = async () => {
+                if (settled) return;
+                const controller = new AbortController();
+                const reqTimer = setTimeout(() => controller.abort(), 12000);
                 try {
-                    const res = await fetch(`${apiBase}/api/jobs/${jobId}?secret=${encodeURIComponent(jobSecret)}`);
+                    const res = await fetch(`${apiBase}/api/jobs/${jobId}?secret=${encodeURIComponent(jobSecret)}`, {
+                        cache: 'no-store',
+                        signal: controller.signal,
+                    });
                     const data = await res.json();
+                    if (settled) return;
                     if (!res.ok) {
                         const fatal = res.status >= 400 && res.status < 500 && res.status !== 429;
                         const err = new Error(data.message || '查询构建状态失败');
@@ -1157,32 +1194,30 @@
                     failStreak = 0;
 
                     if (data.status === 'succeeded') {
-                        clearInterval(state.pollTimer);
-                        state.pollTimer = null;
-                        resolve(data);
+                        finish(resolve, data);
                         return;
                     }
                     if (data.status === 'failed' || data.status === 'rejected') {
-                        clearInterval(state.pollTimer);
-                        state.pollTimer = null;
-                        reject(new Error(data.errorMessage || '云端编译失败'));
+                        finish(reject, new Error(data.errorMessage || '云端编译失败'));
                         return;
                     }
 
                     const [msg, pct] = statusMap[data.status] || ['云端处理中…', 70];
                     setStage('build', pct, msg, data.r2Deleted ? '临时存储已清理' : '');
                 } catch (err) {
+                    if (settled) return;
                     failStreak++;
-                    if (err?.fatal || failStreak >= 5) {
-                        clearInterval(state.pollTimer);
-                        state.pollTimer = null;
-                        reject(err);
+                    if (err?.fatal || failStreak >= 8) {
+                        finish(reject, err?.name === 'AbortError' ? new Error('查询构建状态超时，请检查网络连接') : err);
+                        return;
                     }
+                } finally {
+                    clearTimeout(reqTimer);
                 }
+                scheduleNext();
             };
 
             tick();
-            state.pollTimer = setInterval(tick, 3000);
         });
     }
 
@@ -1503,8 +1538,9 @@
                 ? `${doneData.artifactName || '安装包'} (${formatBytes(doneData.artifactSize)}) · 点击下方按钮分片下载`
                 : '点击下方按钮分片极速下载';
             setStage('done', 100, 'x64 安装包封装完成！', readyDetail);
-            const baseDownloadUrl = `${apiBase}/api/jobs/${jobId}/download?secret=${encodeURIComponent(jobSecret)}`;
-            state.lastDownload = { apiBase, jobId, jobSecret };
+            const downloadBase = resolveDownloadBase(apiBase);
+            const baseDownloadUrl = `${downloadBase}/api/jobs/${jobId}/download?secret=${encodeURIComponent(jobSecret)}`;
+            state.lastDownload = { apiBase: downloadBase, jobId, jobSecret };
             $('download-link').textContent = '分片极速下载 (.zip)';
             $('download-link').disabled = false;
             $('download-direct-link').href = baseDownloadUrl;
