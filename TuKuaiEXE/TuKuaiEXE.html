@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <title>TuKuai EXE · Windows x64 云端安装包封装</title>
+    <link rel="icon" href="../imgs/TuKuaiStudio.ico" type="image/x-icon">
+
+    <!-- 🌓 首屏主题防闪烁：同步 TuKuai Studio 主站 ?theme= 参数与系统时段 -->
+    <script>
+        (function () {
+            const params = new URLSearchParams(window.location.search);
+            let theme = params.get('theme') || localStorage.getItem('tukuai-theme');
+            if (theme !== 'light' && theme !== 'dark') {
+                const hour = new Date().getHours();
+                theme = (hour >= 7 && hour < 19) ? 'light' : 'dark';
+            }
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.style.colorScheme = theme;
+        })();
+    </script>
+
+    <!-- Cloudflare Turnstile -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+
+    <style>
+        :root {
+            color-scheme: light;
+            --page: #ffffff;
+            --surface: #f6f6f6;
+            --surface-raised: #ffffff;
+            --neutral-ink: #242424;
+            --neutral-muted: #6e7785;
+            --neutral-faint: #98a0ac;
+            --neutral-line: #e5e5e5;
+            --red: #e16e7d;
+            --red-soft: rgba(225, 110, 125, 0.12);
+            --green: #27ad80;
+            --green-soft: rgba(39, 173, 128, 0.12);
+            --blue: #3989ec;
+            --blue-soft: rgba(57, 137, 236, 0.12);
+            --yellow: #d5a32e;
+            --ease: cubic-bezier(.22, 1, .36, 1);
+        }
+
+        html[data-theme="dark"] {
+            color-scheme: dark;
+            --page: #111111;
+            --surface: #191919;
+            --surface-raised: #1f1f1f;
+            --neutral-ink: #e9e9e9;
+            --neutral-muted: #a8b0bc;
+            --neutral-faint: #7b828e;
+            --neutral-line: #303030;
+            --red: #f18b98;
+            --red-soft: rgba(241, 139, 152, 0.14);
+            --green: #63cfa6;
+            --green-soft: rgba(99, 207, 166, 0.14);
+            --blue: #7ab7ff;
+            --blue-soft: rgba(122, 183, 255, 0.14);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--page);
+            color: var(--neutral-ink);
+            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            padding: 40px 20px 80px;
+            min-height: 100vh;
+            line-height: 1.6;
+            transition: background 0.25s var(--ease), color 0.25s var(--ease);
+        }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--page); }
+        ::-webkit-scrollbar-thumb { background: var(--neutral-line); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neutral-muted); }
+
+        .container {
+            max-width: 880px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 8px;
+        }
+
+        .header-eyebrow {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 11px;
+            letter-spacing: 2.2px;
+            color: var(--red);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: clamp(1.75rem, 4.2vw, 2.35rem);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            line-height: 1.25;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: var(--neutral-muted);
+            font-size: 0.94rem;
+            max-width: 640px;
+            margin: 0 auto 20px;
+            line-height: 1.7;
+        }
+
+        .badge-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: var(--surface);
+            border: 1px solid var(--neutral-line);
+            padding: 5px 13px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--neutral-muted);
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--neutral-line);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 22px;
+            transition: background 0.25s var(--ease), border-color 0.25s var(--ease);
+        }
+
+        .card-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .card-title {
+            font-size: 1.04rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .step-pill {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.74rem;
+            padding: 2px 8px;
+            border-radius: 5px;
+            background: var(--red-soft);
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        .card-hint {
+            font-size: 0.82rem;
+            color: var(--neutral-muted);
+        }
+
+        /* 拖拽区 */
+        .dropzone {
+            border: 1.5px dashed var(--neutral-line);
+            background: var(--surface-raised);
+            border-radius: 10px;
+            padding: 36px 20px;
+            text-align: center;
+            transition: border-color 0.2s var(--ease), background 0.2s var(--ease), transform 0.2s var(--ease);
+            cursor: pointer;
+        }
+
+        .dropzone:hover,
+        .dropzone.is-dragover {
+            border-color: var(--red);
+            background: var(--red-soft);
+        }
+
+        .dropzone-icon {
+            width: 38px;
+            height: 38px;
+            margin: 0 auto 12px;
+            color: var(--red);
+        }
+
+        .dropzone-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .dropzone-desc {
+            font-size: 0.84rem;
+            color: var(--neutral-muted);
+            margin-bottom: 18px;
+        }
+
+        .btn-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: var(--surface);
+            color: var(--neutral-ink);
+            border: 1px solid var(--neutral-line);
+            border-radius: 7px;
+            padding: 8px 16px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.18s var(--ease);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .btn:hover:not(:disabled) {
+            border-color: var(--neutral-muted);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: scale(0.985);
+        }
+
+        .btn:disabled {
+            opacity: 0.48;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: var(--red);
+            border-color: var(--red);
+            color: #ffffff;
+            font-weight: 600;
+            padding: 10px 22px;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            filter: brightness(1.06);
+            border-color: var(--red);
+        }
+
+        .btn-download {
+            background: var(--blue);
+            border-color: var(--blue);
+            color: #ffffff;
+            font-weight: 600;
+            padding: 10px 22px;
+        }
+
+        .btn-download:hover {
+            filter: brightness(1.06);
+            border-color: var(--blue);
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .summary-item {
+            background: var(--surface-raised);
+            border: 1px solid var(--neutral-line);
+            border-radius: 8px;
+            padding: 10px 14px;
+        }
+
+        .summary-label {
+            font-size: 0.76rem;
+            color: var(--neutral-faint);
+            margin-bottom: 3px;
+        }
+
+        .summary-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .summary-value.ok { color: var(--green); }
+        .summary-value.warn { color: var(--yellow); }
+        .summary-value.err { color: var(--red); }
+
+        /* 表单 */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 14px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: var(--neutral-muted);
+        }
+
+        input[type="text"],
+        select {
+            background: var(--surface-raised);
+            color: var(--neutral-ink);
+            border: 1px solid var(--neutral-line);
+            border-radius: 7px;
+            padding: 9px 12px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.18s var(--ease);
+            width: 100%;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            border-color: var(--red);
+        }
+
+        .action-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        /* 进度与状态 */
+        .progress-track {
+            width: 100%;
+            height: 8px;
+            background: var(--surface-raised);
+            border: 1px solid var(--neutral-line);
+            border-radius: 999px;
+            overflow: hidden;
+            margin: 14px 0 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--red), var(--blue));
+            border-radius: 999px;
+            transition: width 0.25s var(--ease);
+        }
+
+        .progress-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.84rem;
+            color: var(--neutral-muted);
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .stage-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        @media (max-width: 640px) {
+            .stage-list { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .stage-step {
+            background: var(--surface-raised);
+            border: 1px solid var(--neutral-line);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 0.8rem;
+            color: var(--neutral-faint);
+            transition: all 0.2s var(--ease);
+        }
+
+        .stage-step.active {
+            border-color: var(--red);
+            color: var(--neutral-ink);
+            background: var(--red-soft);
+            font-weight: 600;
+        }
+
+        .stage-step.done {
+            border-color: var(--green);
+            color: var(--green);
+            background: var(--green-soft);
+        }
+
+        .notice-box {
+            margin-top: 14px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 0.83rem;
+            border: 1px solid var(--neutral-line);
+            background: var(--surface-raised);
+            color: var(--neutral-muted);
+            line-height: 1.6;
+        }
+
+        .notice-box.error {
+            border-color: var(--red);
+            background: var(--red-soft);
+            color: var(--red);
+        }
+
+        .notice-box.success {
+            border-color: var(--green);
+            background: var(--green-soft);
+            color: var(--neutral-ink);
+        }
+
+        .result-bar {
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        [hidden] { display: none !important; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="header-eyebrow">SYS / TUKUAI-EXE</div>
+        <h1>TuKuai EXE 云端封装工坊</h1>
+        <p class="subtitle">
+            拖入已打包好的桌面应用文件夹（含主 <code>.exe</code>）与 <code>license.txt</code>，云端自动生成标准 Windows x64 安装包（Inno Setup）。中转文件即用即焚，不留存任何源码。
+        </p>
+        <div class="badge-bar">
+            <span class="badge">x64compatible</span>
+            <span class="badge">fflate 零压缩打包</span>
+            <span class="badge">单包上限 1 GB</span>
+            <span class="badge">纯免费开源架构</span>
+        </div>
+    </header>
+
+    <div class="notice-box error" id="config-warning" hidden></div>
+
+    <!-- Step 1: 拖入文件夹与协议 -->
+    <section class="card">
+        <div class="card-head">
+            <div class="card-title"><span class="step-pill">01</span> 选择应用目录与协议文件</div>
+            <span class="card-hint">支持拖拽整个 dist 文件夹 + license.txt</span>
+        </div>
+
+        <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="拖拽或点击选择项目文件夹">
+            <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <div class="dropzone-title">把项目文件夹（和 license.txt）拖到这里</div>
+            <div class="dropzone-desc">请确保目录内已包含可运行的主程序 .exe（如 PyInstaller / Nuitka / jpackage 输出目录）</div>
+            <div class="btn-row">
+                <button type="button" class="btn" id="pick-folder-btn">选择应用文件夹</button>
+                <button type="button" class="btn" id="pick-license-btn">单独选择 license.txt</button>
+                <button type="button" class="btn" id="clear-files-btn" hidden>清空重选</button>
+            </div>
+        </div>
+
+        <input type="file" id="folder-input" webkitdirectory directory multiple hidden>
+        <input type="file" id="license-input" accept=".txt,text/plain" hidden>
+
+        <div class="summary-grid" id="file-summary" hidden>
+            <div class="summary-item">
+                <div class="summary-label">应用根目录</div>
+                <div class="summary-value" id="sum-root">-</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">文件数量 / 总大小</div>
+                <div class="summary-value" id="sum-size">-</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">检测到 .exe 入口</div>
+                <div class="summary-value" id="sum-exe">-</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-label">license.txt 协议</div>
+                <div class="summary-value" id="sum-license">-</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Step 2: 安装包配置 -->
+    <section class="card">
+        <div class="card-head">
+            <div class="card-title"><span class="step-pill">02</span> 填写安装包信息</div>
+            <span class="card-hint">用于安装向导界面与 Windows 控制面板卸载项</span>
+        </div>
+
+        <div class="form-grid">
+            <div class="field full">
+                <label for="main-exe-select">主程序入口 (.exe)</label>
+                <select id="main-exe-select" disabled>
+                    <option value="">请先选择包含 .exe 的应用文件夹</option>
+                </select>
+            </div>
+            <div class="field">
+                <label for="app-name-input">应用名称</label>
+                <input type="text" id="app-name-input" maxlength="80" placeholder="例如：TuKuai Tool">
+            </div>
+            <div class="field">
+                <label for="app-version-input">版本号（纯数字格式）</label>
+                <input type="text" id="app-version-input" maxlength="24" value="1.0.0" placeholder="1.0.0">
+            </div>
+            <div class="field full">
+                <label for="app-publisher-input">发布者名称（可选）</label>
+                <input type="text" id="app-publisher-input" maxlength="80" value="TuKuai Studio" placeholder="TuKuai Studio">
+            </div>
+        </div>
+
+        <div class="action-bar">
+            <div id="turnstile-box"></div>
+            <button type="button" class="btn btn-primary" id="start-btn" disabled>开始云端封装 x64 安装包</button>
+        </div>
+    </section>
+
+    <!-- Step 3: 进度与下载 -->
+    <section class="card" id="status-card" hidden>
+        <div class="card-head">
+            <div class="card-title"><span class="step-pill">03</span> 云端封装进度</div>
+            <span class="card-hint" id="job-id-hint"></span>
+        </div>
+
+        <div class="progress-track" aria-hidden="true">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-meta">
+            <span id="status-text">准备中…</span>
+            <span id="status-detail"></span>
+        </div>
+
+        <div class="stage-list">
+            <div class="stage-step" data-stage="pack">1. 本地归档打包</div>
+            <div class="stage-step" data-stage="upload">2. 直传临时中转</div>
+            <div class="stage-step" data-stage="build">3. 云端封装编译</div>
+            <div class="stage-step" data-stage="done">4. 成品可下载</div>
+        </div>
+
+        <div class="notice-box" id="status-notice" hidden></div>
+
+        <div class="result-bar" id="result-bar" hidden>
+            <span class="card-hint">产物有效期 24 小时，下载压缩包解压即可得到安装程序。</span>
+            <a class="btn btn-download" id="download-link" href="#" target="_blank" rel="noopener noreferrer">下载 x64 安装包 (.zip)</a>
+        </div>
+    </section>
+</div>
+
+<script type="module">
+    import { Zip, ZipPassThrough } from 'https://cdn.jsdelivr.net/npm/fflate@0.8.2/esm/browser.js';
+
+    const TUKUAI_EXE_CONFIG = {
+        // 接入 TuKuai-Studio 主站（https://xn--2esp7m.xn--udsye.art）跨域调用 Cloudflare Worker；
+        // 如需本地调试可加 ?api=http://127.0.0.1:8787 临时覆盖。
+        apiBase: new URLSearchParams(location.search).get('api') || 'https://tukuai-exe-worker.w1961459892.workers.dev',
+        turnstileSiteKey: '0x4AAAAAAGA1Xo1IyeEK1QRX',
+        maxPackageBytes: 1024 * 1024 * 1024,
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    const state = {
+        appFiles: [],       // Array<{ file: File, relPath: string }>
+        licenseFile: null,  // File | null
+        rootName: '',
+        totalBytes: 0,
+        turnstileToken: '',
+        widgetId: null,
+        busy: false,
+        pollTimer: null,
+    };
+
+    function resolveApiBase() {
+        if (TUKUAI_EXE_CONFIG.apiBase) {
+            return TUKUAI_EXE_CONFIG.apiBase.replace(/\/+$/, '');
+        }
+        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.endsWith('.workers.dev')) {
+            return '';
+        }
+        return null;
+    }
+
+    function applyTheme(theme) {
+        if (theme !== 'light' && theme !== 'dark') return;
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+        renderTurnstileWidget();
+    }
+
+    window.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'tukuai-theme') {
+            applyTheme(event.data.theme);
+        }
+    });
+
+    function renderTurnstileWidget() {
+        if (!window.turnstile) return;
+        const container = $('turnstile-box');
+        if (state.widgetId !== null) {
+            try { window.turnstile.remove(state.widgetId); } catch {}
+            state.widgetId = null;
+        }
+        state.turnstileToken = '';
+        state.widgetId = window.turnstile.render(container, {
+            sitekey: TUKUAI_EXE_CONFIG.turnstileSiteKey,
+            theme: document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light',
+            callback: (token) => {
+                state.turnstileToken = token;
+                updateStartButton();
+            },
+            'expired-callback': () => {
+                state.turnstileToken = '';
+                updateStartButton();
+            },
+            'error-callback': () => {
+                state.turnstileToken = '';
+                updateStartButton();
+            },
+        });
+    }
+
+    window.addEventListener('load', () => {
+        if (resolveApiBase() === null) {
+            const warn = $('config-warning');
+            warn.textContent = '提示：尚未在 TuKuaiEXE.html 顶部配置 Cloudflare Worker 后端地址（apiBase），目前无法发起云端请求。';
+            warn.hidden = false;
+        }
+        const timer = setInterval(() => {
+            if (window.turnstile) {
+                clearInterval(timer);
+                renderTurnstileWidget();
+            }
+        }, 200);
+        setTimeout(() => clearInterval(timer), 10000);
+    });
+
+    function formatBytes(bytes) {
+        if (bytes < 1024) return `${bytes} B`;
+        if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+        if (bytes < 1024 * 1024 * 1024) return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+        return `${(bytes / 1024 / 1024 / 1024).toFixed(2)} GB`;
+    }
+
+    function sanitizeAppNameInput(raw) {
+        return raw.replace(/[\r\n\x00-\x1F"`;\[\]\\/{}$%]/g, '').trim().slice(0, 80);
+    }
+
+    function readAllDirectoryEntries(reader) {
+        return new Promise((resolve, reject) => {
+            const entries = [];
+            function readNext() {
+                reader.readEntries((batch) => {
+                    if (!batch.length) {
+                        resolve(entries);
+                    } else {
+                        entries.push(...batch);
+                        readNext();
+                    }
+                }, reject);
+            }
+            readNext();
+        });
+    }
+
+    function entryToFile(entry) {
+        return new Promise((resolve, reject) => entry.file(resolve, reject));
+    }
+
+    async function collectEntryFiles(entry, prefix = '') {
+        if (entry.isFile) {
+            const file = await entryToFile(entry);
+            return [{ file, rawPath: prefix ? `${prefix}/${entry.name}` : entry.name }];
+        }
+        if (entry.isDirectory) {
+            const reader = entry.createReader();
+            const children = await readAllDirectoryEntries(reader);
+            const nextPrefix = prefix ? `${prefix}/${entry.name}` : entry.name;
+            const nested = [];
+            for (const child of children) {
+                nested.push(...(await collectEntryFiles(child, nextPrefix)));
+            }
+            return nested;
+        }
+        return [];
+    }
+
+    function scoreExeCandidate(relPath) {
+        const lower = relPath.toLowerCase();
+        const depth = relPath.split('/').length;
+        let penalty = depth * 10;
+        if (/(unins|crash|qtwebengineprocess|vc_redist|helper|updater|elevate)/.test(lower)) {
+            penalty += 100;
+        }
+        return penalty;
+    }
+
+    function normalizeCollectedItems(rawItems, existingLicense = null) {
+        let dirRoot = '';
+        let droppedLicense = null;
+
+        // Separate standalone top-level license.txt dropped alongside or separately from a folder.
+        const nonTopTxt = rawItems.filter((item) => {
+            const isStandaloneTxt = !item.rawPath.includes('/') && /^license\.txt$/i.test(item.rawPath);
+            if (isStandaloneTxt) {
+                droppedLicense = item.file;
+                return false;
+            }
+            return true;
+        });
+
+        // If the user dropped ONLY a standalone license.txt, keep existing appFiles intact.
+        if (!nonTopTxt.length) {
+            if (droppedLicense) {
+                state.licenseFile = droppedLicense;
+                refreshSummaryUI();
+            }
+            return;
+        }
+
+        let foundLicense = droppedLicense || existingLicense;
+        const folderFiles = [];
+
+        const firstSegments = new Set(
+            nonTopTxt.map((i) => i.rawPath.split('/')[0]).filter(Boolean)
+        );
+        if (firstSegments.size === 1 && nonTopTxt.some((i) => i.rawPath.includes('/'))) {
+            dirRoot = [...firstSegments][0];
+        }
+
+        for (const item of nonTopTxt) {
+            const relPath = dirRoot
+                ? item.rawPath.slice(dirRoot.length + 1)
+                : item.rawPath;
+            if (!relPath) continue;
+            if (!foundLicense && /^license\.txt$/i.test(relPath)) {
+                foundLicense = item.file;
+            }
+            folderFiles.push({ file: item.file, relPath });
+        }
+
+        state.appFiles = folderFiles;
+        state.licenseFile = foundLicense;
+        state.rootName = dirRoot || '已选目录';
+        state.totalBytes = folderFiles.reduce((acc, item) => acc + item.file.size, 0);
+
+        if (!$('app-name-input').value.trim() && dirRoot) {
+            $('app-name-input').value = sanitizeAppNameInput(dirRoot) || 'MyApp';
+        }
+        refreshSummaryUI();
+    }
+
+    function refreshSummaryUI() {
+        const hasFiles = state.appFiles.length > 0;
+        $('file-summary').hidden = !hasFiles && !state.licenseFile;
+        $('clear-files-btn').hidden = !hasFiles && !state.licenseFile;
+
+        $('sum-root').textContent = state.rootName || '未选文件夹';
+
+        const sizeEl = $('sum-size');
+        sizeEl.className = 'summary-value';
+        if (!hasFiles) {
+            sizeEl.textContent = '0 个文件';
+        } else if (state.totalBytes > TUKUAI_EXE_CONFIG.maxPackageBytes) {
+            sizeEl.textContent = `${state.appFiles.length} 个文件 · ${formatBytes(state.totalBytes)} (超出 1 GB)`;
+            sizeEl.classList.add('err');
+        } else {
+            sizeEl.textContent = `${state.appFiles.length} 个文件 · ${formatBytes(state.totalBytes)}`;
+        }
+
+        const exes = state.appFiles
+            .filter((item) => item.relPath.toLowerCase().endsWith('.exe'))
+            .sort((a, b) => scoreExeCandidate(a.relPath) - scoreExeCandidate(b.relPath));
+
+        const select = $('main-exe-select');
+        select.replaceChildren();
+        if (!exes.length) {
+            const opt = document.createElement('option');
+            opt.value = '';
+            opt.textContent = hasFiles ? '未检测到 .exe 文件（请确认拖入的是已构建目录）' : '请先选择应用文件夹';
+            select.append(opt);
+            select.disabled = true;
+            $('sum-exe').textContent = hasFiles ? '0 个 (缺少主程序)' : '-';
+            $('sum-exe').className = hasFiles ? 'summary-value err' : 'summary-value';
+        } else {
+            exes.forEach((item) => {
+                const opt = document.createElement('option');
+                opt.value = item.relPath;
+                opt.textContent = item.relPath;
+                select.append(opt);
+            });
+            select.disabled = false;
+            $('sum-exe').textContent = `找到 ${exes.length} 个`;
+            $('sum-exe').className = 'summary-value ok';
+        }
+
+        const licEl = $('sum-license');
+        if (state.licenseFile) {
+            licEl.textContent = `已附带 (${state.licenseFile.name})`;
+            licEl.className = 'summary-value ok';
+        } else {
+            licEl.textContent = '未附带（可选，若需要请拖入）';
+            licEl.className = 'summary-value warn';
+        }
+
+        updateStartButton();
+    }
+
+    function updateStartButton() {
+        const hasValidSize = state.appFiles.length > 0 && state.totalBytes > 0 && state.totalBytes <= TUKUAI_EXE_CONFIG.maxPackageBytes;
+        const hasExe = Boolean($('main-exe-select').value);
+        const hasName = Boolean($('app-name-input').value.trim());
+        const hasVersion = /^[0-9]+(\.[0-9]+){1,3}$/.test($('app-version-input').value.trim());
+        const hasCaptcha = Boolean(state.turnstileToken);
+        $('start-btn').disabled = state.busy || !(hasValidSize && hasExe && hasName && hasVersion && hasCaptcha);
+    }
+
+    // 拖拽事件
+    const dropzone = $('dropzone');
+    dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('is-dragover');
+    });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('is-dragover'));
+    dropzone.addEventListener('drop', async (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('is-dragover');
+        if (state.busy) return;
+
+        const items = Array.from(e.dataTransfer?.items || []);
+        const entries = items
+            .map((item) => item.webkitGetAsEntry?.())
+            .filter(Boolean);
+
+        if (!entries.length) return;
+        const collected = [];
+        for (const entry of entries) {
+            collected.push(...(await collectEntryFiles(entry)));
+        }
+        normalizeCollectedItems(collected, state.licenseFile);
+    });
+
+    $('pick-folder-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        $('folder-input').click();
+    });
+    $('pick-license-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        $('license-input').click();
+    });
+    $('clear-files-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        state.appFiles = [];
+        state.licenseFile = null;
+        state.rootName = '';
+        state.totalBytes = 0;
+        $('folder-input').value = '';
+        $('license-input').value = '';
+        $('app-name-input').value = '';
+        refreshSummaryUI();
+    });
+
+    $('folder-input').addEventListener('change', (e) => {
+        const files = Array.from(e.target.files || []);
+        if (!files.length) return;
+        const rawItems = files.map((file) => ({
+            file,
+            rawPath: file.webkitRelativePath || file.name,
+        }));
+        normalizeCollectedItems(rawItems, state.licenseFile);
+    });
+
+    $('license-input').addEventListener('change', (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        state.licenseFile = file;
+        refreshSummaryUI();
+    });
+
+    ['main-exe-select', 'app-name-input', 'app-version-input'].forEach((id) => {
+        $(id).addEventListener('input', updateStartButton);
+        $(id).addEventListener('change', updateStartButton);
+    });
+
+    function setStage(stageName, progressPct, titleText, detailText = '') {
+        $('status-card').hidden = false;
+        $('progress-fill').style.width = `${Math.min(100, Math.max(0, progressPct))}%`;
+        $('status-text').textContent = titleText;
+        $('status-detail').textContent = detailText;
+
+        const order = ['pack', 'upload', 'build', 'done'];
+        const currentIdx = order.indexOf(stageName);
+        document.querySelectorAll('.stage-step').forEach((el) => {
+            const idx = order.indexOf(el.dataset.stage);
+            el.classList.remove('active', 'done');
+            if (idx < currentIdx || (stageName === 'done' && idx === 3)) {
+                el.classList.add('done');
+            } else if (idx === currentIdx) {
+                el.classList.add('active');
+            }
+        });
+    }
+
+    function showNotice(text, type = 'info') {
+        const box = $('status-notice');
+        if (!text) {
+            box.hidden = true;
+            return;
+        }
+        box.className = `notice-box ${type === 'error' ? 'error' : type === 'success' ? 'success' : ''}`;
+        box.textContent = text;
+        box.hidden = false;
+    }
+
+    async function buildStoreZipBlob(onProgress) {
+        const chunks = [];
+        let settled = false;
+
+        return new Promise(async (resolve, reject) => {
+            const zip = new Zip((err, data, final) => {
+                if (err) {
+                    if (!settled) { settled = true; reject(err); }
+                    return;
+                }
+                chunks.push(data);
+                if (final && !settled) {
+                    settled = true;
+                    resolve(new Blob(chunks, { type: 'application/octet-stream' }));
+                }
+            });
+
+            try {
+                const total = state.appFiles.length + (state.licenseFile ? 1 : 0);
+                let done = 0;
+
+                const writeFileEntry = async (entryPath, file) => {
+                    const entry = new ZipPassThrough(entryPath);
+                    zip.add(entry);
+                    const reader = file.stream().getReader();
+                    while (true) {
+                        const { value, done: streamDone } = await reader.read();
+                        if (streamDone) break;
+                        entry.push(value, false);
+                    }
+                    entry.push(new Uint8Array(0), true);
+                    done++;
+                    onProgress(done, total);
+                };
+
+                for (const item of state.appFiles) {
+                    await writeFileEntry(`app/${item.relPath}`, item.file);
+                }
+                if (state.licenseFile) {
+                    await writeFileEntry('license/license.txt', state.licenseFile);
+                }
+
+                zip.end();
+            } catch (err) {
+                if (!settled) {
+                    settled = true;
+                    reject(err);
+                }
+            }
+        });
+    }
+
+    function uploadBlobWithProgress(uploadUrl, contentType, blob, onProgress) {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('PUT', uploadUrl);
+            xhr.setRequestHeader('Content-Type', contentType);
+            xhr.upload.onprogress = (event) => {
+                if (event.lengthComputable) {
+                    onProgress(event.loaded, event.total);
+                }
+            };
+            xhr.onload = () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    resolve();
+                } else {
+                    reject(new Error(`直传中转存储失败 (HTTP ${xhr.status})`));
+                }
+            };
+            xhr.onerror = () => reject(new Error('网络异常或 CORS 未放行，直传 R2 失败'));
+            xhr.send(blob);
+        });
+    }
+
+    async function pollUntilComplete(apiBase, jobId, jobSecret) {
+        const statusMap = {
+            queued: ['正在排队分配 Windows 构建机…', 65],
+            building: ['云端已接收任务，正在拉取归档包…', 75],
+            compiling: ['R2 临时包已销毁 · 正在执行 Inno Setup x64 编译…', 88],
+        };
+
+        return new Promise((resolve, reject) => {
+            const tick = async () => {
+                try {
+                    const res = await fetch(`${apiBase}/api/jobs/${jobId}?secret=${encodeURIComponent(jobSecret)}`);
+                    const data = await res.json();
+                    if (!res.ok) {
+                        throw new Error(data.message || '查询构建状态失败');
+                    }
+
+                    if (data.status === 'succeeded') {
+                        clearInterval(state.pollTimer);
+                        state.pollTimer = null;
+                        resolve(data);
+                        return;
+                    }
+                    if (data.status === 'failed' || data.status === 'rejected') {
+                        clearInterval(state.pollTimer);
+                        state.pollTimer = null;
+                        reject(new Error(data.errorMessage || '云端编译失败'));
+                        return;
+                    }
+
+                    const [msg, pct] = statusMap[data.status] || ['云端处理中…', 70];
+                    setStage('build', pct, msg, data.r2Deleted ? '临时存储已清理' : '');
+                } catch (err) {
+                    clearInterval(state.pollTimer);
+                    state.pollTimer = null;
+                    reject(err);
+                }
+            };
+
+            tick();
+            state.pollTimer = setInterval(tick, 3000);
+        });
+    }
+
+    $('start-btn').addEventListener('click', async () => {
+        const apiBase = resolveApiBase();
+        if (apiBase === null) {
+            showNotice('请先在 HTML 顶部 TUKUAI_EXE_CONFIG.apiBase 填入 Worker 地址。', 'error');
+            return;
+        }
+
+        state.busy = true;
+        updateStartButton();
+        $('result-bar').hidden = true;
+        showNotice('');
+        $('job-id-hint').textContent = '';
+
+        try {
+            setStage('pack', 5, '正在浏览器内零压缩归档文件…', `共 ${state.appFiles.length} 个文件`);
+            const archiveBlob = await buildStoreZipBlob((done, total) => {
+                const pct = 5 + Math.round((done / Math.max(1, total)) * 20);
+                setStage('pack', pct, `正在归档文件 (${done}/${total})…`, formatBytes(state.totalBytes));
+            });
+
+            if (archiveBlob.size > TUKUAI_EXE_CONFIG.maxPackageBytes) {
+                throw new Error('归档包体积超过 1 GB 上限，请精简目录后重试');
+            }
+
+            setStage('upload', 26, '正在校验额度并申请临时上传通道…', formatBytes(archiveBlob.size));
+            const createRes = await fetch(`${apiBase}/api/jobs`, {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({
+                    archiveSize: archiveBlob.size,
+                    turnstileToken: state.turnstileToken,
+                    metadata: {
+                        appName: $('app-name-input').value.trim(),
+                        appVersion: $('app-version-input').value.trim(),
+                        appPublisher: $('app-publisher-input').value.trim() || 'TuKuai Studio User',
+                        mainExe: $('main-exe-select').value,
+                    },
+                }),
+            });
+
+            const createData = await createRes.json();
+            if (!createRes.ok) {
+                throw new Error(createData.message || `创建任务失败 (${createRes.status})`);
+            }
+
+            const { jobId, jobSecret, uploadUrl, contentType } = createData;
+            $('job-id-hint').textContent = `Job: ${jobId.slice(0, 8)}`;
+
+            await uploadBlobWithProgress(uploadUrl, contentType, archiveBlob, (loaded, total) => {
+                const pct = 28 + Math.round((loaded / Math.max(1, total)) * 32);
+                setStage('upload', pct, '正在直传中转存储 (R2)…', `${formatBytes(loaded)} / ${formatBytes(total)}`);
+            });
+
+            setStage('build', 62, '上传完成，正在启动 GitHub Actions Windows 虚拟机…');
+            const startRes = await fetch(`${apiBase}/api/jobs/${jobId}/start`, {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ secret: jobSecret }),
+            });
+            const startData = await startRes.json();
+            if (!startRes.ok) {
+                throw new Error(startData.message || '启动云端封装失败');
+            }
+
+            await pollUntilComplete(apiBase, jobId, jobSecret);
+
+            setStage('done', 100, 'x64 安装包封装完成！', '点击下方按钮下载');
+            $('download-link').href = `${apiBase}/api/jobs/${jobId}/download?secret=${encodeURIComponent(jobSecret)}`;
+            $('result-bar').hidden = false;
+            showNotice(
+                '说明：免费云端封装不含商业数字签名，首次在他人电脑运行若遇 Windows SmartScreen 拦截提示，点击“更多信息 → 仍要运行”即可安装。',
+                'success'
+            );
+        } catch (err) {
+            showNotice(err instanceof Error ? err.message : String(err), 'error');
+        } finally {
+            state.busy = false;
+            renderTurnstileWidget();
+            updateStartButton();
+        }
+    });
+</script>
+</body>
+</html>

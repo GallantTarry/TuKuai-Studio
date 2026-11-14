@@ -82,15 +82,23 @@
   {
     "id": "red",
     "name": "Sys",
-    "badge": "00",
+    "badge": "01",
     "color": "red",
-    "href": "?view=red",
     "ariaLabel": "第五个组件板块，红色，Sys",
     "description": "UNIX is basically a simple operating system, but you have to be a genius to understand the simplicity. — Dennis M. Ritchie",
-    "keywords": "红色 珊瑚 red sys 05 Dennis Ritchie",
-    "status": "planned",
+    "keywords": "红色 珊瑚 red sys 05 Dennis Ritchie tukuai-exe exe 安装包 封装",
+    "status": "group",
     "label": "05 / SYS",
     "sculpture": "ribbon",
-    "children": []
+    "children": [
+      {
+        "id": "tukuai-exe",
+        "name": "TuKuai-EXE",
+        "description": "Windows x64 云端安装包封装（Inno Setup）",
+        "keywords": "exe 安装包 封装 打包 windows x64 inno setup installer",
+        "status": "available",
+        "url": "TuKuaiEXE/TuKuaiEXE.html"
+      }
+    ]
   }
 ]
