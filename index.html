@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#f6f1e6">
-    <meta name="description" content="TuKuai Studio 土块工坊。以色彩连接灵感，探索 Comp 组件工坊与持续生长的创作工具。">
-    <title>TuKuai Studio · 给灵感，一点颜色。</title>
+    <meta name="description" content="TuKuai Studio 土塊工坊。以色彩連結靈感，探索 Comp 組件工坊與持續生長的創作工具。">
+    <title>TuKuai Studio · 給靈感，一點顏色。</title>
     <link rel="icon"
           href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='22' y='2' width='20' height='37' rx='10' fill='%23fa7c85' transform='rotate(-72 32 32)'/%3E%3Crect x='22' y='2' width='20' height='37' rx='10' fill='%2368bdf5'/%3E%3Crect x='22' y='2' width='20' height='37' rx='10' fill='%2348cba1' transform='rotate(72 32 32)'/%3E%3Crect x='22' y='2' width='20' height='37' rx='10' fill='%23f5ca55' transform='rotate(144 32 32)'/%3E%3Crect x='22' y='2' width='20' height='37' rx='10' fill='%23ae7de8' transform='rotate(216 32 32)'/%3E%3C/svg%3E">
     <script>
-        // 初次打开按浏览者设备时间自动选择；站内跳转通过 URL 保持手动选择。
+        // 初次開啟依瀏覽者裝置時間自動選擇；站內跳轉透過 URL 保持手動選擇。
         (() => {
             const choice = new URLSearchParams(location.search).get('theme');
             const hour = new Date().getHours();
@@ -29,7 +29,7 @@
             --red: #e16e7d;
             --line: #dfe7f1;
             --ease: cubic-bezier(.22, 1, .36, 1);
-            font-family: Inter, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif
+            font-family: Inter, "Segoe UI", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", "PingFang SC", "Microsoft YaHei", sans-serif
         }
 
         * {
@@ -467,7 +467,7 @@
             display: flex;
             gap: 11px;
             align-items: center;
-            font: 10px "Microsoft YaHei", sans-serif;
+            font: 10px "PingFang TC", "Microsoft JhengHei", "Microsoft YaHei", sans-serif;
             letter-spacing: 1px
         }
 
@@ -1281,7 +1281,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            font: 9px "Microsoft YaHei", sans-serif;
+            font: 9px "PingFang TC", "Microsoft JhengHei", "Microsoft YaHei", sans-serif;
             color: var(--tone)
         }
 
@@ -3773,7 +3773,7 @@
 
         .section-poetic {
             margin: 0;
-            font-family: "Georgia", "Times New Roman", "Songti SC", "STSong", serif;
+            font-family: "Georgia", "Times New Roman", "Songti TC", "PMingLiU", "Noto Serif TC", "Songti SC", "STSong", serif;
             font-style: italic;
             font-size: 13px;
             line-height: 1.75;
@@ -3964,7 +3964,7 @@
         }
 
         .mosaic-quote p {
-            font-family: Georgia, "Times New Roman", "Songti SC", serif;
+            font-family: Georgia, "Times New Roman", "Songti TC", "PMingLiU", "Noto Serif TC", "Songti SC", serif;
             font-style: italic;
             font-size: 13px;
             line-height: 1.7;
@@ -4065,7 +4065,7 @@
         }
 
         .colophon-verse {
-            font-family: "Georgia", "Times New Roman", "Songti SC", "STSong", serif;
+            font-family: "Georgia", "Times New Roman", "Songti TC", "PMingLiU", "Noto Serif TC", "Songti SC", "STSong", serif;
             font-size: 14px;
             letter-spacing: 3px;
             color: var(--ink);
@@ -4141,7 +4141,7 @@
     </style>
 </head>
 <body>
-<a class="skip" href="#main">跳至主要内容</a>
+<a class="skip" href="#main">跳至主要內容</a>
 <svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <defs>
         <linearGradient id="b" x2="1" y2="1">
@@ -4212,31 +4212,31 @@
 </svg>
 <header class="site-header">
     <div class="header-inner wrap">
-        <a class="brand" href="index.html" aria-label="TuKuai Studio 首页">
+        <a class="brand" href="index.html" aria-label="TuKuai Studio 首頁">
             <svg class="brand-mark">
                 <use href="#flower-logo"/>
             </svg>
-            <span>TuKuai <em>Studio</em><small>土 块 工 坊</small></span></a>
-        <nav class="main-nav" id="main-nav" aria-label="六个板块"></nav>
+            <span>TuKuai <em>Studio</em><small>土 塊 工 坊</small></span></a>
+        <nav class="main-nav" id="main-nav" aria-label="六個板塊"></nav>
         <div class="header-actions">
-            <div class="theme-switch" role="group" aria-label="日夜主题">
-                <button class="theme-option" data-theme-choice="light" aria-label="白天主题" aria-pressed="false">
+            <div class="theme-switch" role="group" aria-label="日夜主題">
+                <button class="theme-option" data-theme-choice="light" aria-label="白天主題" aria-pressed="false">
                     <svg class="icon" aria-hidden="true">
                         <use href="#sun-icon"/>
                     </svg>
                     <span>白天</span></button>
-                <button class="theme-option" data-theme-choice="dark" aria-label="夜晚主题" aria-pressed="false">
+                <button class="theme-option" data-theme-choice="dark" aria-label="夜晚主題" aria-pressed="false">
                     <svg class="icon" aria-hidden="true">
                         <use href="#moon-icon"/>
                     </svg>
                     <span>夜晚</span></button>
             </div>
-            <button class="search-trigger" id="open-search" aria-label="搜索工坊，Ctrl 或 Command 加 K">
+            <button class="search-trigger" id="open-search" aria-label="搜尋工坊，Ctrl 或 Command 加 K">
                 <svg class="icon">
                     <use href="#search"/>
                 </svg>
-                <span>搜索工坊</span><kbd>Ctrl K</kbd></button>
-            <a class="website-link" href="https://土块.art" aria-label="返回主网站 土块.art">
+                <span>搜尋工坊</span><kbd>Ctrl K</kbd></button>
+            <a class="website-link" href="https://土块.art" aria-label="返回主網站 土塊.art">
                 <svg class="icon">
                     <use href="#globe"/>
                 </svg>
@@ -4251,22 +4251,22 @@
                     <span class="spectrum-dots"><i></i><i></i><i></i><i></i><i></i></span>
                     <span>LUMEN · FORMA · ORDO</span>
                 </div>
-                <h1 id="hero-title">给灵感，<br><span
-                        class="spectrum-heading"><span>一</span><span>点</span><span>颜</span><span>色</span><span>。</span></span>
+                <h1 id="hero-title">給靈感，<br><span
+                        class="spectrum-heading"><span>一</span><span>點</span><span>顏</span><span>色</span><span>。</span></span>
                 </h1>
-                <p>一块灵感，无限可能。<br>把对世界的热爱，写进每一个组件。</p>
-                <div class="hero-actions"><a class="primary-button" href="#collection">查看整个工坊
+                <p>一塊靈感，無限可能。<br>把對世界的熱愛，寫進每一個組件。</p>
+                <div class="hero-actions"><a class="primary-button" href="#collection">查看整個工坊
                     <svg class="icon">
                         <use href="#down"/>
                     </svg>
                 </a></div>
-                <div class="hero-note"><b></b> 独立构建，持续生长<span></span><small>MADE WITH CARE</small></div>
+                <div class="hero-note"><b></b> 獨立構築，持續生長<span></span><small>MADE WITH CARE</small></div>
             </div>
             <div class="art-stage" id="art-stage" data-reveal style="--reveal-order:1">
                 <div class="orbit" aria-hidden="true"></div>
                 <div class="orbit second" aria-hidden="true"></div>
                 <div class="flower-shadow" aria-hidden="true"></div>
-                <div class="flower-float" role="img" aria-label="五片蓝、绿、黄、紫、红色的圆润立体玻璃花瓣，缓缓浮动">
+                <div class="flower-float" role="img" aria-label="五片藍、綠、黃、紫、紅色的圓潤立體玻璃花瓣，緩緩浮動">
                     <div class="flower-tilt">
                         <div class="flower">
                             <div class="petal red"></div>
@@ -4281,7 +4281,7 @@
                     <span class="art-coord">N° 05 / 72°</span>
                     <small>COMP · CORE · IO · NET · SYS</small>
                 </div>
-                <div class="art-tag top"><i></i><span>五种色彩，同一份热爱</span></div>
+                <div class="art-tag top"><i></i><span>五種色彩，同一份熱愛</span></div>
                 <div class="art-tag bottom">
                     <span class="mini-palette" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
                     <span>FIVE COLORS.<br>ONE STUDIO.</span>
@@ -4298,7 +4298,7 @@
             <div class="section-head" data-reveal>
                 <div>
                     <span class="section-kicker" aria-hidden="true">§ 01 — QUINQUE ELEMENTA</span>
-                    <h2 id="collection-title">从一块开始，慢慢长大。</h2>
+                    <h2 id="collection-title">從一塊開始，慢慢長大。</h2>
                 </div>
                 <p class="section-poetic">“彩縷織錦，方寸棲靈。<br>以智慧之度量，雕琢器皿之榮美。”</p>
             </div>
@@ -4430,33 +4430,33 @@
             </div>
         </section>
     </div>
-    <section class="workspace" id="workspace" aria-label="TuKuai UI 组件工坊" hidden>
+    <section class="workspace" id="workspace" aria-label="TuKuai UI 組件工坊" hidden>
         <div class="workspace-toolbar">
             <div class="workspace-title"><a class="back-link" href="index.html">
                 <svg class="icon">
                     <use href="#back"/>
                 </svg>
-                返回首页</a><i></i><span>TuKuai UI</span></div>
+                返回首頁</a><i></i><span>TuKuai UI</span></div>
             <div class="workspace-tools">
-                <button id="reload-frame" aria-label="重新加载组件页面">
+                <button id="reload-frame" aria-label="重新載入組件頁面">
                     <svg class="icon">
                         <use href="#reload"/>
                     </svg>
-                    <span>重新加载</span></button>
-                <a id="standalone-link" aria-label="在新标签页独立打开当前组件"
+                    <span>重新載入</span></button>
+                <a id="standalone-link" aria-label="在新分頁獨立開啟目前組件"
                    href="TuKuaiUI/TuKuaiUI.html" target="_blank"
                    rel="noopener noreferrer">
                     <svg class="icon">
                         <use href="#external"/>
                     </svg>
-                    <span>独立打开</span></a></div>
+                    <span>獨立開啟</span></a></div>
         </div>
         <div class="workspace-frame-wrap">
-            <iframe aria-label="TuKuai-UI 组件页面" id="component-frame" allow="fullscreen" allowfullscreen></iframe>
+            <iframe aria-label="TuKuai-UI 組件頁面" id="component-frame" allow="fullscreen" allowfullscreen></iframe>
             <div class="frame-status" id="frame-status"><span class="spinner" aria-hidden="true"></span><span
-                    id="loading-message" role="status">正在打开 TuKuai UI…</span><a
+                    id="loading-message" role="status">正在開啟 TuKuai UI…</span><a
                     href="TuKuaiUI/TuKuaiUI.html" target="_blank"
-                    rel="noopener noreferrer">也可以在新标签页中独立打开 ↗</a></div>
+                    rel="noopener noreferrer">也可以在新分頁中獨立開啟 ↗</a></div>
         </div>
     </section>
     <section class="coming-view" id="coming-view" aria-labelledby="coming-title" hidden>
@@ -4465,9 +4465,9 @@
             <div class="coming-art" aria-hidden="true">
                 <div class="sculpture" id="coming-sculpture"></div>
             </div>
-            <h1 id="coming-title">待开发</h1>
+            <h1 id="coming-title">待開發</h1>
             <p id="coming-description"></p>
-            <div class="coming-status"><i></i> 灵感酝酿中 · 敬请期待</div>
+            <div class="coming-status"><i></i> 靈感醞釀中 · 敬請期待</div>
             <div class="coming-links"><a href="index.html">
                 <svg class="icon">
                     <use href="#back"/>
@@ -4480,8 +4480,8 @@
     <div class="footer-inner wrap"><span>© <span id="year">2026</span> TuKuai Studio · All rights reserved.</span></div>
 </footer>
 <dialog id="search-dialog" aria-labelledby="search-title">
-    <div class="dialog-top"><h2 id="search-title">寻找下一块灵感</h2>
-        <button class="close-button" id="close-search" aria-label="关闭搜索">
+    <div class="dialog-top"><h2 id="search-title">尋找下一塊靈感</h2>
+        <button class="close-button" id="close-search" aria-label="關閉搜尋">
             <svg class="icon">
                 <use href="#close"/>
             </svg>
@@ -4491,13 +4491,13 @@
         <svg class="icon">
             <use href="#search"/>
         </svg>
-        <input type="search" id="search-input" aria-label="搜索板块名称或关键词" placeholder="搜索 Comp、Core、音频、视频…"
+        <input type="search" id="search-input" aria-label="搜尋板塊名稱或關鍵詞" placeholder="搜尋 Comp、Core、音訊、視訊…"
                autocomplete="off"></label>
     <div class="search-results" id="search-results" aria-live="polite"></div>
-    <div class="search-footer"><span>搜索板块与组件。</span><span><kbd>Esc</kbd> 关闭</span></div>
+    <div class="search-footer"><span>搜尋板塊與組件。</span><span><kbd>Esc</kbd> 關閉</span></div>
 </dialog>
-<noscript><p style="padding:20px;text-align:center">开启 JavaScript 可以浏览板块与动效。<a
-        href="TuKuaiUI/TuKuaiUI.html">直接打开 TuKuai UI ↗</a></p>
+<noscript><p style="padding:20px;text-align:center">開啟 JavaScript 可以瀏覽板塊與動效。<a
+        href="TuKuaiUI/TuKuaiUI.html">直接開啟 TuKuai UI ↗</a></p>
 </noscript>
 <script>
     (async () => {
@@ -4514,7 +4514,7 @@
         } catch {
         }
 
-        // 扁平化数据供全局搜索及路由索引
+        // 扁平化資料供全域搜尋及路由索引
         const entries = [];
         sections.forEach(item => {
             entries.push(item);
@@ -4528,7 +4528,7 @@
         const $ = selector => document.querySelector(selector);
         const requested = new URLSearchParams(location.search).get('view');
         const matched = entries.find(item => item.id === requested && item.status !== 'group');
-        const current = matched || sections[0] || { id: 'home', name: '首页', status: 'home' };
+        const current = matched || sections[0] || { id: 'home', name: '首頁', status: 'home' };
         let theme = document.documentElement.dataset.theme;
         const iframe = $('#component-frame');
         const frameStatus = $('#frame-status');
@@ -4536,7 +4536,7 @@
         document.body.dataset.page = current.id === 'home' ? 'home' : 'inner';
         $('#year').textContent = new Date().getFullYear();
 
-        // 数据驱动渲染顶部标题栏导航
+        // 資料驅動渲染頂部標題列導覽
         function renderNavigation() {
             const nav = $('.main-nav');
             if (!nav) return;
@@ -4569,7 +4569,7 @@
                     const submenu = document.createElement('div');
                     submenu.className = 'ui-submenu';
                     submenu.id = `${item.id}-submenu`;
-                    submenu.setAttribute('aria-label', `${item.name} 子板块`);
+                    submenu.setAttribute('aria-label', `${item.name} 子板塊`);
                     submenu.setAttribute('aria-hidden', 'true');
 
                     submenu.innerHTML = item.children.map(child => `
@@ -4588,7 +4588,7 @@
 
         renderNavigation();
 
-        // 统一处理所有导航分组（含子菜单）的交互行为
+        // 統一處理所有導覽分組（含子選單）的互動行為
         let activePinnedGroup = null;
 
         function closeAllMenus() {
@@ -4679,7 +4679,7 @@
 
         initNavInteractions();
 
-        // 统一设置当前激活标签的高亮状态
+        // 統一設定目前啟用標籤的高亮狀態
         document.querySelectorAll('.nav-link').forEach(link => {
             if (link.dataset.key === (current.parent || current.id)) link.setAttribute('aria-current', 'page');
             else link.removeAttribute('aria-current');
@@ -4726,7 +4726,7 @@
             }
         }));
 
-        // 滚动渐显动效 (Scroll-Triggered Reveal)
+        // 捲動漸顯動效 (Scroll-Triggered Reveal)
         const revealItems = document.querySelectorAll('[data-reveal]');
         if ('IntersectionObserver' in window) {
             const revealObserver = new IntersectionObserver((entriesList, obs) => {
@@ -4745,10 +4745,10 @@
         function loadFrame() {
             clearTimeout(loadingTimer);
             frameStatus.hidden = false;
-            $('#loading-message').textContent = '正在打开 ' + current.name + '…';
+            $('#loading-message').textContent = '正在開啟 ' + current.name + '…';
             iframe.src = themedUrl(current.url);
             loadingTimer = setTimeout(() => {
-                $('#loading-message').textContent = '加载时间较长，可以独立打开或重新加载。';
+                $('#loading-message').textContent = '載入時間較長，可以獨立開啟或重新載入。';
             }, 12000);
         }
 
@@ -4761,7 +4761,7 @@
         iframe.addEventListener('error', () => {
             clearTimeout(loadingTimer);
             frameStatus.hidden = false;
-            $('#loading-message').textContent = '页面加载失败，请重新加载或独立打开。';
+            $('#loading-message').textContent = '頁面載入失敗，請重新載入或獨立開啟。';
         });
         if (current.id !== 'home') {
             $('#home-view').hidden = true;
@@ -4769,9 +4769,9 @@
             document.title = current.name + ' · TuKuai Studio';
             if (current.status === 'available' && current.url) {
                 $('#workspace').hidden = false;
-                $('#workspace').setAttribute('aria-label', current.name + ' 组件工坊');
+                $('#workspace').setAttribute('aria-label', current.name + ' 組件工坊');
                 $('.workspace-title>span').textContent = current.name;
-                iframe.setAttribute('aria-label', current.name + ' 组件页面');
+                iframe.setAttribute('aria-label', current.name + ' 組件頁面');
                 $('#standalone-link').href = current.url;
                 $('.frame-status a').href = current.url;
                 $('#reload-frame').addEventListener('click', loadFrame);
@@ -4780,7 +4780,7 @@
                 const coming = $('#coming-view');
                 coming.hidden = false;
                 coming.classList.add(current.parent ? 'jui' : current.id);
-                $('#coming-title').textContent = current.name || '待开发';
+                $('#coming-title').textContent = current.name || '待開發';
                 $('#coming-index').textContent = current.label;
                 $('#coming-description').textContent = current.description;
                 $('#coming-sculpture').className = 'sculpture ' + current.sculpture;
@@ -4799,7 +4799,7 @@
             if (!matches.length) {
                 const empty = document.createElement('p');
                 empty.className = 'search-empty';
-                empty.textContent = '还没有找到这个灵感。试试“TuKuai-UI”“Core”或“视频”。';
+                empty.textContent = '還沒有找到這個靈感。試試「TuKuai-UI」「Core」或「視訊」。';
                 results.append(empty);
                 return;
             }
@@ -4816,7 +4816,7 @@
                 description.textContent = item.description;
                 copy.append(name, description);
                 const state = document.createElement('span');
-                state.textContent = item.status === 'planned' ? '待开发' : item.id === 'home' ? '首页' : '已开放 ↗';
+                state.textContent = item.status === 'planned' ? '待開發' : item.id === 'home' ? '首頁' : '已開放 ↗';
                 link.append(dot, copy, state);
                 results.append(link);
             });
@@ -4889,7 +4889,7 @@
         });
         art.addEventListener('pointerleave', resetTilt);
 
-        // 彻底隐藏全站所有原生悬停提示 (Tooltips)
+        // 徹底隱藏全站所有原生懸停提示 (Tooltips)
         document.addEventListener('mouseover', e => {
             let el = e.target;
             while (el && el !== document) {

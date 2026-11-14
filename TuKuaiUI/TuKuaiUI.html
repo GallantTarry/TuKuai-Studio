@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
-    <title>TuKuai UI 影音组件工坊 · 样式展示与使用指南</title>
+    <title>TuKuai UI Audio &amp; Video Components · Showcase &amp; Guide</title>
     <link rel="icon" href="../imgs/TuKuaiStudio.ico" type="image/x-icon">
 
-    <!-- 🌓 高级灰主题无缝联动内核：首屏防白闪/黑闪，秒级同步主页白天/黑夜主题 -->
+    <!-- Neutral Day/Night Theme Sync: prevents white/black flash on initial load -->
     <script>
         (function() {
             const params = new URLSearchParams(window.location.search);
@@ -20,12 +20,12 @@
         })();
     </script>
 
-    <!-- 🌟 全局唯一引入：通过 jsDelivr CDN 一键加载全量组件与 5 套流光主题（内置样式，无需额外引入任何 CSS！） -->
+    <!-- Single-file import: loads all Web Components and 5 themes with Shadow DOM style isolation -->
     <script src="../assets/tukuai-ui.min.js"></script>
 
     <style>
         /* ==========================================================================
-           【TuKuai Studio 统一高级白 / 高级黑规范】 (完全匹配主页设计体系)
+           TuKuai Studio Unified Light / Dark Palette (Matches Host Theme System)
            ========================================================================== */
         :root {
             color-scheme: light;
@@ -56,7 +56,7 @@
             --yellow: #e6c46e;
         }
 
-        /* ================= 全局基础重置与纯净背景 ================= */
+        /* ================= Global Reset & Clean Canvas ================= */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -72,7 +72,7 @@
         body {
             background: var(--page);
             color: var(--neutral-ink);
-            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             padding: 40px 20px calc(80px + env(safe-area-inset-bottom, 0px));
             min-height: 100vh;
             line-height: 1.6;
@@ -82,7 +82,7 @@
             transition: background 0.25s var(--ease), color 0.25s var(--ease);
         }
 
-        /* 极简细滚动条 */
+        /* Minimalist Thin Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -104,7 +104,7 @@
             width: 100%;
         }
 
-        /* 确保自定义播放器组件在任何屏幕下不溢出 */
+        /* Keep custom media components within viewport bounds */
         tukuai-audio,
         tukuai-player {
             display: block;
@@ -112,7 +112,7 @@
             max-width: 100%;
         }
 
-        /* ================= 顶部标题区 (克制、高级、大方) ================= */
+        /* ================= Header Section ================= */
         header {
             text-align: center;
             margin-bottom: 48px;
@@ -123,10 +123,10 @@
             font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
             font-size: 11px;
             letter-spacing: 2.2px;
-            color: var(--neutral-faint);
+            color: var(--blue);
             text-transform: uppercase;
-            margin-bottom: 14px;
-            font-weight: 500;
+            margin-bottom: 12px;
+            font-weight: 600;
         }
 
         h1 {
@@ -172,7 +172,7 @@
             background: var(--surface-raised);
         }
 
-        /* ================= CDN 起步卡片与通用面板 ================= */
+        /* ================= CDN Quick-Start Card & Panels ================= */
         .cdn-card {
             background: var(--surface);
             border: 1px solid var(--neutral-line);
@@ -293,7 +293,7 @@
             transform: scale(0.98);
         }
 
-        /* ================= 章节标题与分块标注 ================= */
+        /* ================= Section Titles & Demo Labels ================= */
         .section-title {
             display: flex;
             align-items: center;
@@ -314,7 +314,7 @@
             margin-bottom: 20px;
         }
 
-        /* 单个组件展示项标注 */
+        /* Individual Demo Header */
         .style-label {
             display: flex;
             align-items: center;
@@ -342,7 +342,7 @@
             flex-shrink: 0;
         }
 
-        /* ================= 代码生成器卡片 ================= */
+        /* ================= Interactive Code Generator ================= */
         .generator-card {
             background: var(--surface);
             border: 1px solid var(--neutral-line);
@@ -474,7 +474,7 @@
             max-height: 460px;
         }
 
-        /* 极简灰度代码语法 */
+        /* Minimal Syntax Highlight Palette */
         .hl-comment { color: var(--neutral-faint); font-style: italic; }
         .hl-doctype { color: var(--neutral-muted); font-weight: 600; }
         .hl-tag { color: var(--blue); }
@@ -484,7 +484,7 @@
         .hl-prop { color: var(--neutral-muted); }
         .hl-val { color: var(--neutral-ink); }
 
-        /* ================= 属性配置表格 ================= */
+        /* ================= API Reference Tables ================= */
         .doc-table-wrap {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
@@ -529,7 +529,7 @@
             white-space: nowrap;
         }
 
-        /* Toast 气泡 */
+        /* Toast Notification */
         #toast {
             position: fixed;
             bottom: max(30px, calc(env(safe-area-inset-bottom, 16px) + 14px));
@@ -562,7 +562,7 @@
             opacity: 1;
         }
 
-        /* ================= 移动端适配 (@media max-width: 768px) ================= */
+        /* ================= Responsive Mobile Layout (@media max-width: 768px) ================= */
         @media (max-width: 768px) {
             body {
                 padding: 20px 12px calc(60px + env(safe-area-inset-bottom, 0px));
@@ -709,27 +709,27 @@
 <body>
 
 <div class="container">
-    <!-- 头部介绍 -->
+    <!-- Header Intro -->
     <header>
-        <div class="header-eyebrow">TUKUAI STUDIO · UI COMPONENTS</div>
-        <h1>TuKuai UI 影音组件工坊</h1>
-        <p class="subtitle">基于原生 Web Components 构建的轻量影音组件库，开箱即用，样式天然隔离。</p>
+        <div class="header-eyebrow">COMP / TUKUAI-UI</div>
+        <h1>TuKuai UI Media Components</h1>
+        <p class="subtitle">Lightweight media Web Components built on native Custom Elements — zero dependencies, Shadow DOM isolated styles, ready out of the box.</p>
         <div class="badge-bar">
-            <span class="badge">单文件 CDN 引入</span>
-            <span class="badge">Shadow DOM 样式隔离</span>
-            <span class="badge">经典 APlayer 交互</span>
-            <span class="badge">5 套流光主题</span>
+            <span class="badge">Single-File CDN Import</span>
+            <span class="badge">Shadow DOM Isolated</span>
+            <span class="badge">Classic APlayer UX</span>
+            <span class="badge">5 Luminous Themes</span>
         </div>
     </header>
 
-    <!-- ================= 全球 CDN 快速引用 ================= -->
+    <!-- ================= Global CDN Quick Start ================= -->
     <section class="cdn-card">
         <div class="cdn-header">
             <div class="cdn-title">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                全球 CDN 极速引入（仅需 1 行代码）
+                Global CDN Import (1 Line Only)
             </div>
-            <span class="cdn-subtip">无需额外引入任何 CSS 文件，样式全部内嵌隔离</span>
+            <span class="cdn-subtip">No extra CSS file required — all component styles are self-contained</span>
         </div>
 
         <div class="code-box">
@@ -737,40 +737,40 @@
             <div class="cdn-actions">
                 <button class="btn-copy" onclick="copyCdnScript()">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    一键复制 CDN
+                    Copy CDN Tag
                 </button>
                 <a href="../assets/tukuai-ui.min.js" download="tukuai-ui.min.js" class="btn-download">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    下载 JS 文件
+                    Download JS
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- ================= 🎵 音乐播放器 5 套全样式展示板块 ================= -->
+    <!-- ================= Audio Player Showcase (5 Themes) ================= -->
     <div class="section-title">
-        <span>音乐播放器全样式展示 (TuKuai-Audio)</span>
-        <span style="font-size:0.82rem; color:#10b981; font-weight:normal;">5 种风格精选网络 CDN 试听曲目</span>
+        <span>Audio Player Theme Showcase (TuKuai-Audio)</span>
+        <span style="font-size:0.82rem; color:#10b981; font-weight:normal;">5 curated themes with online preview tracks</span>
     </div>
-    <p class="card-tip">支持点击专辑封面播放/暂停、悬停或点按喇叭呼出纵向音量槽、单曲循环与进度条拖拽：</p>
+    <p class="card-tip">Click album art to play/pause, hover or tap the speaker icon for the vertical volume slider, toggle loop, or drag the seek bar:</p>
 
-    <!-- 样式 1：落日暖阳 (Sunset Mode) -->
+    <!-- Mode 1: Sunset -->
     <div class="style-label" style="border-left-color:#f59e0b;">
-        <span>落日暖阳 (Sunset Mode)</span>
+        <span>Sunset Amber (Sunset Mode)</span>
         <code>mode="sunset"</code>
     </div>
     <tukuai-audio
             url="https://music.163.com/song/media/outer/url?id=1436709403.mp3"
-            name="夏天的风"
-            artist="火羊瞌睡了 / 温岚"
+            name="Summer Wind"
+            artist="HuoYang / Landy Wen"
             cover="https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=600&h=600&fit=crop&q=85"
             mode="sunset"
             loop>
     </tukuai-audio>
 
-    <!-- 样式 2：赛博霓虹 (Cyberpunk Mode) -->
+    <!-- Mode 2: Cyberpunk -->
     <div class="style-label" style="border-left-color:#d946ef;">
-        <span>赛博霓虹 (Cyberpunk Mode)</span>
+        <span>Cyberpunk Neon (Cyberpunk Mode)</span>
         <code>mode="cyberpunk"</code>
     </div>
     <tukuai-audio
@@ -781,56 +781,56 @@
             mode="cyberpunk">
     </tukuai-audio>
 
-    <!-- 样式 3：深海星河 (Ocean Mode) -->
+    <!-- Mode 3: Ocean -->
     <div class="style-label" style="border-left-color:#38bdf8;">
-        <span>深海星河 (Ocean Mode)</span>
+        <span>Deep Ocean (Ocean Mode)</span>
         <code>mode="ocean"</code>
     </div>
     <tukuai-audio
             url="https://music.163.com/song/media/outer/url?id=1294951288.mp3"
-            name="溯 (Reverse)"
-            artist="CORSAK胡梦周 / 马吟吟"
+            name="Reverse"
+            artist="CORSAK / Ma Yinyin"
             cover="https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=600&h=600&fit=crop&q=85"
             mode="ocean">
     </tukuai-audio>
 
-    <!-- 样式 4：极客黑曜 (Dark Mode) -->
+    <!-- Mode 4: Dark -->
     <div class="style-label" style="border-left-color:#10b981;">
-        <span>极客黑曜 (Dark Mode)</span>
+        <span>Obsidian Dark (Dark Mode)</span>
         <code>mode="dark"</code>
     </div>
     <tukuai-audio
             url="https://music.163.com/song/media/outer/url?id=1330348068.mp3"
-            name="起风了"
-            artist="买辣椒也用券"
+            name="The Wind Rises"
+            artist="MaiLaJiao"
             cover="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=600&h=600&fit=crop&q=85"
             mode="dark">
     </tukuai-audio>
 
-    <!-- 样式 5：极简凝白 (Light Mode) -->
+    <!-- Mode 5: Light -->
     <div class="style-label" style="border-left-color:#ec4899;">
-        <span>极简凝白 (Light Mode)</span>
+        <span>Minimal Light (Light Mode)</span>
         <code>mode="light"</code>
     </div>
     <tukuai-audio
             url="https://music.163.com/song/media/outer/url?id=458647488.mp3"
-            name="天空之城"
-            artist="久石让 / 纯净钢琴"
+            name="Castle in the Sky"
+            artist="Joe Hisaishi (Piano)"
             cover="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=600&fit=crop&q=85"
             mode="light">
     </tukuai-audio>
 
 
-    <!-- ================= 🎬 视频播放器全样式展示板块 ================= -->
+    <!-- ================= Video Player Showcase (5 Themes) ================= -->
     <div class="section-title">
-        <span>视频播放器全样式展示 (TuKuai-Player)</span>
-        <span style="font-size:0.82rem; color:#06b6d4; font-weight:normal;">5 种风格精选全球 CDN 演示视频 (16:9 全宽满屏)</span>
+        <span>Video Player Theme Showcase (TuKuai-Player)</span>
+        <span style="font-size:0.82rem; color:#06b6d4; font-weight:normal;">5 curated themes with 16:9 widescreen demo clips</span>
     </div>
-    <p class="card-tip">支持中央微光大按钮、播放闲置 2.5 秒控制栏自动淡出、右下角一键高清截帧、双击全屏：</p>
+    <p class="card-tip">Features a glowing center play button, 2.5s auto-hide control bar, one-click lossless PNG frame capture, and double-click fullscreen:</p>
 
-    <!-- 视频 1：赛博朋克极光 (Cyberpunk Mode) -->
+    <!-- Video 1: Cyberpunk -->
     <div class="style-label" style="border-left-color:#d946ef;">
-        <span>赛博霓虹 (Cyberpunk Mode)</span>
+        <span>Cyberpunk Neon (Cyberpunk Mode)</span>
         <code>mode="cyberpunk"</code>
     </div>
     <tukuai-player
@@ -840,9 +840,9 @@
             mode="cyberpunk">
     </tukuai-player>
 
-    <!-- 视频 2：极客暗黑 (Dark Mode) -->
+    <!-- Video 2: Dark -->
     <div class="style-label" style="border-left-color:#10b981;">
-        <span>极客黑曜 (Dark Mode)</span>
+        <span>Obsidian Dark (Dark Mode)</span>
         <code>mode="dark"</code>
     </div>
     <tukuai-player
@@ -852,9 +852,9 @@
             mode="dark">
     </tukuai-player>
 
-    <!-- 视频 3：落日余晖 (Sunset Mode) -->
+    <!-- Video 3: Sunset -->
     <div class="style-label" style="border-left-color:#f59e0b;">
-        <span>落日暖阳 (Sunset Mode)</span>
+        <span>Sunset Amber (Sunset Mode)</span>
         <code>mode="sunset"</code>
     </div>
     <tukuai-player
@@ -864,9 +864,9 @@
             mode="sunset">
     </tukuai-player>
 
-    <!-- 视频 4：深海幽蓝 (Ocean Mode) -->
+    <!-- Video 4: Ocean -->
     <div class="style-label" style="border-left-color:#38bdf8;">
-        <span>深海星河 (Ocean Mode)</span>
+        <span>Deep Ocean (Ocean Mode)</span>
         <code>mode="ocean"</code>
     </div>
     <tukuai-player
@@ -876,9 +876,9 @@
             mode="ocean">
     </tukuai-player>
 
-    <!-- 视频 5：极简凝白 (Light Mode) -->
+    <!-- Video 5: Light -->
     <div class="style-label" style="border-left-color:#ec4899;">
-        <span>极简凝白 (Light Mode)</span>
+        <span>Minimal Light (Light Mode)</span>
         <code>mode="light"</code>
     </div>
     <tukuai-player
@@ -889,66 +889,66 @@
     </tukuai-player>
 
 
-    <!-- ================= ⚙️ 交互式代码生成器 ================= -->
+    <!-- ================= Interactive Code Generator ================= -->
     <section class="generator-card">
         <div class="cdn-header">
             <div class="cdn-title">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-                可视化代码生成器（拿走即用）
+                Visual Code Generator (Copy &amp; Run)
             </div>
-            <span style="font-size:0.82rem; color:#facc15;">默认填入可全球直链访问的在线媒体，复制到任意 HTML 均可直接运行</span>
+            <span style="font-size:0.82rem; color:#facc15;">Pre-filled with direct online media URLs — paste into any HTML file to run immediately</span>
         </div>
 
         <div class="generator-grid">
             <div class="form-side">
                 <div class="form-group">
-                    <label class="form-label">选择组件类型</label>
+                    <label class="form-label">Component Type</label>
                     <select class="form-select" id="gen-type" onchange="onTypeChange()">
-                        <option value="audio">音乐播放器 &lt;tukuai-audio&gt;</option>
-                        <option value="player">视频播放器 &lt;tukuai-player&gt;</option>
+                        <option value="audio">Audio Player &lt;tukuai-audio&gt;</option>
+                        <option value="player">Video Player &lt;tukuai-player&gt;</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">媒体源链接 (url)</label>
+                    <label class="form-label">Media Source URL (url)</label>
                     <input type="text" class="form-input" id="gen-url" value="https://music.163.com/song/media/outer/url?id=1436709403.mp3" oninput="renderGenCode()">
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" id="label-name">歌曲名 / 标题 (name / title)</label>
-                    <input type="text" class="form-input" id="gen-name" value="夏天的风" oninput="renderGenCode()">
+                    <label class="form-label" id="label-name">Track Name / Title (name / title)</label>
+                    <input type="text" class="form-input" id="gen-name" value="Summer Wind" oninput="renderGenCode()">
                 </div>
 
                 <div class="form-group" id="group-artist">
-                    <label class="form-label">艺术家 / 副标题 (artist)</label>
-                    <input type="text" class="form-input" id="gen-artist" value="火羊瞌睡了" oninput="renderGenCode()">
+                    <label class="form-label">Artist / Subtitle (artist)</label>
+                    <input type="text" class="form-input" id="gen-artist" value="HuoYang" oninput="renderGenCode()">
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" id="label-cover">封面/海报图 (cover / pic)</label>
+                    <label class="form-label" id="label-cover">Cover / Poster URL (cover / pic)</label>
                     <input type="text" class="form-input" id="gen-cover" value="https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=600&h=600&fit=crop&q=80" oninput="renderGenCode()">
                     <div id="cover-format-tip" style="font-size:0.75rem; color:#94a3b8; margin-top:4px;">
-                        支持格式：<code>.jpg</code>, <code>.png</code>, <code>.webp</code>, <code>.svg</code>, <code>.gif</code> · 推荐 <strong>1:1 正方形</strong> 唱片比例
+                        Supported: <code>.jpg</code>, <code>.png</code>, <code>.webp</code>, <code>.svg</code>, <code>.gif</code> · Recommended <strong>1:1 square</strong> aspect ratio
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">流光主题模式 (mode)</label>
+                    <label class="form-label">Theme Mode (mode)</label>
                     <select class="form-select" id="gen-mode" onchange="renderGenCode()">
-                        <option value="sunset">sunset (落日暖阳)</option>
-                        <option value="cyberpunk">cyberpunk (赛博霓虹)</option>
-                        <option value="ocean">ocean (深海星河)</option>
-                        <option value="dark">dark (极客黑曜)</option>
-                        <option value="light">light (极简凝白)</option>
+                        <option value="sunset">sunset (Sunset Amber)</option>
+                        <option value="cyberpunk">cyberpunk (Cyberpunk Neon)</option>
+                        <option value="ocean">ocean (Deep Ocean)</option>
+                        <option value="dark">dark (Obsidian Dark)</option>
+                        <option value="light">light (Minimal Light)</option>
                     </select>
                 </div>
 
                 <div style="display:flex; gap:18px; margin-top:12px; flex-wrap:wrap;">
                     <label style="font-size:0.86rem; color:#d4d4d8; display:flex; align-items:center; gap:6px; cursor:pointer;">
-                        <input type="checkbox" id="gen-loop" onchange="renderGenCode()" style="accent-color:#facc15; width:16px; height:16px;" checked> 循环播放 (loop)
+                        <input type="checkbox" id="gen-loop" onchange="renderGenCode()" style="accent-color:#facc15; width:16px; height:16px;" checked> Loop Playback (loop)
                     </label>
                     <label style="font-size:0.86rem; color:#d4d4d8; display:flex; align-items:center; gap:6px; cursor:pointer;">
-                        <input type="checkbox" id="gen-autoplay" onchange="renderGenCode()" style="accent-color:#facc15; width:16px; height:16px;"> 自动播放 (autoplay)
+                        <input type="checkbox" id="gen-autoplay" onchange="renderGenCode()" style="accent-color:#facc15; width:16px; height:16px;"> Autoplay (autoplay)
                     </label>
                 </div>
             </div>
@@ -958,21 +958,21 @@
                     <div class="format-tabs" role="tablist">
                         <button type="button" class="format-tab active" id="tab-format-full" onclick="setExportFormat('full')">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                            完整独立网页 (推荐)
+                            Full Standalone HTML
                         </button>
                         <button type="button" class="format-tab" id="tab-format-snippet" onclick="setExportFormat('snippet')">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-                            仅组件标签
+                            Tag Snippet Only
                         </button>
                     </div>
                     <div class="preview-actions">
                         <button class="btn-copy" onclick="resetGenDefaults()" style="background:rgba(255,255,255,0.06); color:#cbd5e1; border-color:rgba(255,255,255,0.15);">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-                            恢复默认
+                            Reset Defaults
                         </button>
                         <button class="btn-copy" id="btn-copy-code" onclick="copyGeneratedCode()">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                            <span id="btn-copy-text">复制完整代码</span>
+                            <span id="btn-copy-text">Copy Full HTML</span>
                         </button>
                     </div>
                 </div>
@@ -982,21 +982,21 @@
     </section>
 
 
-    <!-- ================= 📖 属性与参数配置手册 ================= -->
+    <!-- ================= API Attributes Reference ================= -->
     <div class="section-title">
-        <span>完整 API 属性配置手册</span>
-        <span style="font-size:0.78rem; color:#94a3b8; font-weight:normal;">手机端可左右滑动表格</span>
+        <span>Complete API Attribute Reference</span>
+        <span style="font-size:0.78rem; color:#94a3b8; font-weight:normal;">Scroll tables horizontally on mobile</span>
     </div>
 
-    <h3 style="font-size:1rem; margin:16px 0 8px; color:#facc15;">&lt;tukuai-audio&gt; 标签属性表</h3>
+    <h3 style="font-size:1rem; margin:16px 0 8px; color:#facc15;">&lt;tukuai-audio&gt; Attributes</h3>
     <div class="doc-table-wrap">
         <table class="doc-table">
             <thead>
             <tr>
-                <th>属性</th>
-                <th>类型</th>
-                <th>默认值</th>
-                <th>说明</th>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
             </tr>
             </thead>
             <tbody>
@@ -1004,57 +1004,57 @@
                 <td><code>url</code></td>
                 <td>String</td>
                 <td>-</td>
-                <td>音频地址（支持 mp3, ogg, wav, aac, m4a 等主流格式及 CDN 网络直链）</td>
+                <td>Audio source URL (supports mp3, ogg, wav, aac, m4a, and CDN direct links)</td>
             </tr>
             <tr>
                 <td><code>name</code></td>
                 <td>String</td>
-                <td>"未知曲目"</td>
-                <td>音频主标题</td>
+                <td>"Unknown Audio"</td>
+                <td>Primary track title</td>
             </tr>
             <tr>
                 <td><code>artist</code></td>
                 <td>String</td>
-                <td>"未知艺术家"</td>
-                <td>歌手或创作者名称</td>
+                <td>-</td>
+                <td>Artist or creator name</td>
             </tr>
             <tr>
                 <td><code>cover</code></td>
                 <td>String</td>
-                <td>唱片占位图</td>
-                <td>专辑封面图片 URL（支持 <code>.jpg</code>, <code>.png</code>, <code>.webp</code>, <code>.svg</code>, <code>.gif</code>；推荐采用 <strong>1:1 正方形比例</strong> 如 600×600）</td>
+                <td>Disc Placeholder</td>
+                <td>Album cover image URL (<code>.jpg</code>, <code>.png</code>, <code>.webp</code>, <code>.svg</code>, <code>.gif</code>; <strong>1:1 square</strong> e.g. 600x600 recommended)</td>
             </tr>
             <tr>
                 <td><code>mode</code></td>
                 <td>String</td>
                 <td>"dark"</td>
-                <td>主题：<code>sunset</code>, <code>cyberpunk</code>, <code>ocean</code>, <code>dark</code>, <code>light</code></td>
+                <td>Theme: <code>sunset</code>, <code>cyberpunk</code>, <code>ocean</code>, <code>dark</code>, <code>light</code></td>
             </tr>
             <tr>
                 <td><code>loop</code></td>
                 <td>Boolean</td>
                 <td>false</td>
-                <td>是否开启单曲循环播放</td>
+                <td>Enable single-track loop playback</td>
             </tr>
             <tr>
                 <td><code>autoplay</code></td>
                 <td>Boolean</td>
                 <td>false</td>
-                <td>是否尝试自动播放（受现代浏览器静音安全策略约束）</td>
+                <td>Attempt automatic playback (subject to browser autoplay policies)</td>
             </tr>
             </tbody>
         </table>
     </div>
 
-    <h3 style="font-size:1rem; margin:28px 0 8px; color:#06b6d4;">&lt;tukuai-player&gt; 视频标签属性表</h3>
+    <h3 style="font-size:1rem; margin:28px 0 8px; color:#06b6d4;">&lt;tukuai-player&gt; Attributes</h3>
     <div class="doc-table-wrap">
         <table class="doc-table">
             <thead>
             <tr>
-                <th>属性</th>
-                <th>类型</th>
-                <th>默认值</th>
-                <th>说明</th>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
             </tr>
             </thead>
             <tbody>
@@ -1062,37 +1062,37 @@
                 <td><code>url</code></td>
                 <td>String</td>
                 <td>-</td>
-                <td>视频地址（支持 mp4, webm 等 HTML5 格式及 CDN 网络直链）</td>
+                <td>Video source URL (supports HTML5 mp4, webm, and CDN direct links)</td>
             </tr>
             <tr>
                 <td><code>title</code></td>
                 <td>String</td>
                 <td>"TuKuai Video"</td>
-                <td>视频标题</td>
+                <td>Video title (also used in captured frame PNG filename)</td>
             </tr>
             <tr>
                 <td><code>pic</code></td>
                 <td>String</td>
                 <td>-</td>
-                <td>未播放时展示的高清视频海报封面（支持 <code>.jpg</code>, <code>.png</code>, <code>.webp</code>, <code>.avif</code>；强烈推荐 <strong>16:9 宽屏比例</strong> 如 1280×720，以实现 100% 满屏无黑边显示）</td>
+                <td>Poster image shown before playback (<code>.jpg</code>, <code>.png</code>, <code>.webp</code>, <code>.avif</code>; <strong>16:9 widescreen</strong> e.g. 1280x720 recommended)</td>
             </tr>
             <tr>
                 <td><code>mode</code></td>
                 <td>String</td>
                 <td>"dark"</td>
-                <td>主题：<code>cyberpunk</code>, <code>dark</code>, <code>sunset</code>, <code>ocean</code>, <code>light</code></td>
+                <td>Theme: <code>cyberpunk</code>, <code>dark</code>, <code>sunset</code>, <code>ocean</code>, <code>light</code></td>
             </tr>
             <tr>
                 <td><code>loop</code></td>
                 <td>Boolean</td>
                 <td>false</td>
-                <td>是否循环播放</td>
+                <td>Enable video loop playback</td>
             </tr>
             <tr>
                 <td><code>autoplay</code></td>
                 <td>Boolean</td>
                 <td>false</td>
-                <td>是否自动播放</td>
+                <td>Attempt automatic playback</td>
             </tr>
             </tbody>
         </table>
@@ -1100,16 +1100,16 @@
 
 </div>
 
-<!-- 气泡提示 Toast -->
+<!-- Toast Notification -->
 <div id="toast">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-    <span id="toast-text">已复制！</span>
+    <span id="toast-text">Copied!</span>
 </div>
 
 <script>
-    // 1. 代码生成器逻辑
+    // 1. Code Generator Logic
     let lastGenType = 'audio';
-    let currentExportFormat = 'full'; // 'full' (完整网页模板) | 'snippet' (仅组件标签)
+    let currentExportFormat = 'full'; // 'full' (standalone HTML) | 'snippet' (tag snippet only)
     let currentRawCode = '';
 
     function setExportFormat(format) {
@@ -1122,7 +1122,7 @@
             snippetTab.classList.toggle('active', format === 'snippet');
         }
         if (copyBtnText) {
-            copyBtnText.textContent = format === 'full' ? '复制完整代码' : '复制组件代码';
+            copyBtnText.textContent = format === 'full' ? 'Copy Full HTML' : 'Copy Tag Snippet';
         }
         renderGenCode();
     }
@@ -1133,50 +1133,50 @@
             lastGenType = type;
             if (type === 'audio') {
                 document.getElementById('gen-url').value = 'https://music.163.com/song/media/outer/url?id=1436709403.mp3';
-                document.getElementById('gen-name').value = '夏天的风';
-                document.getElementById('gen-artist').value = '火羊瞌睡了';
+                document.getElementById('gen-name').value = 'Summer Wind';
+                document.getElementById('gen-artist').value = 'HuoYang';
                 document.getElementById('gen-cover').value = 'https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=600&h=600&fit=crop&q=80';
-                document.getElementById('cover-format-tip').innerHTML = '支持格式：<code>.jpg</code>, <code>.png</code>, <code>.webp</code>, <code>.svg</code>, <code>.gif</code> · 推荐 <strong>1:1 正方形</strong> 唱片比例';
+                document.getElementById('cover-format-tip').innerHTML = 'Supported: <code>.jpg</code>, <code>.png</code>, <code>.webp</code>, <code>.svg</code>, <code>.gif</code> · Recommended <strong>1:1 square</strong> aspect ratio';
             } else {
                 document.getElementById('gen-url').value = 'https://www.w3schools.com/html/mov_bbb.mp4';
-                document.getElementById('gen-name').value = 'Big Buck Bunny (开源电影演示)';
+                document.getElementById('gen-name').value = 'Big Buck Bunny (Open Movie Demo)';
                 document.getElementById('gen-cover').value = 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1280&h=720&fit=crop&q=80';
-                document.getElementById('cover-format-tip').innerHTML = '支持格式：<code>.jpg</code>, <code>.png</code>, <code>.webp</code>, <code>.avif</code> · 强烈推荐 <strong>16:9 宽屏比例</strong> (如 1280×720) 占满屏幕无黑边';
+                document.getElementById('cover-format-tip').innerHTML = 'Supported: <code>.jpg</code>, <code>.png</code>, <code>.webp</code>, <code>.avif</code> · <strong>16:9 widescreen</strong> (e.g. 1280x720) strongly recommended';
             }
         }
         renderGenCode();
     }
 
-    // 恢复默认配置
+    // Reset to defaults
     function resetGenDefaults() {
         const type = document.getElementById('gen-type').value;
         if (type === 'audio') {
             document.getElementById('gen-url').value = 'https://music.163.com/song/media/outer/url?id=1436709403.mp3';
-            document.getElementById('gen-name').value = '夏天的风';
-            document.getElementById('gen-artist').value = '火羊瞌睡了';
+            document.getElementById('gen-name').value = 'Summer Wind';
+            document.getElementById('gen-artist').value = 'HuoYang';
             document.getElementById('gen-cover').value = 'https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=600&h=600&fit=crop&q=80';
             document.getElementById('gen-mode').value = 'sunset';
             document.getElementById('gen-loop').checked = true;
             document.getElementById('gen-autoplay').checked = false;
-            document.getElementById('cover-format-tip').innerHTML = '支持格式：<code>.jpg</code>, <code>.png</code>, <code>.webp</code>, <code>.svg</code>, <code>.gif</code> · 推荐 <strong>1:1 正方形</strong> 唱片比例';
+            document.getElementById('cover-format-tip').innerHTML = 'Supported: <code>.jpg</code>, <code>.png</code>, <code>.webp</code>, <code>.svg</code>, <code>.gif</code> · Recommended <strong>1:1 square</strong> aspect ratio';
         } else {
             document.getElementById('gen-url').value = 'https://www.w3schools.com/html/mov_bbb.mp4';
-            document.getElementById('gen-name').value = 'Big Buck Bunny (开源电影演示)';
+            document.getElementById('gen-name').value = 'Big Buck Bunny (Open Movie Demo)';
             document.getElementById('gen-cover').value = 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1280&h=720&fit=crop&q=80';
             document.getElementById('gen-mode').value = 'cyberpunk';
             document.getElementById('gen-loop').checked = false;
             document.getElementById('gen-autoplay').checked = false;
-            document.getElementById('cover-format-tip').innerHTML = '支持格式：<code>.jpg</code>, <code>.png</code>, <code>.webp</code>, <code>.avif</code> · 强烈推荐 <strong>16:9 宽屏比例</strong> (如 1280×720) 占满屏幕无黑边';
+            document.getElementById('cover-format-tip').innerHTML = 'Supported: <code>.jpg</code>, <code>.png</code>, <code>.webp</code>, <code>.avif</code> · <strong>16:9 widescreen</strong> (e.g. 1280x720) strongly recommended';
         }
         renderGenCode();
-        showToast('已恢复官方默认配置！');
+        showToast('Default configuration restored.');
     }
 
-    // 生成代码字符串
+    // Generate HTML / Tag String
     function generateCodeString(format) {
         const type = document.getElementById('gen-type').value;
         const url = document.getElementById('gen-url').value || 'https://example.com/media.mp3';
-        const name = document.getElementById('gen-name').value || (type === 'audio' ? '夏天的风' : 'TuKuai 演示视频');
+        const name = document.getElementById('gen-name').value || (type === 'audio' ? 'Summer Wind' : 'TuKuai Demo Video');
         const artist = document.getElementById('gen-artist').value;
         const cover = document.getElementById('gen-cover').value;
         const mode = document.getElementById('gen-mode').value;
@@ -1186,16 +1186,16 @@
         if (format === 'full') {
             if (type === 'audio') {
                 return `<!DOCTYPE html>\n` +
-                    `<html lang="zh-CN">\n` +
+                    `<html lang="en">\n` +
                     `<head>\n` +
-                    `    <!-- ⚠️ 核心防乱码配置：Windows 本地双击打开必须声明 UTF-8 编码 -->\n` +
+                    `    <!-- Declare UTF-8 encoding first so local HTML files render cleanly across OSes -->\n` +
                     `    <meta charset="UTF-8">\n` +
                     `    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n` +
-                    `    <title>${name} - 音频播放器</title>\n\n` +
-                    `    <!-- 1. 引入 TuKuai-UI 核心脚本 (内置毛玻璃流光样式，无需额外引入 CSS) -->\n` +
+                    `    <title>${name} - Audio Player</title>\n\n` +
+                    `    <!-- 1. Import TuKuai-UI script (Shadow DOM styles built in, no extra CSS needed) -->\n` +
                     `    <script src="https://cdn.jsdelivr.net/gh/GallantTarry/TuKuai-Studio@v1.0.0/tukuai-ui.min.js"><` + `/script>\n\n` +
                     `    <style>\n` +
-                    `        /* 页面居中排版与暗黑背景 */\n` +
+                    `        /* Centered layout & dark stage */\n` +
                     `        body {\n` +
                     `            margin: 0;\n` +
                     `            padding: 40px 20px;\n` +
@@ -1207,7 +1207,7 @@
                     `            box-sizing: border-box;\n` +
                     `            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;\n` +
                     `        }\n` +
-                    `        /* 宽度自适应保证：确保播放器横向展开，播放进度条完美伸展可见 */\n` +
+                    `        /* Responsive width so the progress bar expands smoothly */\n` +
                     `        tukuai-audio {\n` +
                     `            width: 100%;\n` +
                     `            max-width: 720px;\n` +
@@ -1215,7 +1215,7 @@
                     `    </style>\n` +
                     `</head>\n` +
                     `<body>\n\n` +
-                    `    <!-- 2. TuKuai 音频播放器组件 -->\n` +
+                    `    <!-- 2. TuKuai Audio Player Component -->\n` +
                     `    <tukuai-audio\n` +
                     `        url="${url}"\n` +
                     `        name="${name}"\n` +
@@ -1230,16 +1230,16 @@
                     `</html>`;
             } else {
                 return `<!DOCTYPE html>\n` +
-                    `<html lang="zh-CN">\n` +
+                    `<html lang="en">\n` +
                     `<head>\n` +
-                    `    <!-- ⚠️ 核心防乱码配置：Windows 本地双击打开必须声明 UTF-8 编码 -->\n` +
+                    `    <!-- Declare UTF-8 encoding first so local HTML files render cleanly across OSes -->\n` +
                     `    <meta charset="UTF-8">\n` +
                     `    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n` +
-                    `    <title>${name} - 视频播放器</title>\n\n` +
-                    `    <!-- 1. 引入 TuKuai-UI 核心脚本 (内置毛玻璃流光样式，无需额外引入 CSS) -->\n` +
+                    `    <title>${name} - Video Player</title>\n\n` +
+                    `    <!-- 1. Import TuKuai-UI script (Shadow DOM styles built in, no extra CSS needed) -->\n` +
                     `    <script src="https://cdn.jsdelivr.net/gh/GallantTarry/TuKuai-Studio@v1.0.0/tukuai-ui.min.js"><` + `/script>\n\n` +
                     `    <style>\n` +
-                    `        /* 页面居中排版与暗黑背景 */\n` +
+                    `        /* Centered layout & dark stage */\n` +
                     `        body {\n` +
                     `            margin: 0;\n` +
                     `            padding: 40px 20px;\n` +
@@ -1251,7 +1251,7 @@
                     `            box-sizing: border-box;\n` +
                     `            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;\n` +
                     `        }\n` +
-                    `        /* 宽度自适应保证：确保视频容器自适应展开，控制栏与进度条完整居中展开 */\n` +
+                    `        /* Responsive width so controls & seek bar scale cleanly */\n` +
                     `        tukuai-player {\n` +
                     `            width: 100%;\n` +
                     `            max-width: 860px;\n` +
@@ -1259,7 +1259,7 @@
                     `    </style>\n` +
                     `</head>\n` +
                     `<body>\n\n` +
-                    `    <!-- 2. TuKuai 视频播放器组件 -->\n` +
+                    `    <!-- 2. TuKuai Video Player Component -->\n` +
                     `    <tukuai-player\n` +
                     `        url="${url}"\n` +
                     `        title="${name}"\n` +
@@ -1275,10 +1275,10 @@
         } else {
             // Snippet only
             if (type === 'audio') {
-                return `<!-- ⚠️ 宿主网页 <head> 中务必包含 <meta charset="UTF-8">，否则 Windows 本地打开中文会乱码！ -->\n\n` +
-                    `<!-- 1. 引入 TuKuai-UI 核心脚本 (页面引入一次即可) -->\n` +
+                return `<!-- Ensure your host <head> includes <meta charset="UTF-8"> -->\n\n` +
+                    `<!-- 1. Import TuKuai-UI script (once per page) -->\n` +
                     `<script src="https://cdn.jsdelivr.net/gh/GallantTarry/TuKuai-Studio@v1.0.0/tukuai-ui.min.js"><` + `/script>\n\n` +
-                    `<!-- 2. 音频播放器组件 (推荐设置 width:100% 确保播放条充分舒展) -->\n` +
+                    `<!-- 2. Audio Player Component (set width: 100% for responsive controls) -->\n` +
                     `<tukuai-audio\n` +
                     `    style="width: 100%; max-width: 720px;"\n` +
                     `    url="${url}"\n` +
@@ -1291,10 +1291,10 @@
                     `>\n` +
                     `</tukuai-audio>`;
             } else {
-                return `<!-- ⚠️ 宿主网页 <head> 中务必包含 <meta charset="UTF-8">，否则 Windows 本地打开中文会乱码！ -->\n\n` +
-                    `<!-- 1. 引入 TuKuai-UI 核心脚本 (页面引入一次即可) -->\n` +
+                return `<!-- Ensure your host <head> includes <meta charset="UTF-8"> -->\n\n` +
+                    `<!-- 1. Import TuKuai-UI script (once per page) -->\n` +
                     `<script src="https://cdn.jsdelivr.net/gh/GallantTarry/TuKuai-Studio@v1.0.0/tukuai-ui.min.js"><` + `/script>\n\n` +
-                    `<!-- 2. 视频播放器组件 (推荐设置 width:100% 确保控制条充分舒展) -->\n` +
+                    `<!-- 2. Video Player Component (set width: 100% for responsive controls) -->\n` +
                     `<tukuai-player\n` +
                     `    style="width: 100%; max-width: 860px;"\n` +
                     `    url="${url}"\n` +
@@ -1317,12 +1317,12 @@
 
         if (type === 'audio') {
             artistGroup.style.display = 'block';
-            labelName.innerText = '歌曲名 (name)';
-            labelCover.innerText = '封面图 (cover)';
+            labelName.innerText = 'Track Name (name)';
+            labelCover.innerText = 'Album Cover (cover)';
         } else {
             artistGroup.style.display = 'none';
-            labelName.innerText = '视频标题 (title)';
-            labelCover.innerText = '海报封面 (pic)';
+            labelName.innerText = 'Video Title (title)';
+            labelCover.innerText = 'Poster Image (pic)';
         }
 
         currentRawCode = generateCodeString(currentExportFormat);
@@ -1332,24 +1332,24 @@
         }
     }
 
-    // 🎨 代码色彩语法高亮渲染器
+    // Minimalist Syntax Highlighter
     function highlightHtml(code) {
         if (!code) return '';
 
-        // 实体转义
+        // Escape HTML entities
         let html = code
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;');
 
-        // 1. 注释色彩
+        // 1. Comments
         html = html.replace(/(&lt;!--[\s\S]*?--&gt;)/g, '<span class="hl-comment">$1</span>');
 
-        // 2. DOCTYPE 色彩
+        // 2. DOCTYPE
         html = html.replace(/(&lt;!DOCTYPE[\s\S]*?&gt;)/gi, '<span class="hl-doctype">$1</span>');
 
-        // 3. 样式块 CSS 色彩
+        // 3. Inline CSS style blocks
         html = html.replace(/(&lt;style&gt;)([\s\S]*?)(&lt;\/style&gt;)/gi, function(m, p1, p2, p3) {
             let css = p2;
             css = css.replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="hl-comment">$1</span>');
@@ -1358,7 +1358,7 @@
             return '<span class="hl-tag">' + p1 + '</span>' + css + '<span class="hl-tag">' + p3 + '</span>';
         });
 
-        // 4. HTML 标签与属性色彩
+        // 4. HTML tags & attributes
         html = html.replace(/(&lt;\/?[a-zA-Z0-9-]+)([\s\S]*?)(&gt;)/g, function(match, openTag, attrs, closeTag) {
             if (openTag.indexOf('style') !== -1) return match;
             let styledAttrs = attrs.replace(/([a-zA-Z0-9-]+)(?:(=)(&quot;[\s\S]*?&quot;|'[\s\S]*?'))?/g, function(m, attrName, eq, val) {
@@ -1374,40 +1374,40 @@
         return html;
     }
 
-    // 复制代码
+    // Copy generated snippet
     function copyGeneratedCode() {
         const msg = currentExportFormat === 'full'
-            ? '已复制完整网页代码（含 UTF-8 防乱码）！'
-            : '已复制组件标签代码！';
+            ? 'Copied full standalone HTML template (with UTF-8)!'
+            : 'Copied component snippet!';
         copyTextToClipboard(currentRawCode, msg);
 
         const btnText = document.getElementById('btn-copy-text');
         if (btnText) {
             const originalText = btnText.textContent;
-            btnText.textContent = '✅ 已复制！';
+            btnText.textContent = 'Copied!';
             setTimeout(() => {
                 btnText.textContent = originalText;
             }, 1800);
         }
     }
 
-    // 复制 CDN 脚本标签
+    // Copy CDN script tag
     function copyCdnScript() {
         const cdnScript = '<script src="https://cdn.jsdelivr.net/gh/GallantTarry/TuKuai-Studio@v1.0.0/tukuai-ui.min.js"><' + '/script>';
-        copyTextToClipboard(cdnScript, 'CDN 引用代码已复制！');
+        copyTextToClipboard(cdnScript, 'CDN script tag copied!');
     }
 
-    // 保持向后兼容的 copyText 函数
+    // Backward-compatible alias
     function copyText(text, msg) {
         copyTextToClipboard(text, msg);
     }
 
-    // 通用剪贴板复制（纯文本注入，绝不使用 innerHTML 避免实体篡改与乱码）
+    // Clipboard helper
     function copyTextToClipboard(text, msg) {
         if (!text) return;
         if (navigator.clipboard && window.isSecureContext) {
             navigator.clipboard.writeText(text).then(() => {
-                showToast(msg || '复制成功！');
+                showToast(msg || 'Copied!');
             }).catch(() => {
                 fallbackCopy(text, msg);
             });
@@ -1430,12 +1430,12 @@
         try {
             const ok = document.execCommand('copy');
             if (ok) {
-                showToast(msg || '复制成功！');
+                showToast(msg || 'Copied!');
             } else {
-                showToast('复制失败，请手动选取代码');
+                showToast('Copy failed — please select manually');
             }
         } catch (err) {
-            showToast('复制失败，请手动选取代码');
+            showToast('Copy failed — please select manually');
         }
         document.body.removeChild(ta);
     }
@@ -1451,12 +1451,11 @@
         }, 2400);
     }
 
-    // 初始化
-    updateThemeToggleBtn(document.documentElement.dataset.theme || 'dark');
+    // Sync theme on initial load
+    applyTheme(document.documentElement.dataset.theme || 'dark');
 
-    
     // ==========================================
-    // 🌓 纯粹跟随主页面嵌入式白天/黑夜主题同步内核
+    // Embedded Light / Dark Theme Sync Core
     // ==========================================
     function applyTheme(theme) {
         if (theme !== 'light' && theme !== 'dark') return;
@@ -1464,7 +1463,7 @@
         document.documentElement.style.colorScheme = theme;
     }
 
-    // 实时监听来自主页 index.html 的 postMessage 主题广播
+    // Listen for theme broadcasts from host index.html
     window.addEventListener('message', (event) => {
         if (event.data && event.data.type === 'tukuai-theme') {
             applyTheme(event.data.theme);
@@ -1475,7 +1474,7 @@
         renderGenCode();
     });
 
-    // 彻底隐藏全站所有原生悬停提示 (Tooltips)
+    // Suppress all native hover tooltips across the page
     document.addEventListener('mouseover', e => {
         let el = e.target;
         while (el && el !== document) {
