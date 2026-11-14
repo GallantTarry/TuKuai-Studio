@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
-    <title>TuKuai EXE · Windows x64 云端安装包封装</title>
+    <title>TuKuai EXE · Cloud Windows x64 Installer Packager</title>
     <link rel="icon" href="../imgs/TuKuaiStudio.ico" type="image/x-icon">
 
-    <!-- 🌓 首屏主题防闪烁：同步 TuKuai Studio 主站 ?theme= 参数与系统时段 -->
+    <!-- Theme anti-flash: sync TuKuai Studio ?theme= query param and local hours -->
     <script>
         (function () {
             const params = new URLSearchParams(window.location.search);
@@ -457,44 +457,43 @@
 <div class="container">
     <header>
         <div class="header-eyebrow">SYS / TUKUAI-EXE</div>
-        <h1>TuKuai EXE 云端封装工坊</h1>
+        <h1>TuKuai EXE Cloud Packager</h1>
         <p class="subtitle">
-            拖入已打包好的桌面应用文件夹（含主 <code>.exe</code>）与 <code>license.txt</code>，云端自动生成标准 Windows x64 安装包（Inno Setup）并由 GitHub 原生返回。中转上传包即用即焚，不留存任何源码。
+            Drop your built desktop application folder (including the main <code>.exe</code>) and optional <code>license.txt</code> to build a standard Windows x64 installer (Inno Setup) returned natively by GitHub Actions. Temporary uploads are purged automatically.
         </p>
         <div class="badge-bar">
             <span class="badge">x64compatible</span>
-            <span class="badge">fflate 零压缩打包</span>
-            <span class="badge">单包上限 1 GB</span>
-            <span class="badge">GitHub 原生返回</span>
-            <span class="badge">仅海外 / 代理环境</span>
+            <span class="badge">fflate Zero-Recompress</span>
+            <span class="badge">Up to 1 GB</span>
+            <span class="badge">GitHub Native Return</span>
         </div>
     </header>
 
     <div class="notice-box" id="region-notice">
-        <strong>网络使用说明：</strong>本服务（含前端、边缘接口与 GitHub Actions 原生成品下载）仅支持海外网络或代理环境，<strong>不支持中国大陆直接访问，亦不提供国内备用下载链接</strong>。国内使用请先开启代理。
+        <strong>Notice:</strong> If your region is not supported, please enable a proxy.
     </div>
 
     <div class="notice-box error" id="config-warning" hidden></div>
 
-    <!-- Step 1: 拖入文件夹与协议 -->
+    <!-- Step 1: Select folder and license -->
     <section class="card">
         <div class="card-head">
-            <div class="card-title"><span class="step-pill">01</span> 选择应用目录与协议文件</div>
-            <span class="card-hint">支持拖拽整个 dist 文件夹 + license.txt</span>
+            <div class="card-title"><span class="step-pill">01</span> Select App Folder &amp; License</div>
+            <span class="card-hint">Supports dropping an entire dist folder + license.txt</span>
         </div>
 
-        <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="拖拽或点击选择项目文件夹">
+        <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Drag and drop or click to select project folder">
             <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                 <polyline points="17 8 12 3 7 8"/>
                 <line x1="12" y1="3" x2="12" y2="15"/>
             </svg>
-            <div class="dropzone-title">把项目文件夹（和 license.txt）拖到这里</div>
-            <div class="dropzone-desc">请确保目录内已包含可运行的主程序 .exe（如 PyInstaller / Nuitka / jpackage 输出目录）</div>
+            <div class="dropzone-title">Drop your app folder (and license.txt) here</div>
+            <div class="dropzone-desc">Ensure the directory contains a runnable main .exe (e.g., PyInstaller / Nuitka / jpackage output)</div>
             <div class="btn-row">
-                <button type="button" class="btn" id="pick-folder-btn">选择应用文件夹</button>
-                <button type="button" class="btn" id="pick-license-btn">单独选择 license.txt</button>
-                <button type="button" class="btn" id="clear-files-btn" hidden>清空重选</button>
+                <button type="button" class="btn" id="pick-folder-btn">Select App Folder</button>
+                <button type="button" class="btn" id="pick-license-btn">Select license.txt</button>
+                <button type="button" class="btn" id="clear-files-btn" hidden>Clear</button>
             </div>
         </div>
 
@@ -503,62 +502,62 @@
 
         <div class="summary-grid" id="file-summary" hidden>
             <div class="summary-item">
-                <div class="summary-label">应用根目录</div>
+                <div class="summary-label">App Root Folder</div>
                 <div class="summary-value" id="sum-root">-</div>
             </div>
             <div class="summary-item">
-                <div class="summary-label">文件数量 / 总大小</div>
+                <div class="summary-label">Files / Total Size</div>
                 <div class="summary-value" id="sum-size">-</div>
             </div>
             <div class="summary-item">
-                <div class="summary-label">检测到 .exe 入口</div>
+                <div class="summary-label">Detected .exe Entry</div>
                 <div class="summary-value" id="sum-exe">-</div>
             </div>
             <div class="summary-item">
-                <div class="summary-label">license.txt 协议</div>
+                <div class="summary-label">license.txt</div>
                 <div class="summary-value" id="sum-license">-</div>
             </div>
         </div>
     </section>
 
-    <!-- Step 2: 安装包配置 -->
+    <!-- Step 2: Installer settings -->
     <section class="card">
         <div class="card-head">
-            <div class="card-title"><span class="step-pill">02</span> 填写安装包信息</div>
-            <span class="card-hint">用于安装向导界面与 Windows 控制面板卸载项</span>
+            <div class="card-title"><span class="step-pill">02</span> Installer Configuration</div>
+            <span class="card-hint">Shown in Setup wizard and Windows Apps &amp; Features</span>
         </div>
 
         <div class="form-grid">
             <div class="field full">
-                <label for="main-exe-select">主程序入口 (.exe)</label>
+                <label for="main-exe-select">Main Executable (.exe)</label>
                 <select id="main-exe-select" disabled>
-                    <option value="">请先选择包含 .exe 的应用文件夹</option>
+                    <option value="">Please select an app folder containing a .exe first</option>
                 </select>
             </div>
             <div class="field">
-                <label for="app-name-input">应用名称</label>
-                <input type="text" id="app-name-input" maxlength="80" placeholder="例如：TuKuai Tool">
+                <label for="app-name-input">Application Name</label>
+                <input type="text" id="app-name-input" maxlength="80" placeholder="e.g., TuKuai Tool">
             </div>
             <div class="field">
-                <label for="app-version-input">版本号（纯数字格式）</label>
+                <label for="app-version-input">Version (numeric format)</label>
                 <input type="text" id="app-version-input" maxlength="24" value="1.0.0" placeholder="1.0.0">
             </div>
             <div class="field full">
-                <label for="app-publisher-input">发布者名称（可选）</label>
+                <label for="app-publisher-input">Publisher Name (optional)</label>
                 <input type="text" id="app-publisher-input" maxlength="80" value="TuKuai Studio" placeholder="TuKuai Studio">
             </div>
         </div>
 
         <div class="action-bar">
             <div id="turnstile-box"></div>
-            <button type="button" class="btn btn-primary" id="start-btn" disabled>开始云端封装 x64 安装包</button>
+            <button type="button" class="btn btn-primary" id="start-btn" disabled>Build x64 Installer</button>
         </div>
     </section>
 
-    <!-- Step 3: 进度与下载 -->
+    <!-- Step 3: Progress and download -->
     <section class="card" id="status-card" hidden>
         <div class="card-head">
-            <div class="card-title"><span class="step-pill">03</span> 云端封装进度</div>
+            <div class="card-title"><span class="step-pill">03</span> Cloud Build Progress</div>
             <span class="card-hint" id="job-id-hint"></span>
         </div>
 
@@ -566,24 +565,24 @@
             <div class="progress-fill" id="progress-fill"></div>
         </div>
         <div class="progress-meta">
-            <span id="status-text">准备中…</span>
+            <span id="status-text">Preparing…</span>
             <span id="status-detail"></span>
         </div>
 
         <div class="stage-list">
-            <div class="stage-step" data-stage="pack">1. 本地归档打包</div>
-            <div class="stage-step" data-stage="upload">2. 分片并发上传</div>
-            <div class="stage-step" data-stage="build">3. 云端封装编译</div>
-            <div class="stage-step" data-stage="done">4. 成品可下载</div>
+            <div class="stage-step" data-stage="pack">1. Local Archive</div>
+            <div class="stage-step" data-stage="upload">2. Chunked Upload</div>
+            <div class="stage-step" data-stage="build">3. Cloud Compile</div>
+            <div class="stage-step" data-stage="done">4. Ready to Download</div>
         </div>
 
         <div class="notice-box" id="status-notice" hidden></div>
 
         <div class="result-bar" id="result-bar" hidden>
             <span class="card-hint" id="result-hint">
-                由 GitHub Actions 原生返回（有效期 24 小时，解压即可得安装程序）。不支持中国大陆直连，国内使用请先开启代理。
+                Delivered natively by GitHub Actions (valid for 24 hours; extract to obtain Setup.exe). If your region is not supported, please enable a proxy.
             </span>
-            <button type="button" class="btn btn-download" id="download-link">下载安装包 (.zip)</button>
+            <button type="button" class="btn btn-download" id="download-link">Download Installer (.zip)</button>
         </div>
     </section>
 </div>
@@ -680,7 +679,7 @@
     window.addEventListener('load', () => {
         if (resolveApiBase() === null) {
             const warn = $('config-warning');
-            warn.textContent = '提示：尚未在 TuKuaiEXE.html 顶部配置 Cloudflare Worker 后端地址（apiBase），目前无法发起云端请求。';
+            warn.textContent = 'Notice: Cloudflare Worker apiBase is not configured at the top of TuKuaiEXE.html.';
             warn.hidden = false;
         }
         const timer = setInterval(() => {
@@ -693,7 +692,7 @@
             clearInterval(timer);
             if (!window.turnstile && state.widgetId === null) {
                 const warn = $('config-warning');
-                warn.textContent = '提示：Cloudflare Turnstile 人机验证脚本加载超时，请检查网络或刷新重试。';
+                warn.textContent = 'Notice: Cloudflare Turnstile failed to load. Check your network or enable a proxy and reload.';
                 warn.hidden = false;
             }
         }, 12000);
@@ -805,7 +804,7 @@
 
         state.appFiles = folderFiles;
         state.licenseFile = foundLicense;
-        state.rootName = dirRoot || '已选目录';
+        state.rootName = dirRoot || 'Selected Folder';
         state.totalBytes = folderFiles.reduce((acc, item) => acc + item.file.size, 0);
 
         if (!$('app-name-input').value.trim() && dirRoot) {
@@ -819,17 +818,17 @@
         $('file-summary').hidden = !hasFiles && !state.licenseFile;
         $('clear-files-btn').hidden = !hasFiles && !state.licenseFile;
 
-        $('sum-root').textContent = state.rootName || '未选文件夹';
+        $('sum-root').textContent = state.rootName || 'Not selected';
 
         const sizeEl = $('sum-size');
         sizeEl.className = 'summary-value';
         if (!hasFiles) {
-            sizeEl.textContent = '0 个文件';
+            sizeEl.textContent = '0 files';
         } else if (state.totalBytes > TUKUAI_EXE_CONFIG.maxPackageBytes) {
-            sizeEl.textContent = `${state.appFiles.length} 个文件 · ${formatBytes(state.totalBytes)} (超出 1 GB)`;
+            sizeEl.textContent = `${state.appFiles.length} files · ${formatBytes(state.totalBytes)} (exceeds 1 GB)`;
             sizeEl.classList.add('err');
         } else {
-            sizeEl.textContent = `${state.appFiles.length} 个文件 · ${formatBytes(state.totalBytes)}`;
+            sizeEl.textContent = `${state.appFiles.length} files · ${formatBytes(state.totalBytes)}`;
         }
 
         const exes = state.appFiles
@@ -841,10 +840,10 @@
         if (!exes.length) {
             const opt = document.createElement('option');
             opt.value = '';
-            opt.textContent = hasFiles ? '未检测到 .exe 文件（请确认拖入的是已构建目录）' : '请先选择应用文件夹';
+            opt.textContent = hasFiles ? 'No .exe found (please drop a built application folder)' : 'Please select an app folder first';
             select.append(opt);
             select.disabled = true;
-            $('sum-exe').textContent = hasFiles ? '0 个 (缺少主程序)' : '-';
+            $('sum-exe').textContent = hasFiles ? '0 (missing main .exe)' : '-';
             $('sum-exe').className = hasFiles ? 'summary-value err' : 'summary-value';
         } else {
             exes.forEach((item) => {
@@ -854,16 +853,16 @@
                 select.append(opt);
             });
             select.disabled = false;
-            $('sum-exe').textContent = `找到 ${exes.length} 个`;
+            $('sum-exe').textContent = `${exes.length} found`;
             $('sum-exe').className = 'summary-value ok';
         }
 
         const licEl = $('sum-license');
         if (state.licenseFile) {
-            licEl.textContent = `已附带 (${state.licenseFile.name})`;
+            licEl.textContent = `Included (${state.licenseFile.name})`;
             licEl.className = 'summary-value ok';
         } else {
-            licEl.textContent = '未附带（可选，若需要请拖入）';
+            licEl.textContent = 'Optional (not attached)';
             licEl.className = 'summary-value warn';
         }
 
@@ -1054,17 +1053,17 @@
                     resolve(parsed);
                     return;
                 }
-                const err = new Error(parsed.message || `上传分片失败 (HTTP ${xhr.status})`);
+                const err = new Error(parsed.message || `Chunk upload failed (HTTP ${xhr.status})`);
                 err.retryable = xhr.status === 429 || xhr.status >= 500;
                 reject(err);
             };
             xhr.onerror = () => {
-                const err = new Error('网络抖动，正在自动重试上传分片…');
+                const err = new Error('Network error while uploading chunk, retrying…');
                 err.retryable = true;
                 reject(err);
             };
             xhr.ontimeout = () => {
-                const err = new Error('分片上传超时，正在自动重试…');
+                const err = new Error('Chunk upload timed out, retrying…');
                 err.retryable = true;
                 reject(err);
             };
@@ -1141,9 +1140,9 @@
 
     async function pollUntilComplete(apiBase, jobId, jobSecret) {
         const statusMap = {
-            queued: ['正在排队分配 Windows 构建机…', 65],
-            building: ['云端已接收任务，正在拉取归档包…', 75],
-            compiling: ['源码包已销毁 · 正在执行 Inno Setup x64 编译并回传成品…', 88],
+            queued: ['Queued for Windows runner…', 65],
+            building: ['Runner claimed job, downloading archive…', 75],
+            compiling: ['Temp upload purged · Compiling Inno Setup x64 installer…', 88],
         };
 
         return new Promise((resolve, reject) => {
@@ -1183,7 +1182,7 @@
                     if (settled) return;
                     if (!res.ok) {
                         const fatal = res.status >= 400 && res.status < 500 && res.status !== 429;
-                        const err = new Error(data.message || '查询构建状态失败');
+                        const err = new Error(data.message || 'Failed to query build status');
                         err.fatal = fatal;
                         throw err;
                     }
@@ -1194,17 +1193,17 @@
                         return;
                     }
                     if (data.status === 'failed' || data.status === 'rejected') {
-                        finish(reject, new Error(data.errorMessage || '云端编译失败'));
+                        finish(reject, new Error(data.errorMessage || 'Cloud compilation failed'));
                         return;
                     }
 
-                    const [msg, pct] = statusMap[data.status] || ['云端处理中…', 70];
-                    setStage('build', pct, msg, data.r2Deleted ? '临时上传包已清理' : '');
+                    const [msg, pct] = statusMap[data.status] || ['Processing in cloud…', 70];
+                    setStage('build', pct, msg, data.r2Deleted ? 'Temp upload purged' : '');
                 } catch (err) {
                     if (settled) return;
                     failStreak++;
                     if (err?.fatal || failStreak >= 8) {
-                        finish(reject, err?.name === 'AbortError' ? new Error('查询构建状态超时，请检查网络连接') : err);
+                        finish(reject, err?.name === 'AbortError' ? new Error('Build status polling timed out. Check your network or proxy.') : err);
                         return;
                     }
                 } finally {
@@ -1233,18 +1232,18 @@
         };
         const resetIdleTimer = () => {
             clearTimeout(idleTimer);
-            idleTimer = setTimeout(() => abortWith('分片传输停滞超时，正在重连…'), idleTimeoutMs);
+            idleTimer = setTimeout(() => abortWith('Download chunk stalled, reconnecting…'), idleTimeoutMs);
         };
 
         resetIdleTimer();
-        const maxTimer = setTimeout(() => abortWith('单分片下载总耗时过长，正在重连…'), maxChunkTimeMs);
+        const maxTimer = setTimeout(() => abortWith('Chunk download timed out, reconnecting…'), maxChunkTimeMs);
 
         try {
             const res = await fetch(url, { cache: 'no-store', signal: controller.signal });
             resetIdleTimer();
 
             if (res.status !== 200 && res.status !== 206) {
-                let errMsg = `下载分片失败 (HTTP ${res.status})`;
+                let errMsg = `Failed to download chunk (HTTP ${res.status})`;
                 try {
                     const data = await res.json();
                     if (data?.message) errMsg = data.message;
@@ -1257,7 +1256,7 @@
             if (!res.body) {
                 const buf = new Uint8Array(await res.arrayBuffer());
                 if (buf.byteLength !== expectedLen) {
-                    const err = new Error('分片长度校验不一致，正在重试…');
+                    const err = new Error('Chunk byte length mismatch, retrying…');
                     err.retryable = true;
                     throw err;
                 }
@@ -1274,7 +1273,7 @@
                 if (!value || value.byteLength === 0) continue;
                 resetIdleTimer();
                 if (offset + value.byteLength > expectedLen) {
-                    const err = new Error('分片数据超出预期长度');
+                    const err = new Error('Received chunk exceeds expected length');
                     err.retryable = true;
                     throw err;
                 }
@@ -1283,7 +1282,7 @@
                 onProgressBytes(offset);
             }
             if (offset !== expectedLen) {
-                const err = new Error('网络中断导致分片不完整，正在自动重试…');
+                const err = new Error('Stream interrupted before chunk completed, retrying…');
                 err.retryable = true;
                 throw err;
             }
@@ -1293,7 +1292,7 @@
                 reader.cancel().catch(() => {});
             }
             if (abortedReason || err?.name === 'AbortError' || err instanceof TypeError) {
-                const netErr = new Error(abortedReason || '网络波动，正在自动重连该分片…');
+                const netErr = new Error(abortedReason || 'Network interruption, reconnecting chunk…');
                 netErr.retryable = true;
                 throw netErr;
             }
@@ -1339,12 +1338,12 @@
         const metaRes = await fetch(`${baseDownloadUrl}&meta=1`, { cache: 'no-store' });
         const meta = await metaRes.json().catch(() => ({}));
         if (!metaRes.ok) {
-            throw new Error(meta?.message || `获取安装包信息失败 (HTTP ${metaRes.status})`);
+            throw new Error(meta?.message || `Failed to inspect artifact metadata (HTTP ${metaRes.status})`);
         }
 
         const total = Number(meta.size || 0);
         const fileName = meta.fileName || 'TuKuai-Setup-x64.zip';
-        const sourceLabel = 'GitHub 原生通道';
+        const sourceLabel = 'GitHub Native';
 
         if (!Number.isFinite(total) || total <= 0) {
             triggerBlobSave(baseDownloadUrl, fileName);
@@ -1409,13 +1408,13 @@
         const btn = $('download-link');
         state.downloading = true;
         btn.disabled = true;
-        btn.textContent = '正在从 GitHub 拉取…';
+        btn.textContent = 'Fetching from GitHub…';
         showNotice('');
 
         try {
             if (state.lastBlobUrl && state.lastDownload.cachedFileName) {
                 triggerBlobSave(state.lastBlobUrl, state.lastDownload.cachedFileName);
-                setStage('done', 100, '已从本地缓存重新保存安装包！', state.lastDownload.cachedFileName);
+                setStage('done', 100, 'Installer saved from local cache!', state.lastDownload.cachedFileName);
                 return;
             }
 
@@ -1427,7 +1426,7 @@
                     setStage(
                         'done',
                         pct,
-                        `正在分片下载 (${sourceLabel})…`,
+                        `Downloading (${sourceLabel})…`,
                         `${formatBytes(loaded)} / ${formatBytes(total)}${speedText}`
                     );
                 }
@@ -1436,17 +1435,17 @@
             setStage(
                 'done',
                 100,
-                'x64 安装包已保存到本地！',
+                'x64 installer saved locally!',
                 `${result.fileName}${result.total > 0 ? ` · ${formatBytes(result.total)}` : ''} · ${result.sourceLabel}`
             );
-            btn.textContent = '再次保存安装包 (.zip)';
+            btn.textContent = 'Save Installer Again (.zip)';
         } catch (err) {
-            setStage('done', 100, 'x64 安装包封装完成！', '下载中断，请开启代理后重试');
+            setStage('done', 100, 'x64 installer build completed!', 'Download failed, please retry');
             showNotice(
-                `下载遇到网络异常（${err instanceof Error ? err.message : String(err)}）。本服务不支持中国大陆直连，国内使用请确认已开启代理后重试。`,
+                `Download failed (${err instanceof Error ? err.message : String(err)}). If your region is not supported, please enable a proxy and retry.`,
                 'error'
             );
-            btn.textContent = '重试下载 (.zip)';
+            btn.textContent = 'Retry Download (.zip)';
         } finally {
             state.downloading = false;
             btn.disabled = false;
@@ -1456,7 +1455,7 @@
     $('start-btn').addEventListener('click', async () => {
         const apiBase = resolveApiBase();
         if (apiBase === null) {
-            showNotice('请先在 HTML 顶部 TUKUAI_EXE_CONFIG.apiBase 填入 Worker 地址。', 'error');
+            showNotice('Please configure TUKUAI_EXE_CONFIG.apiBase at the top of this HTML file first.', 'error');
             return;
         }
 
@@ -1472,21 +1471,21 @@
         $('job-id-hint').textContent = '';
 
         try {
-            setStage('pack', 5, '正在浏览器内打包归档（轻量压缩加速上传）…', `共 ${state.appFiles.length} 个文件`);
+            setStage('pack', 5, 'Packaging folder locally in browser…', `${state.appFiles.length} files`);
             const archiveBlob = await buildArchiveZipBlob((done, total) => {
                 const pct = 5 + Math.round((done / Math.max(1, total)) * 20);
-                setStage('pack', pct, `正在归档文件 (${done}/${total})…`, formatBytes(state.totalBytes));
+                setStage('pack', pct, `Archiving files (${done}/${total})…`, formatBytes(state.totalBytes));
             });
 
             if (archiveBlob.size > TUKUAI_EXE_CONFIG.maxPackageBytes) {
-                throw new Error('归档包体积超过 1 GB 上限，请精简目录后重试');
+                throw new Error('Archive exceeds 1 GB limit. Please slim down the folder and retry.');
             }
 
             setStage(
                 'upload',
                 26,
-                '正在校验额度并建立加密上传通道…',
-                `${formatBytes(archiveBlob.size)}（原 ${formatBytes(state.totalBytes)}）`
+                'Verifying quota and initializing upload channel…',
+                `${formatBytes(archiveBlob.size)} (raw ${formatBytes(state.totalBytes)})`
             );
             const createRes = await fetch(`${apiBase}/api/jobs`, {
                 method: 'POST',
@@ -1505,7 +1504,7 @@
 
             const createData = await createRes.json();
             if (!createRes.ok) {
-                throw new Error(createData.message || `创建任务失败 (${createRes.status})`);
+                throw new Error(createData.message || `Failed to create build job (${createRes.status})`);
             }
 
             const { jobId, jobSecret } = createData;
@@ -1514,10 +1513,10 @@
             const uploadedParts = await uploadArchiveInChunks(apiBase, createData, archiveBlob, (loaded, total, speedBps) => {
                 const pct = 28 + Math.round((loaded / Math.max(1, total)) * 32);
                 const speedText = speedBps > 0 ? ` · ${formatBytes(speedBps)}/s` : '';
-                setStage('upload', pct, '正在分片并发上传至中转站…', `${formatBytes(loaded)} / ${formatBytes(total)}${speedText}`);
+                setStage('upload', pct, 'Uploading archive chunks…', `${formatBytes(loaded)} / ${formatBytes(total)}${speedText}`);
             });
 
-            setStage('build', 62, '上传完成，正在启动 GitHub Actions Windows 虚拟机…');
+            setStage('build', 62, 'Upload complete, starting GitHub Actions Windows runner…');
             const startRes = await fetch(`${apiBase}/api/jobs/${jobId}/start`, {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
@@ -1525,19 +1524,19 @@
             });
             const startData = await startRes.json();
             if (!startRes.ok) {
-                throw new Error(startData.message || '启动云端封装失败');
+                throw new Error(startData.message || 'Failed to dispatch cloud build');
             }
 
             const doneData = await pollUntilComplete(apiBase, jobId, jobSecret);
 
-            const readyDetail = `${doneData?.artifactName || 'TuKuai-Setup-x64.zip'} · 已由 GitHub 原生生成（24 小时内有效）`;
-            setStage('done', 100, 'x64 安装包封装完成！', readyDetail);
+            const readyDetail = `${doneData?.artifactName || 'TuKuai-Setup-x64.zip'} · Built natively by GitHub Actions (valid 24h)`;
+            setStage('done', 100, 'x64 installer build completed!', readyDetail);
             state.lastDownload = { apiBase, jobId, jobSecret };
-            $('download-link').textContent = '下载安装包 (.zip)';
+            $('download-link').textContent = 'Download Installer (.zip)';
             $('download-link').disabled = false;
             $('result-bar').hidden = false;
             showNotice(
-                '说明：免费云端封装不含商业数字签名，首次在他人电脑运行若遇 Windows SmartScreen 拦截提示，点击“更多信息 → 仍要运行”即可安装。',
+                'SmartScreen Notice: Free cloud builds do not include a commercial code-signing certificate. If Windows SmartScreen warns on first launch, click "More info -> Run anyway" to install.',
                 'success'
             );
         } catch (err) {
