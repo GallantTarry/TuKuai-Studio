@@ -70,3 +70,7 @@ TuKuai-Studio/
     ├── TuKuaiEXE.html          # Pure-English embedded frontend for the Cloud Inno Setup Packager
     └── fflate.browser.js       # Client-side DEFLATE / ZIP helper
 ```
+
+## License
+
+Copyright © 2026 TuKuai. Licensed under the [Apache License 2.0](LICENSE).

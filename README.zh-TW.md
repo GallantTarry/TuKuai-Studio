@@ -70,3 +70,7 @@ TuKuai-Studio/
     ├── TuKuaiEXE.html          # 純英文雲端 Inno Setup 打包前端介面
     └── fflate.browser.js       # 前端瀏覽器端 ZIP / DEFLATE 工具庫
 ```
+
+## 授權條款
+
+Copyright © 2026 TuKuai。本專案採用 [Apache License 2.0](LICENSE) 開源授權。
