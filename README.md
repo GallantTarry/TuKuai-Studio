@@ -71,6 +71,12 @@ TuKuai-Studio/
     └── fflate.browser.js       # Client-side DEFLATE / ZIP helper
 ```
 
-## License
+## Copyright & Notice
 
-Copyright © 2026 TuKuai. Licensed under the [Apache License 2.0](LICENSE).
+```text
+Copyright (c) 2026 TuKuai (GallantTarry). All rights reserved.
+```
+
+This repository makes its source code publicly visible on GitHub solely for **viewing, learning, and technical reference**. Without prior written permission from the copyright holder, copying, modifying, mirroring/re-hosting, or redistributing the original code, UI design, copywriting, or original assets for commercial or non-commercial purposes is prohibited. See [LICENSE](LICENSE) for details.
+
+> Third-party notice: `TuKuaiEXE/fflate.browser.js` bundles `fflate@0.8.2` (by Arjun Barrett) under the MIT License; demo audio, video, and image media files remain subject to their respective copyright holders' licenses.

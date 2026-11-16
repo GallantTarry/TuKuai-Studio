@@ -71,6 +71,12 @@ TuKuai-Studio/
     └── fflate.browser.js       # 前端瀏覽器端 ZIP / DEFLATE 工具庫
 ```
 
-## 授權條款
+## 版權與使用聲明
 
-Copyright © 2026 TuKuai。本專案採用 [Apache License 2.0](LICENSE) 開源授權。
+```text
+Copyright (c) 2026 TuKuai (GallantTarry). All rights reserved.
+```
+
+本專案原始碼於 GitHub 公開僅供**瀏覽、學習與技術參考**，**保留所有權利（非開源授權）**。未經版權持有人書面許可，禁止複製、修改、鏡像克隆重新部署，或將原創程式碼、UI 設計、文案與原創素材用於任何商業或非商業再分發。詳見 [LICENSE](LICENSE)。
+
+> 第三方聲明：`TuKuaiEXE/fflate.browser.js` 內建了 `fflate@0.8.2`（作者 Arjun Barrett），採用 MIT License；站內演示用音訊、視訊與圖片素材各自歸原權利人所有，並遵循其原始授權。
