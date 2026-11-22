@@ -10,7 +10,7 @@
   {
     "id": "ui",
     "name": "Comp",
-    "badge": "02",
+    "badge": "01",
     "color": "blue",
     "description": "Simple things should be simple, complex things should be possible. — Alan Kay",
     "keywords": "界面 蓝色 components blue comp ui Alan Kay",
@@ -23,17 +23,6 @@
         "keywords": "影音 音频 视频 播放器 audio video",
         "status": "available",
         "url": "TuKuaiUI/TuKuaiUI.html"
-      },
-      {
-        "id": "tukuai-jui",
-        "name": "TuKuai-JUI",
-        "description": "独立入口已预留，更多界面正在酝酿。",
-        "keywords": "jui 界面",
-        "status": "planned",
-        "url": "",
-        "badge": "待开发",
-        "label": "COMP / TUKUAI-JUI",
-        "sculpture": "layers"
       }
     ]
   },
@@ -68,16 +57,25 @@
   {
     "id": "purple",
     "name": "Net",
-    "badge": "00",
+    "badge": "01",
     "color": "purple",
     "href": "?view=purple",
     "ariaLabel": "第四个组件板块，紫色，Net",
     "description": "The Web as I envisaged it, we have not seen it yet. The future is still so much bigger than the past. — Sir Tim Berners-Lee",
-    "keywords": "紫色 想象 purple net 04 Tim Berners-Lee",
-    "status": "planned",
+    "keywords": "紫色 想象 purple net 04 Tim Berners-Lee kuaiblog blog 博客 docsify markdown rss npm",
+    "status": "group",
     "label": "04 / NET",
     "sculpture": "layers",
-    "children": []
+    "children": [
+      {
+        "id": "kuaiblog",
+        "name": "KuaiBlog",
+        "description": "Zero-Bundler Docsify Markdown Blog Engine (npm CLI · Dual Themes · RSS 2.0)",
+        "keywords": "kuaiblog blog docsify markdown npm cli rss mermaid mathjax theme 博客 静态博客",
+        "status": "available",
+        "url": "KuaiBlog/KuaiBlog.html"
+      }
+    ]
   },
   {
     "id": "red",
