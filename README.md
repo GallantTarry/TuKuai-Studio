@@ -1,82 +1,29 @@
-English | [繁體中文](README.zh-TW.md)
+English | [简体中文](README.zh-CN.md)
 
 # TuKuai Studio
 
-> Modular five-spectrum developer workshop hosting zero-dependency web tools and self-contained embedded utilities inside a single unified shell.
+> A splash of color for inspiration — built for programmers and the open-source world.
 
-TuKuai Studio solves the fragmentation and bloat of everyday utility apps by organizing modular front-end components and focused developer workflows into five color-coded domains (`Comp`, `Core`, `IO`, `Net`, `Sys`). Its portal shell presents Traditional Chinese (`zh-Hant`) navigation while loading standalone, pure-English interactive workspaces (`TuKuai-UI`, `TuKuai-EXE`, and upcoming tools) inside a theme-synchronized iframe workspace.
+## Our Founding Purpose
 
-## Architecture & Data Flow
+TuKuai Studio began with a simple, enduring wish: **to bring genuine convenience to programmers and give back to the open-source world**.
 
-```mermaid
-flowchart TD
-    subgraph Entry["1. Entrance Stage (intro.html)"]
-        A["Intro Video & Audio Sync (UI_REVEAL_TIME = 4.16s)"] -->|"Frosted UI Fade / Enter Button"| B["Studio Portal Shell (index.html)"]
-    end
+Everyday software engineering is filled with small, recurring friction — repetitive boilerplate, bloated toolchains, and fragmented workflows that pull focus away from real creation. TuKuai Studio exists to smooth away that friction, one focused piece at a time.
 
-    subgraph Portal["2. Spectrum Shell & Discovery (index.html + sections.json)"]
-        B -->|"fetch('sections.json')"| C["Dynamic Top Nav & Submenus"]
-        B -->|"Ctrl/Cmd + K Modal"| D["Global Client Search Index"]
-        C & D -->|"Route ?view and theme query"| E{"Status Check"}
-        E -->|"planned"| F["Coming Soon Sculpture View"]
-    end
+- **Built for Programmers**: Crafted for clarity, speed, and ease of use so developers spend less time fighting repetitive setup and more time turning ideas into reality.
+- **Rooted in Open Source**: Inspired by the generosity and openness of the global developer community, TuKuai Studio strives to contribute practical, clean work that helps builders move faster and build with joy.
+- **Starting Small, Growing Steadily**: We believe the everyday tools that accompany developers deserve both solid engineering craft and quiet, thoughtful care.
 
-    subgraph Embed["3. Pure-English Embedded Workspaces (iframe)"]
-        E -->|"available + url"| G["Embedded Tool Frame (component-frame)"]
-        G -->|"postMessage tukuai-theme"| H["Comp / TuKuai-UI (TuKuaiUI.html + tukuai-ui.min.js)"]
-        G -->|"postMessage tukuai-theme"| I["Sys / TuKuai-EXE (TuKuaiEXE.html + fflate.browser.js)"]
-    end
-```
+## Copyright & Licensing
 
-## End-to-End Flow & Core Technologies
-
-| Stage | Data Flow | Core Technologies | What It Accomplishes |
-| :--- | :--- | :--- | :--- |
-| **1. Entrance Transition** | `intro.html` → `index.html` | HTML5 Video/Audio sync, GPU `opacity` compositing (`4.16s` cue & `4.5s` timer fallback) | Synchronizes intro playback with chord timing and provides touch-gesture fallback on mobile browsers before entering the portal. |
-| **2. Registry & Search** | `sections.json` → `index.html` Nav & Search Modal | `fetch` JSON registry, URL query routing (`?view=`), case-insensitive `Ctrl/Cmd + K` search | Drives top-level dropdown menus, section states (`available` vs `planned`), and bilingual/English keyword filtering without a backend. |
-| **3. Theme & Frame Sync** | `index.html` → Embedded `<iframe id="component-frame">` | `?theme=` URL propagation + `window.postMessage` (`tukuai-theme`), CSS `color-scheme` | Keeps Day (`#f6f1e6` / `#ffffff`) and Night (`#0f1116` / `#111111`) palettes synchronized across the shell and embedded tools without page reloads. |
-| **4. Comp · TuKuai-UI** | `assets/tukuai-ui.min.js` → `TuKuaiUI/TuKuaiUI.html` | Native Custom Elements (`<tukuai-audio>`, `<tukuai-player>`), Canvas frame capture, pure-English Code Generator | Renders zero-dependency audio/video players with 5 visual themes (`sunset`, `cyberpunk`, `ocean`, `dark`, `light`) and exports ready-to-paste English HTML/snippets. |
-| **5. Sys · TuKuai-EXE** | `TuKuaiEXE/TuKuaiEXE.html` → Worker API (`exe.xn--udsye.art`) | Browser folder/ZIP intake (`fflate.browser.js`), Inno Setup cloud packaging, native GitHub Actions delivery | Compiles Windows x64 `Setup.exe` packages remotely with a single native download link (users in restricted regions should enable a proxy). |
-
-### Five-Color Spectrum Domains
-
-| Domain | Accent | Quote Anchor | Current Modules |
-| :--- | :--- | :--- | :--- |
-| `Comp` | Blue | Alan Kay | `TuKuai-UI` (Available), `TuKuai-JUI` (Planned) |
-| `Core` | Green | Alan M. Turing | Planned |
-| `IO` | Yellow | Claude E. Shannon | Planned |
-| `Net` | Purple | Sir Tim Berners-Lee | Planned |
-| `Sys` | Red | Dennis M. Ritchie | `TuKuai-EXE` (Available) |
-
-## Directory Structure
-
-```text
-TuKuai-Studio/
-├── index.html                  # Main Traditional Chinese (zh-Hant) portal shell, theme engine & iframe host
-├── intro.html                  # Timed video/audio entrance stage linking to index.html
-├── sections.json               # Navigation, domain hierarchy, tool URLs & search keyword registry
-├── README.md                   # English documentation (primary)
-├── README.zh-TW.md             # Synchronized Traditional Chinese documentation
-├── 教程.md                     # Traditional Chinese guide for extending sections.json
-├── AGENTS.md                   # Workspace localization rules (zh-Hant shell + pure-English embedded pages)
-├── assets/
-│   ├── tukuai-ui.min.js        # Pure-English <tukuai-audio> & <tukuai-player> Custom Elements library
-│   └── 更新日志.md              # Traditional Chinese changelog for TuKuai-UI fixes
-├── TuKuaiUI/
-│   ├── TuKuaiUI.html           # Pure-English component showcase & interactive HTML generator
-│   ├── imgs/                   # Video poster thumbnails
-│   └── media/                  # Local demo video & audio assets
-└── TuKuaiEXE/
-    ├── TuKuaiEXE.html          # Pure-English embedded frontend for the Cloud Inno Setup Packager
-    └── fflate.browser.js       # Client-side DEFLATE / ZIP helper
-```
-
-## Copyright & Notice
+### Main Website Design (All Rights Reserved)
 
 ```text
 Copyright (c) 2026 TuKuai (GallantTarry). All rights reserved.
 ```
 
-This repository makes its source code publicly visible on GitHub solely for **viewing, learning, and technical reference**. Without prior written permission from the copyright holder, copying, modifying, mirroring/re-hosting, or redistributing the original code, UI design, copywriting, or original assets for commercial or non-commercial purposes is prohibited. See [LICENSE](LICENSE) for details.
+The **main website design** of TuKuai Studio — including its portal shell, visual identity, layout, copywriting, and original site assets — is **All Rights Reserved**. The main site source is publicly visible on GitHub solely for viewing, learning, and technical reference. Without prior written permission from the copyright holder, copying, modifying, mirroring, re-hosting, or redistributing the main website design or original site assets (for commercial or non-commercial purposes) is prohibited. See the root [LICENSE](LICENSE) for full details.
 
-> Third-party notice: `TuKuaiEXE/fflate.browser.js` bundles `fflate@0.8.2` (by Arjun Barrett) under the MIT License; demo audio, video, and image media files remain subject to their respective copyright holders' licenses.
+### Individual Components (Per-Directory License)
+
+Each component in this repository is governed independently by the **`LICENSE`** file located inside its own component directory. Please refer to the `LICENSE` file in each component's directory for the exact license terms and permissions applicable to that component.

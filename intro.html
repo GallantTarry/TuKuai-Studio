@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#b8d7e2" />
-  <title>別來無恙</title>
+  <title>别来无恙</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" href="imgs/apple-touch-icon.png" />
-  <!-- 預載入首幀海報、預渲染毛玻璃尾幀與高清 Logo，0 毫秒立現且零 GPU 卡頓 -->
+  <!-- 预加载首帧海报、预渲染毛玻璃尾帧与高清 Logo，0 毫秒立现且零 GPU 卡顿 -->
   <link rel="preload" as="image" href="imgs/intro_poster.jpg" fetchpriority="high" />
   <link rel="preload" as="image" href="imgs/intro_frosted.jpg" />
   <link rel="preload" as="image" href="imgs/TuKuaiStudio.png" />
   <style>
-    /* 全域重設 */
+    /* 全局重置 */
     *, *::before, *::after {
       margin: 0;
       padding: 0;
@@ -28,13 +28,13 @@
       height: 100dvh;
       overflow: hidden;
       background: #b8d7e2;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", "Noto Serif TC", "PMingLiU", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Serif SC", STSong, SimSun, serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Serif SC", STSong, SimSun, serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       touch-action: manipulation;
     }
 
-    /* 影片背景全螢幕層：使用靜態首幀圖兜底，不對 <video> 施加任何即時濾鏡以徹底杜絕手機端 GPU 卡死 */
+    /* 视频背景全屏层：使用静态首帧图兜底，不对 <video> 施加任何实时滤镜以彻底杜绝手机端 GPU 卡死 */
     #video-wrapper {
       position: fixed;
       inset: 0;
@@ -57,7 +57,7 @@
       transform: translateZ(0);
     }
 
-    /* 霧化毛玻璃層：採用預渲染高清高斯霧化圖，僅做純硬體加速 opacity 過渡，手機端滿幀零開銷 */
+    /* 雾化毛玻璃层：采用预渲染高清高斯雾化图，仅做纯硬件加速 opacity 过渡，手机端满帧零开销 */
     #frost-overlay {
       position: fixed;
       inset: 0;
@@ -77,7 +77,7 @@
       opacity: 1;
     }
 
-    /* 行動端/受限環境下的詩意輕觸喚醒層（全螢幕任意處輕觸即刻同步起播） */
+    /* 移动端/受限环境下的诗意轻触唤醒层（全屏任意处轻触即刻同步起播） */
     #touch-veil {
       position: fixed;
       inset: 0;
@@ -111,7 +111,7 @@
       gap: 14px;
     }
 
-    /* 呼吸水波光環 */
+    /* 呼吸水波光环 */
     .touch-ripple-ring {
       position: relative;
       width: 46px;
@@ -164,7 +164,7 @@
       text-shadow: 0 2px 10px rgba(10, 30, 52, 0.45);
     }
 
-    /* 純淨UI高光容器 (與第二聲鋼琴和弦同步浮現) */
+    /* 纯净UI高光容器 (与第二声钢琴和弦同步浮现) */
     #ui-container {
       position: fixed;
       inset: 0;
@@ -183,7 +183,7 @@
       pointer-events: auto;
     }
 
-    /* Logo 視覺包裝盒：精準對齊影片尾幀幾何中心 (Y: 41.7%) */
+    /* Logo 视觉包装盒：精准对齐视频尾帧几何中心 (Y: 41.7%) */
     .ui-content {
       position: absolute;
       top: 41.7%;
@@ -200,7 +200,7 @@
       transform: translate3d(-50%, -50%, 0) scale(1);
     }
 
-    /* 柔透微光暈：純徑向漸層實現柔和光暈，避免動態 blur 濾鏡消耗手機顯示記憶體 */
+    /* 柔透微光晕：纯径向渐变实现柔和光晕，避免动态 blur 滤镜消耗手机显存 */
     .logo-halo {
       position: absolute;
       top: 50%;
@@ -232,7 +232,7 @@
       }
     }
 
-    /* 純淨 Logo 特效包裝 */
+    /* 纯净 Logo 特效包装 */
     .logo-wrapper {
       position: relative;
       display: flex;
@@ -250,7 +250,7 @@
       }
     }
 
-    /* 高清 Logo 影像：輕量硬體合成，杜絕多重高半徑 drop-shadow 導致行動端掉幀 */
+    /* 高清 Logo 图像：轻量硬件合成，杜绝多重高半径 drop-shadow 导致移动端掉帧 */
     .ui-logo {
       display: block;
       width: clamp(340px, 78vh, 560px);
@@ -270,7 +270,7 @@
     }
 
     /* ==========================================================
-       全新極簡高定「流光晶透羽化入口」設計 (Portal Entry)
+       全新极简高定「流光晶透羽化入口」设计 (Portal Entry)
        ========================================================== */
     .portal-container {
       position: fixed;
@@ -320,7 +320,7 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* 五色微光極光底襯（呼應圖快五瓣色彩） */
+    /* 五色微光极光底衬（呼应土块五瓣色彩） */
     .portal-entry::before {
       content: "";
       position: absolute;
@@ -356,7 +356,7 @@
       transform: translate3d(0, 0.5px, 0) scale(0.98);
     }
 
-    /* 左側呼吸星芒微點 */
+    /* 左侧呼吸星芒微点 */
     .portal-spark {
       position: relative;
       width: 6px;
@@ -404,7 +404,7 @@
       opacity: 1;
     }
 
-    /* 底部纖細呼吸流光線 */
+    /* 底部纤细呼吸流光线 */
     .portal-hairline {
       width: 36px;
       height: 1.5px;
@@ -424,7 +424,7 @@
       opacity: 1;
     }
 
-    /* 轉場進入工坊時的絲滑羽化離場動效 */
+    /* 转场进入工坊时的丝滑羽化离场动效 */
     body.leaving-stage #ui-container,
     body.leaving-stage #frost-overlay,
     body.leaving-stage #video-wrapper {
@@ -436,7 +436,7 @@
       background: #f9fbfe;
     }
 
-    /* 行動端視口精細適配與輕量化渲染 */
+    /* 移动端视口精细适配与轻量化渲染 */
     @media (max-width: 640px) {
       #video-wrapper,
       #frost-overlay {
@@ -485,7 +485,7 @@
 </head>
 <body>
 
-  <!-- 影片背景：內嵌 poster 首幀圖，杜絕任何行動端黑屏與解碼阻塞 -->
+  <!-- 视频背景：内联 poster 首帧图，杜绝任何移动端黑屏与解码阻塞 -->
   <div id="video-wrapper">
     <video
       id="bg-video"
@@ -501,25 +501,25 @@
     </video>
   </div>
 
-  <!-- 黃金適耳訂製音訊：已精確對齊兩次 UI 浮現和弦，並刪去後續多餘音樂 -->
+  <!-- 黄金适耳定制音频：已精确对齐两次 UI 浮现和弦，并删去后续多余音乐 -->
   <audio id="ambient-audio" preload="auto">
     <source src="audio/言叶之庭.aac" type="audio/aac" />
   </audio>
 
-  <!-- 預渲染高清霧化毛玻璃層（零 GPU 即時模糊開銷） -->
+  <!-- 预渲染高清雾化毛玻璃层（零 GPU 实时模糊开销） -->
   <div id="frost-overlay"></div>
 
-  <!-- 行動端/受限環境下的詩意輕觸喚醒層 -->
-  <div id="touch-veil" role="button" tabindex="0" aria-label="輕觸開啟音畫體驗">
+  <!-- 移动端/受限环境下的诗意轻触唤醒层 -->
+  <div id="touch-veil" role="button" tabindex="0" aria-label="轻触开启音画体验">
     <div class="touch-cue">
       <div class="touch-ripple-ring">
         <span class="touch-core-dot"></span>
       </div>
-      <span class="touch-caption">輕觸畫面 · 聆聽花開</span>
+      <span class="touch-caption">轻触画面 · 聆听花开</span>
     </div>
   </div>
 
-  <!-- 純淨毛玻璃 UI 層：與第二聲清脆鋼琴和弦同步浮現 -->
+  <!-- 纯净毛玻璃 UI 层：与第二声清脆钢琴和弦同步浮现 -->
   <main id="ui-container" aria-hidden="true">
     <div class="ui-content">
       <div class="logo-halo"></div>
@@ -528,17 +528,17 @@
           id="ui-logo"
           class="ui-logo"
           src="imgs/TuKuaiStudio.png"
-          alt="圖塊工坊 TuKuai Studio"
+          alt="土块工坊 TuKuai Studio"
           draggable="false"
         />
       </div>
     </div>
 
-    <!-- 全新極簡高定「流光晶透羽化入口」 -->
+    <!-- 全新极简高定「流光晶透羽化入口」 -->
     <div class="portal-container">
       <a href="index.html" class="portal-entry" id="enter-btn">
         <span class="portal-spark"></span>
-        <span class="portal-label">進入工坊</span>
+        <span class="portal-label">进入工坊</span>
         <span class="portal-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <path d="M5 12h13" />
@@ -562,9 +562,9 @@
     let isNavigating = false;
     let fallbackTimer = null;
 
-    // 黃金適耳音量：配合已母帶柔化處理的《言葉之庭》音訊，溫潤清透不刺耳
+    // 黄金适耳音量：配合已母带柔化处理的《言叶之庭》音频，温润清透不刺耳
     const GOLDEN_AUDIO_VOL = 0.68;
-    // 第二聲和弦（網頁毛玻璃 UI 浮現）精確時間點
+    // 第二声和弦（网页毛玻璃 UI 浮现）精确时间点
     const UI_REVEAL_TIME = 4.16;
 
     ambientAudio.loop = false;
@@ -580,11 +580,11 @@
       if (fallbackTimer) {
         clearTimeout(fallbackTimer);
       }
-      // 兜底保護：即便手機省電模式攔截影片解碼，也絕不卡死，準時在 4.5s 浮現工坊 UI
+      // 兜底保护：即便手机省电模式拦截视频解码，也绝不卡死，准时在 4.5s 浮现工坊 UI
       fallbackTimer = setTimeout(revealFrostedUI, 4500);
     }
 
-    // 使用者觸控/點擊喚醒：在同一個同步呼叫堆疊內直接同時啟動 video 與 audio，絕不二次重設 currentTime
+    // 用户触屏/点击唤醒：在同一个同步调用栈内直接同时启动 video 与 audio，绝不二次重置 currentTime
     function onUserGesture() {
       if (hasStarted || isRevealed) return;
       hasStarted = true;
@@ -604,11 +604,11 @@
       }
     }
 
-    // 桌面端/允許自動有聲播放的環境：嘗試靜默同步自啟一次
+    // 桌面端/允许自动有声播放的环境：尝试静默同步自启一次
     function tryAutoStartOnce() {
       if (hasStarted || isRevealed) return;
 
-      // 觸控行動裝置瀏覽器均需手勢解鎖有聲播放，直接展示輕觸引導，避免無效 play() 阻塞解碼器
+      // 触屏移动设备浏览器均需手势解锁有声播放，直接展示轻触引导，避免无效 play() 阻塞解码器
       const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
       if (isTouchDevice) {
         document.body.classList.add('awaiting-gesture');
@@ -635,14 +635,14 @@
       }
     }
 
-    // 僅綁定 touchend / click / keydown，且透過 hasStarted 同步鎖杜絕同一點擊觸發多次
+    // 仅绑定 touchend / click / keydown，且通过 hasStarted 同步锁杜绝同一点击触发多次
     window.addEventListener('touchend', onUserGesture, { passive: true });
     window.addEventListener('click', onUserGesture, { passive: true });
     window.addEventListener('keydown', onUserGesture, { passive: true });
 
     tryAutoStartOnce();
 
-    // 影片到達尾幀並轉化為毛玻璃霧化 UI（與第二聲鋼琴和弦 4.18s 自然同步，不強行 seek 音訊）
+    // 视频到达尾帧并转化为毛玻璃雾化 UI（与第二声钢琴和弦 4.18s 自然同步，不强行 seek 音频）
     function revealFrostedUI() {
       if (isRevealed) return;
       isRevealed = true;
@@ -661,7 +661,7 @@
         }
       } catch (err) {}
 
-      // 啟用毛玻璃全螢幕霧化與高光 UI
+      // 激活毛玻璃全屏雾化与高光 UI
       document.body.classList.add('frosted-active');
       const uiContainer = document.getElementById('ui-container');
       if (uiContainer) {
@@ -669,20 +669,20 @@
       }
     }
 
-    // 1. 影片自然播放到結尾轉場
+    // 1. 视频自然播放到结尾转场
     video.addEventListener('ended', revealFrostedUI, { once: true });
 
-    // 2. 緊貼第二聲和弦時間點（4.16s）觸發平滑轉場
+    // 2. 紧贴第二声和弦时间点（4.16s）触发平滑转场
     video.addEventListener('timeupdate', function () {
       if (video.currentTime >= UI_REVEAL_TIME) {
         revealFrostedUI();
       }
     });
 
-    // 3. 容錯兜底：若影片資源異常，直接展示毛玻璃 UI
+    // 3. 容错兜底：若视频资源异常，直接展示毛玻璃 UI
     video.addEventListener('error', revealFrostedUI, { once: true });
 
-    // 4. 優雅絲滑轉場進入主站 index.html
+    // 4. 优雅丝滑转场进入主站 index.html
     function navigateToStudio(e) {
       if (e) {
         e.preventDefault();
@@ -707,7 +707,7 @@
       logoImg.addEventListener('click', navigateToStudio);
     }
 
-    // 5. 頁面可見性管理：切背景時暫停，切回時恢復
+    // 5. 页面可见性管理：切后台时暂停，切回时恢复
     document.addEventListener('visibilitychange', function () {
       if (document.hidden) {
         if (!isRevealed && !video.paused) {
