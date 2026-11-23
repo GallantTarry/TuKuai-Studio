@@ -3200,9 +3200,14 @@
             }
 
             .main-nav {
+                position: relative;
                 gap: 0;
                 justify-content: space-between;
                 overflow: visible
+            }
+
+            .nav-group {
+                position: static
             }
 
             .nav-group > .nav-link {
@@ -3215,9 +3220,11 @@
             }
 
             .ui-submenu {
-                min-width: 185px;
-                left: 10px;
-                transform: translateY(-8px) scale(.97);
+                left: 0;
+                right: 0;
+                min-width: 0;
+                width: 100%;
+                transform: translateY(-8px) scale(.98);
                 top: calc(100% + 4px)
             }
 
