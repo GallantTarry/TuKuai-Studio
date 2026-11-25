@@ -356,15 +356,22 @@
       transform: translate3d(0, 0.5px, 0) scale(0.98);
     }
 
-    /* 左侧呼吸星芒微点 */
+    /* 左侧五色光谱圆点（呼应主站五瓣色彩圆点） */
     .portal-spark {
       position: relative;
-      width: 6px;
-      height: 6px;
+      z-index: 1;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #3989ec, #27ad80);
-      box-shadow: 0 0 8px rgba(57, 137, 236, 0.6);
+      background: conic-gradient(#5aa9ed, #40ba92, #e9bd4b, #a77bdc, #e88391, #5aa9ed);
+      box-shadow: 0 0 0 4px rgba(22, 41, 58, 0.05);
       flex-shrink: 0;
+      transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+    }
+
+    .portal-entry:hover .portal-spark {
+      transform: rotate(72deg) scale(1.08);
+      box-shadow: 0 0 0 4px rgba(22, 41, 58, 0.08);
     }
 
     .portal-label {
@@ -465,6 +472,11 @@
       .portal-entry {
         padding: 11px 30px 11px 36px;
         gap: 11px;
+      }
+
+      .portal-spark {
+        width: 7px;
+        height: 7px;
       }
 
       .portal-label {
