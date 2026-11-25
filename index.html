@@ -2669,6 +2669,26 @@
             flex-shrink: 0
         }
 
+        .nav-group[data-key=ui] {
+            --tone: var(--blue)
+        }
+
+        .nav-group[data-key=green] {
+            --tone: var(--green)
+        }
+
+        .nav-group[data-key=yellow] {
+            --tone: var(--yellow)
+        }
+
+        .nav-group[data-key=purple] {
+            --tone: var(--purple)
+        }
+
+        .nav-group[data-key=red] {
+            --tone: var(--red)
+        }
+
         .nav-group > .nav-link {
             display: flex;
             align-items: center;
@@ -2698,30 +2718,38 @@
         /* Smooth Dropdown Fade-In & Slide Reveal */
         .ui-submenu {
             position: absolute;
-            top: calc(100% + 6px);
+            top: calc(100% + 7px);
             left: 50%;
-            transform: translateX(-50%) translateY(-8px) scale(.97);
-            min-width: 214px;
-            padding: 7px;
-            border: 1px solid var(--line);
-            background: color-mix(in srgb, var(--surface-raised) 95%, transparent);
+            transform: translateX(calc(-50% + var(--submenu-shift, 0px))) translateY(-8px) scale(.96);
+            display: grid;
+            gap: 2px;
+            width: max-content;
+            min-width: 168px;
+            max-width: min(280px, calc(100vw - 24px));
+            padding: 6px;
+            border: 1px solid color-mix(in srgb, var(--tone, var(--neutral-line)) 24%, var(--line));
+            background: color-mix(in srgb, var(--surface-raised) 96%, transparent);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-radius: 13px;
-            box-shadow: 0 18px 44px -10px #15223822, 0 2px 6px #0000000a;
+            box-shadow: 0 16px 38px -10px #15223824, 0 2px 6px #0000000a, inset 0 1px 0 #ffffff66;
             color: var(--ink);
             z-index: 60;
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
-            transition: opacity .26s var(--ease), transform .26s var(--ease), visibility .26s
+            transition: opacity .24s var(--ease), transform .24s var(--ease), visibility .24s
+        }
+
+        html[data-theme=dark] .ui-submenu {
+            box-shadow: 0 18px 42px -10px #00000085, 0 2px 8px #0000004d, inset 0 1px 0 #ffffff12
         }
 
         .nav-group.is-open .ui-submenu {
             opacity: 1;
             visibility: visible;
             pointer-events: auto;
-            transform: translateX(-50%) translateY(0) scale(1)
+            transform: translateX(calc(-50% + var(--submenu-shift, 0px))) translateY(0) scale(1)
         }
 
         .ui-submenu:before {
@@ -2736,16 +2764,40 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 20px;
-            padding: 12px 13px;
+            gap: 22px;
+            padding: 10px 12px;
             font-size: 12px;
             border-radius: 8px;
-            transition: background .2s var(--ease), padding-left .2s var(--ease), color .2s var(--ease)
+            white-space: nowrap;
+            transition: background .2s var(--ease), color .2s var(--ease)
+        }
+
+        .ui-submenu a > span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500
+        }
+
+        .ui-submenu a > span:before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--tone, var(--blue));
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--tone, var(--blue)) 15%, transparent);
+            flex-shrink: 0;
+            transition: transform .22s var(--ease), box-shadow .22s var(--ease)
         }
 
         .ui-submenu a:hover, .ui-submenu a:focus-visible {
-            background: var(--surface);
-            padding-left: 16px
+            background: color-mix(in srgb, var(--tone, var(--blue)) 9%, var(--surface));
+            color: var(--ink)
+        }
+
+        .ui-submenu a:hover > span:before, .ui-submenu a:focus-visible > span:before {
+            transform: scale(1.15);
+            box-shadow: 0 0 0 4px color-mix(in srgb, var(--tone, var(--blue)) 22%, transparent)
         }
 
         .ui-submenu small {
@@ -2756,7 +2808,13 @@
         .ui-submenu .icon {
             width: 13px;
             height: 13px;
-            color: var(--neutral-faint)
+            color: var(--neutral-faint);
+            transition: transform .22s var(--ease), color .22s var(--ease)
+        }
+
+        .ui-submenu a:hover .icon, .ui-submenu a:focus-visible .icon {
+            color: var(--tone, var(--blue));
+            transform: translate(1.5px, -1.5px)
         }
 
         .main-nav {
@@ -3206,10 +3264,6 @@
                 overflow: visible
             }
 
-            .nav-group {
-                position: static
-            }
-
             .nav-group > .nav-link {
                 gap: 3px
             }
@@ -3220,21 +3274,27 @@
             }
 
             .ui-submenu {
-                left: 0;
-                right: 0;
-                min-width: 0;
-                width: 100%;
-                transform: translateY(-8px) scale(.98);
-                top: calc(100% + 4px)
-            }
-
-            .nav-group.is-open .ui-submenu {
-                transform: translateY(0) scale(1)
+                top: calc(100% + 8px);
+                min-width: 146px;
+                max-width: calc(100vw - 24px);
+                padding: 5px;
+                border-radius: 11px
             }
 
             .ui-submenu a {
-                padding: 12px 10px;
-                font-size: 11px
+                padding: 9px 11px;
+                gap: 18px;
+                font-size: 11.5px;
+                border-radius: 7px
+            }
+
+            .ui-submenu a > span {
+                gap: 7px
+            }
+
+            .ui-submenu a > span:before {
+                width: 5.5px;
+                height: 5.5px
             }
 
             .inner-wrap {
@@ -4611,10 +4671,33 @@
             activePinnedGroup = null;
         }
 
+        function positionSubmenu(group) {
+            const btn = group.querySelector('.nav-link');
+            const sub = group.querySelector('.ui-submenu');
+            if (!btn || !sub) return;
+            const btnRect = btn.getBoundingClientRect();
+            const boundEl = group.closest('.header-inner') || document.documentElement;
+            const boundRect = boundEl.getBoundingClientRect();
+            const subWidth = sub.offsetWidth;
+            const btnCenter = btnRect.left + btnRect.width / 2;
+            const minLeft = Math.max(12, boundRect.left);
+            const maxRight = Math.min(document.documentElement.clientWidth - 12, boundRect.right);
+            let shift = 0;
+            if (subWidth > maxRight - minLeft) {
+                shift = (minLeft + maxRight) / 2 - btnCenter;
+            } else if (btnCenter - subWidth / 2 < minLeft) {
+                shift = minLeft - (btnCenter - subWidth / 2);
+            } else if (btnCenter + subWidth / 2 > maxRight) {
+                shift = maxRight - (btnCenter + subWidth / 2);
+            }
+            sub.style.setProperty('--submenu-shift', `${Math.round(shift)}px`);
+        }
+
         function setMenuGroup(group, open) {
             const sub = group.querySelector('.ui-submenu');
             const btn = group.querySelector('.nav-link');
             if (!sub || !btn) return;
+            if (open) positionSubmenu(group);
             sub.setAttribute('aria-hidden', String(!open));
             btn.setAttribute('aria-expanded', String(open));
             group.classList.toggle('is-open', open);
@@ -4661,12 +4744,17 @@
                 });
 
                 group.addEventListener('focusout', event => {
-                    if (!group.contains(event.relatedTarget)) {
+                    if (event.relatedTarget && !group.contains(event.relatedTarget)) {
                         if (activePinnedGroup === group) activePinnedGroup = null;
                         setMenuGroup(group, false);
                     }
                 });
             });
+
+            window.addEventListener('resize', () => {
+                const openGroup = document.querySelector('.nav-group.is-open');
+                if (openGroup) positionSubmenu(openGroup);
+            }, { passive: true });
 
             document.addEventListener('click', event => {
                 if (!event.target.closest('.nav-group')) {
