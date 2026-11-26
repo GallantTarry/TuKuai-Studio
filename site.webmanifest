@@ -1,0 +1,24 @@
+{
+  "name": "TuKuai Studio · 土块工坊",
+  "short_name": "TuKuai Studio",
+  "description": "TuKuai Studio 土块工坊。以色彩连接灵感，探索工坊与持续生长的创作工具。",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f1e6",
+  "theme_color": "#f6f1e6",
+  "icons": [
+    {
+      "src": "./imgs/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./imgs/favicon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
