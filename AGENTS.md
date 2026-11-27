@@ -1,4 +1,4 @@
-# TuKuai-Studio Repository Rules
+# tukuai-studio Repository Rules
 
 ## Language & Internationalization Standard
 

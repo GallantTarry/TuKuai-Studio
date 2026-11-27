@@ -741,7 +741,7 @@
         </div>
 
         <div class="code-box">
-            <pre id="cdn-url-code"><span class="hl-tag">&lt;script</span> <span class="hl-attr">src</span>=<span class="hl-str">"https://cdn.jsdelivr.net/gh/GallantTarry/TuKuai-Studio@v1.0.0/tukuai-ui.min.js"</span><span class="hl-tag">&gt;&lt;/script&gt;</span></pre>
+            <pre id="cdn-url-code"><span class="hl-tag">&lt;script</span> <span class="hl-attr">src</span>=<span class="hl-str">"https://cdn.jsdelivr.net/gh/GallantTarry/tukuai-studio@v1.0.0/tukuai-ui.min.js"</span><span class="hl-tag">&gt;&lt;/script&gt;</span></pre>
             <div class="cdn-actions">
                 <button class="btn-copy" onclick="copyCdnScript()">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
@@ -1201,7 +1201,7 @@
                     `    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n` +
                     `    <title>${name} - Audio Player</title>\n\n` +
                     `    <!-- 1. Import TuKuai-UI script (Shadow DOM styles built in, no extra CSS needed) -->\n` +
-                    `    <script src="https://cdn.jsdelivr.net/gh/GallantTarry/TuKuai-Studio@v1.0.0/tukuai-ui.min.js"><` + `/script>\n\n` +
+                    `    <script src="https://cdn.jsdelivr.net/gh/GallantTarry/tukuai-studio@v1.0.0/tukuai-ui.min.js"><` + `/script>\n\n` +
                     `    <style>\n` +
                     `        /* Centered layout & dark stage */\n` +
                     `        body {\n` +
@@ -1245,7 +1245,7 @@
                     `    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n` +
                     `    <title>${name} - Video Player</title>\n\n` +
                     `    <!-- 1. Import TuKuai-UI script (Shadow DOM styles built in, no extra CSS needed) -->\n` +
-                    `    <script src="https://cdn.jsdelivr.net/gh/GallantTarry/TuKuai-Studio@v1.0.0/tukuai-ui.min.js"><` + `/script>\n\n` +
+                    `    <script src="https://cdn.jsdelivr.net/gh/GallantTarry/tukuai-studio@v1.0.0/tukuai-ui.min.js"><` + `/script>\n\n` +
                     `    <style>\n` +
                     `        /* Centered layout & dark stage */\n` +
                     `        body {\n` +
@@ -1285,7 +1285,7 @@
             if (type === 'audio') {
                 return `<!-- Ensure your host <head> includes <meta charset="UTF-8"> -->\n\n` +
                     `<!-- 1. Import TuKuai-UI script (once per page) -->\n` +
-                    `<script src="https://cdn.jsdelivr.net/gh/GallantTarry/TuKuai-Studio@v1.0.0/tukuai-ui.min.js"><` + `/script>\n\n` +
+                    `<script src="https://cdn.jsdelivr.net/gh/GallantTarry/tukuai-studio@v1.0.0/tukuai-ui.min.js"><` + `/script>\n\n` +
                     `<!-- 2. Audio Player Component (set width: 100% for responsive controls) -->\n` +
                     `<tukuai-audio\n` +
                     `    style="width: 100%; max-width: 720px;"\n` +
@@ -1301,7 +1301,7 @@
             } else {
                 return `<!-- Ensure your host <head> includes <meta charset="UTF-8"> -->\n\n` +
                     `<!-- 1. Import TuKuai-UI script (once per page) -->\n` +
-                    `<script src="https://cdn.jsdelivr.net/gh/GallantTarry/TuKuai-Studio@v1.0.0/tukuai-ui.min.js"><` + `/script>\n\n` +
+                    `<script src="https://cdn.jsdelivr.net/gh/GallantTarry/tukuai-studio@v1.0.0/tukuai-ui.min.js"><` + `/script>\n\n` +
                     `<!-- 2. Video Player Component (set width: 100% for responsive controls) -->\n` +
                     `<tukuai-player\n` +
                     `    style="width: 100%; max-width: 860px;"\n` +
@@ -1401,7 +1401,7 @@
 
     // Copy CDN script tag
     function copyCdnScript() {
-        const cdnScript = '<script src="https://cdn.jsdelivr.net/gh/GallantTarry/TuKuai-Studio@v1.0.0/tukuai-ui.min.js"><' + '/script>';
+        const cdnScript = '<script src="https://cdn.jsdelivr.net/gh/GallantTarry/tukuai-studio@v1.0.0/tukuai-ui.min.js"><' + '/script>';
         copyTextToClipboard(cdnScript, 'CDN script tag copied!');
     }
 
